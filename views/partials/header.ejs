@@ -1,0 +1,50 @@
+<nav class="main-header navbar navbar-expand-md navbar-light navbar-white fixed-top" style="background-color: #1f9ec7; ">
+    <div class="container-fluid">
+      <a href="/dashboard" class="navbar-brand">
+        <img src="/images/logo_quawaco.jpg" alt="Sao Việt Logo" class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+        <span class="brand-text" style="font-size: small; font-weight: bold; color: white; margin-right: 20px;">QUAWACO - HỆ THỐNG GIÁM SÁT CHẤT LƯỢNG NƯỚC ONLINE</span>
+
+      </a>
+      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="/dashboard" class="nav-link <%= current_path === '/dashboard' ? 'active' : '' %>" style="color: white ;"><span class="BD"></span> tổng thể</a>
+          </li>
+          <li class="nav-item">
+            <a href="/overview" class="nav-link <%= current_path === '/overview' ? 'active' : '' %>" style="color: white ;"><span class="GS"></span> chất lượng nước</a>
+          </li>
+          <li class="nav-item">
+            <a href="/monitoring" class="nav-link <%= current_path === '/monitoring' ? 'active' : '' %>" style="color: white ;"><span class="GS"></span> nhà máy</a>
+          </li>
+          <% if(role == "admin"){ %>
+            <!-- <li class="nav-item dropdown">
+              <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" style="color: white;">Quản lý và cài đặt</a>
+              <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow" style="background-color: #1f9ec7; ">
+                <li><a href="/setting" style="font-size: 0.88rem; color:white;" class=" dropdown-item <%= current_path === '/setting' ? 'active' : '' %>">Cài đặt trạm</a></li>
+                <li><a href="/config_meter" style="font-size: 0.88rem; color:white;" class=" dropdown-item <%= current_path === '/config_meter' ? 'active' : '' %>">Cấu hình thiết bị</a></li>
+                <li><a href="/manage" style="font-size: 0.88rem; color: white;" class="dropdown-item <%= current_path === '/manage' ? 'active' : '' %>">Quản lý trạm và người dùng </a></li>
+              </ul>
+            </li> -->
+          <% } %>
+        </ul>
+      </div>
+
+      <!-- Right navbar links -->
+      <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+        <!-- Notifications Dropdown Menu -->
+        <li class="nav-item dropdown">
+          <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" style="color: white !important;"><%= full_name %>&nbsp;&nbsp;&nbsp;<i class="fas fa-user"></i>
+          </a>
+          <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu dropdown-menu-right border-0 shadow" style="background-color: #1f9ec7; ">
+            <li><a href="/profile" style="font-size: 0.88rem; color:white;" class=" dropdown-item <%= current_path === '/profile' ? 'active' : '' %>">Cài đặt tài khoản</a></li>
+            <li><a href="/logout" style="font-size: 0.88rem; color: white;" class="dropdown-item">Đăng xuất</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>

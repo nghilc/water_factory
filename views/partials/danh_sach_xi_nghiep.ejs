@@ -1,0 +1,146 @@
+<div class="page-header">
+    <div class="page-title">
+        <div class="d-flex align-items-end">
+            <img src="/images/factory.png" width="35px" class="mr-2">
+            <span style="font-size: x-large; font-weight: bolder; color: #1b1b1bcd;">DANH SÁCH XÍ NGHIỆP</span>
+        </div>
+    </div>
+</div>
+
+
+<% 
+const groups=danh_sach_xi_nghiep_nha_may.filter(item=> item.parent_id === null);
+    groups.forEach(group => {
+    const subItems = danh_sach_xi_nghiep_nha_may.filter(item => item.parent_id === group.org_id);
+    %>
+
+
+
+
+<div class="card-dd " id="">
+    <h5 class="generator-header">🏢 <%= group.name %></h5>
+    <div class="stats-grid">
+        <% subItems.forEach(tram=> { %>
+        <div class="stat-card-large">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon-supper-large"><img src="/images/factory.png" width="35px"></div>
+                <div class="stat-label-large font-weight-bold"  style="color: #262626cd;">
+                    <%= tram.name %>
+                </div>
+            </div>
+            <div class="panel-actions">
+                <button class="btn-overview truy_cap_nha_may" org_id="<%=tram.org_id %>"
+                    style="display: block;">Vào giám sát</button>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div>
+<% }); %>
+
+  
+<style>
+       .production-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+        padding: 20px;
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 12px;
+    }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.stat-card-large {
+    background: rgba(207, 207, 207, 0.284);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat-icon-large {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.stat-icon-supper-large {
+    font-size: 30px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+
+.stat-value-large {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.stat-value-supper-large {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.stat-label-large {
+    font-size: 14px;
+    /* opacity: 0.8; */
+}
+
+.stat-subvalue {
+    font-size: 12px;
+    margin-top: 4px;
+    /* opacity: 0.8; */
+}
+.btn-overview {
+    padding: 8px 16px;
+    background: #2196F3;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+.btn-overview:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .water-quality-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .standards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .parameter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+}
+</style>

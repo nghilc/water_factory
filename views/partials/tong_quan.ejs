@@ -1,0 +1,890 @@
+<div class="overview-page">
+    <div class="page-header">
+        <div class="page-title">
+            <h5>📊 TỔNG QUAN HỆ THỐNG</h5>
+            <div class="devices-count">Thiết bị đang hoạt động</div>
+        </div>
+
+    </div>
+
+    <!-- Thống kê sản lượng -->
+    <div class="production-stats">
+        <div class="stat-item">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon">🌊</div>
+                <div class="stat-label">NƯỚC THÔ</div>
+            </div>
+            <div class="stat-subvalue">Tổng sản lượng</div>
+            <div class="d-flex align-items-center">
+                <div class="stat-value raw-water-value" id="tong_san_luong_nuoc_tho">5,397 m³</div>
+                <!-- <div class="stat-unit">m³</div> -->
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="stat-subvalue">Máy bơm hoạt động:&nbsp;&nbsp;</div>
+                <div class="stat-value pumps-active">0/0</div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon">💧</div>
+                <div class="stat-label">NƯỚC SẠCH</div>
+            </div>
+            <div class="stat-subvalue">Tổng sản lượng</div>
+            <div class="d-flex align-items-center">
+                <div class="stat-value clean-water-value" id="tong_san_luong_nuoc_sach">5,397 m³</div>
+                <div class="stat-unit"></div>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="stat-subvalue">Máy bơm hoạt động hôm nay:&nbsp;&nbsp;</div>
+                <div class="stat-value pumps-active">0/0</div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon">📈</div>
+                <div class="stat-label">CHẤT LƯỢNG NƯỚC</div>
+            </div>
+            <div>
+                <div class="text-left" style="float: left;">
+                    <div class="stat-subvalue">Nước thô</div>
+                    <div class="d-flex align-items-center">
+                        <div class="stat-value wmco_tho">Đạt</div>
+                    </div>
+                </div>
+                <div class="text-right" style="float: right;">
+                    <div class="stat-subvalue">Nước sạch</div>
+                    <div class="d-flex align-items-center">
+                        <div class="stat-value wmco_sach">Đạt</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center" style="float: left;">
+                <div class="stat-subvalue">Thời điểm đo:&nbsp;&nbsp;</div>
+                <div class="stat-value wmco_time">2025-10-17 13:00:00</div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-label">ĐIỆN NĂNG</div>
+            </div>
+            <div class="stat-subvalue">Tổng cộng lũy kế tháng</div>
+            <div class="d-flex align-items-center">
+                <div class="stat-value clean-water-value" id="dien_nang_tieu_thu_thang">- kWWh</div>
+                <div class="stat-unit"></div>
+            </div>
+            <div class="d-flex align-items-center" style="float: left;">
+                <div class="stat-subvalue">Trạng thái:&nbsp;&nbsp;</div>
+                <div class="stat-value">Điện lưới</div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-label">CẢNH BÁO</div>
+            </div>
+            <div class="stat-subvalue">Sự kiện</div>
+            <div class="d-flex align-items-center">
+                <div class="stat-value alerts-count">0&nbsp;</div>
+                <div class="stat-unit">cảnh báo</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ tổng quan -->
+    <div class="charts-grid">
+        <div class="card-dd">
+            <h5 class="generator-header">🌊 MỰC NƯỚC THEO THỜI GIAN THỰC</h5>
+            <div class="legend-container">
+
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #3498db; border-color: #2980b9;"></div>
+                    <div class="legend-text">Mực nước hiện tại</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ecf0f1; border-color: #bdc3c7;"></div>
+                    <div class="legend-text">Mực nước động</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style=" border-bottom: 3px dotted #e74c3c;"></div>
+                    <div class="legend-text">Ngưỡng cao nhất</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="border-bottom: 3px dotted #f39c12;"></div>
+                    <div class="legend-text">Ngưỡng thấp nhất</div>
+                </div>
+            </div>
+            <div class="chart-container" style="height: 300px;">
+                <div id="water-level-realtime-chart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+        <div class="card-dd">
+            <h5 class="generator-header">⚡ SẢN LƯỢNG TRONG NGÀY</h5>
+            <div class="legend-container">
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #ff7043;"></span>
+                    <span>Bơm nước thô</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #0aa162ff;"></span>
+                    <span>Bơm nước sạch</span>
+                </div>
+            </div>
+            <div class="chart-container" style="height: 300px;">
+                <div id="pump-production-24h-chart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông tin thiết bị -->
+    <div class="dashboard-grid">
+        <!-- Nguồn nước thô -->
+        <div class="card-dd">
+            <h5 class="generator-header">🌊 NGUỒN NƯỚC THÔ</h5>
+            <div class="status-grid" id="nguon_nuoc_tho_container">
+                <div class="equipment-card normal">
+                    <div class="equipment-header">
+                        <h4>Sông Hồng - TR01</h4>
+                        <span class="status-indicator status-normal">Bình thường</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Mực nước</span>
+                            <span class="data-value">3.2 m</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Độ đục</span>
+                            <span class="data-value">45 NTU</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lưu lượng</span>
+                            <span class="data-value">285 m³/h</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nhiệt độ</span>
+                            <span class="data-value">26°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="equipment-card normal">
+                    <div class="equipment-header">
+                        <h4>Sông Đà - TR02</h4>
+                        <span class="status-indicator status-normal">Bình thường</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Mực nước</span>
+                            <span class="data-value">4.1 m</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Độ đục</span>
+                            <span class="data-value">38 NTU</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lưu lượng</span>
+                            <span class="data-value">0 m³/h</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nhiệt độ</span>
+                            <span class="data-value">25°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bể chứa nước sạch -->
+        <div class="card-dd">
+            <h5 class="generator-header">💧 BỂ CHỨA NƯỚC SẠCH</h5>
+            <div class="status-grid" id="be_nuoc_sach_container">
+                <div class="equipment-card normal">
+                    <div class="equipment-header">
+                        <h4>Bể Chính</h4>
+                        <span class="status-indicator status-normal">Bình thường</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Mực nước</span>
+                            <span class="data-value">3.8 m</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Dung tích</span>
+                            <span class="data-value">85%</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Clo dư</span>
+                            <span class="data-value">0.8 ppm</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Độ pH</span>
+                            <span class="data-value">7.2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Máy bơm nước thô -->
+        <div class="card-dd">
+            <h5 class="generator-header">⚡ MÁY BƠM NƯỚC THÔ</h5>
+            <div class="status-grid" id="generator-grid">
+                <div class="equipment-card normal">
+                    <div class="equipment-header">
+                        <h4>Bơm Thô P-001</h4>
+                        <span class="status-indicator status-normal">Đang chạy</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Trạng thái</span>
+                            <span class="data-value">🟢 BÌNH THƯỜNG</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lưu lượng</span>
+                            <span class="data-value">280 m³/h</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Áp lực</span>
+                            <span class="data-value">3.2 bar</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nhiệt độ</span>
+                            <span class="data-value">68°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="equipment-card normal">
+                    <div class="equipment-header">
+                        <h4>Bơm Thô P-002</h4>
+                        <span class="status-indicator status-danger">Đã dừng</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Trạng thái</span>
+                            <span class="data-value">🟢 BÌNH THƯỜNG</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lưu lượng</span>
+                            <span class="data-value">0 m³/h</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Áp lực</span>
+                            <span class="data-value">0 bar</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nhiệt độ</span>
+                            <span class="data-value">35°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Máy bơm nước sạch -->
+        <div class="card-dd">
+            <h5 class="generator-header">🚰 MÁY BƠM NƯỚC SẠCH</h5>
+            <div class="status-grid" id="generator-grid2">
+                <div class="equipment-card normal">
+                    <div class="equipment-header">
+                        <h4>Bơm Sạch PS-001</h4>
+                        <span class="status-indicator status-normal">Đang chạy</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Trạng thái</span>
+                            <span class="data-value">🟢 BÌNH THƯỜNG</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lưu lượng</span>
+                            <span class="data-value">280 m³/h</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Áp lực</span>
+                            <span class="data-value">3.2 bar</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nhiệt độ</span>
+                            <span class="data-value">68°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="equipment-card warning">
+                    <div class="equipment-header">
+                        <h4>Bơm Sạch PS-002</h4>
+                        <span class="status-indicator status-warning">Cảnh báo</span>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Trạng thái</span>
+                            <span class="data-value">🟡 QUÁ NHIỆT</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Lưu lượng</span>
+                            <span class="data-value">250 m³/h</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Áp lực</span>
+                            <span class="data-value">4.1 bar</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nhiệt độ</span>
+                            <span class="data-value" style="color: #FF9800;">82°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Máy phát điện và cảnh báo -->
+    <div class="generator-alerts-section">
+        <!-- Máy phát điện -->
+        <div class="generator-panel">
+            <div class="generator-header">
+                <h5>🔌 <span id="ten_may_phat_dien"></span></h5>
+                <span class="status-indicator status-normal"></span>
+                <span class="generator-status-text status-running" id="generator_note">CHƯA LẮP THIẾT BỊ ĐO</span>
+            </div>
+
+            <div class="generator-grid">
+                <!-- Điện áp lưới -->
+                <div class="generator-section">
+                    <div class="section-title">ĐIỆN ÁP LƯỚI</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Pha</th>
+                            <th>Điện áp</th>
+                            <th>Tần số</th>
+                        </tr>
+                        <tr>
+                            <td>Pha A</td>
+                            <td class="value-cell">
+                                <span class="value grid-voltage-a" id="V_A2_v">-</span>
+                                <span class="unit-cell" id="V_A2_u">(V)</span>
+                            </td>
+                            <td class="value-cell" rowspan="3">
+                                <span class="value" id="Freq2_v">-</span>
+                                <span class="unit-cell" id="Freq2_u">(Hz)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pha B</td>
+                            <td class="value-cell">
+                                <span class="value grid-voltage-b" id="V_B2_v">-</span>
+                                <span class="unit-cell" id="V_B2_u">(V)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pha C</td>
+                            <td class="value-cell">
+                                <span class="value grid-voltage-c" id="V_C2_v">-</span>
+                                <span class="unit-cell" id="V_C2_u">(V)</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Điện áp đầu ra -->
+                <div class="generator-section">
+                    <div class="section-title">ĐIỆN ÁP ĐẦU RA</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Pha</th>
+                            <th>Điện áp</th>
+                            <th>Dòng điện</th>
+                        </tr>
+                        <tr>
+                            <td>Pha A</td>
+                            <td class="value-cell">
+                                <span class="value output-voltage-a" id="V_A_v">-</span>
+                                <span class="unit-cell" id="V_A_u">(V)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value output-current-a" id="I_A_v">-</span>
+                                <span class="unit-cell" id="I_A_u">(A)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pha B</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_B_v">-</span>
+                                <span class="unit-cell" id="V_B_u">(V)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value" id="I_B_v">-</span>
+                                <span class="unit-cell" id="I_B_u">(A)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pha C</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_C_v">-</span>
+                                <span class="unit-cell" id="V_C_u">(V)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value" id="I_C_v">-</span>
+                                <span class="unit-cell" id="I_C_u">(A)</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Thông tin chung -->
+                <div class="generator-section">
+                    <div class="section-title">THÔNG TIN CHUNG</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Tốc độ</span>
+                            <span class="info-value generator-speed" id="Speed_v">- rpm</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Điện áp ắc quy</span>
+                            <span class="info-value battery-voltage" id="V_Bat_v">- V</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Nhiệt độ nước</span>
+                            <span class="info-value water-temp" id="Tem_W_v">-°C</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Áp suất dầu</span>
+                            <span class="info-value oil-pressure" id="P_Oil_v">- bar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trạng thái đầu vào -->
+                <div class="generator-section">
+                    <div class="section-title">TRẠNG THÁI ĐẦU VÀO</div>
+                    <div class="status-grid-small" id="sta_in_container">
+                        <div class="status-item status-off">MCE: TẮT</div>
+                        <div class="status-item status-off">AUX.1: TẮT</div>
+                        <div class="status-item status-off">AUX.2: TẮT</div>
+                        <div class="status-item status-off">AUX.3: TẮT</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cảnh báo -->
+        <div class="alerts-panel">
+            <h5 class="generator-header">⚠️ CẢNH BÁO HIỆN TẠI (MÔ PHỎNG)</h5>
+            <div class="alert-item alert-medium">
+                <div class="alert-icon">🟡</div>
+                <div class="alert-content">
+                    <div class="alert-title">Nhiệt độ Bơm PS-002 cao</div>
+                    <div class="alert-desc">82°C - Gần ngưỡng cảnh báo</div>
+                    <div class="alert-time">14:30</div>
+                </div>
+            </div>
+            <div class="alert-item alert-high">
+                <div class="alert-icon">🔴</div>
+                <div class="alert-content">
+                    <div class="alert-title">Máy phát cần bảo trì</div>
+                    <div class="alert-desc">Còn 252 giờ đến lần bảo trì</div>
+                    <div class="alert-time">13:45</div>
+                </div>
+            </div>
+            <div class="alert-item alert-low">
+                <div class="alert-icon">🟢</div>
+                <div class="alert-content">
+                    <div class="alert-title">Vận hành ổn định</div>
+                    <div class="alert-desc">Tất cả thiết bị đang hoạt động</div>
+                    <div class="alert-time">12:00</div>
+                </div>
+            </div>
+            <div class="alert-item alert-medium">
+                <div class="alert-icon">🟡</div>
+                <div class="alert-content">
+                    <div class="alert-title">Mực nước Sông 1 thấp</div>
+                    <div class="alert-desc">2.8m - Gần ngưỡng cảnh báo</div>
+                    <div class="alert-time">11:20</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* .overview-page {
+        max-width: 1400px;
+        margin: 0 auto;
+    } */
+
+    .production-stats {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+        padding: 20px;
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 12px;
+    }
+
+    .stat-item {
+        padding: 15px;
+        background: rgba(174, 174, 174, 0.311);
+        border-radius: 10px;
+        border: 1px solid rgba(207, 207, 207, 0.284);
+    }
+
+    .stat-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 15px;
+        opacity: 0.8;
+        margin-bottom: 5px;
+        margin-left: 5px;
+        font-weight: bold;
+    }
+
+    .stat-value {
+        font-size: 14px;
+        font-weight: bold;
+        color: #4CAF50;
+    }
+
+    .warning-value {
+        font-size: 14px;
+        font-weight: bold;
+        color: #FF9800;
+    }
+
+    .stat-unit {
+        font-size: 11px;
+        opacity: 0.7;
+    }
+
+    .stat-subvalue {
+        font-size: 12px;
+        margin-top: 4px;
+        opacity: 0.8;
+    }
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .status-grid {
+        display: grid;
+        gap: 15px;
+    }
+
+    .equipment-card {
+        background: rgba(174, 174, 174, 0.311);
+        border-radius: 10px;
+        padding: 15px;
+        border-left: 4px solid;
+    }
+
+    .equipment-card.normal {
+        border-color: #4CAF50;
+    }
+
+    .equipment-card.warning {
+        border-color: #FF9800;
+    }
+
+    .equipment-card.danger {
+        border-color: #f44336;
+    }
+
+    .equipment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .status-indicator {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .status-normal {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+    }
+
+    .status-warning {
+        background: rgba(255, 152, 0, 0.2);
+        color: #FF9800;
+    }
+
+    .status-danger {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+    }
+
+    .data-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .data-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .data-label {
+        font-size: 11px;
+        opacity: 0.9;
+    }
+
+    .data-value {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .generator-alerts-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .generator-panel {
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+    .generator-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(73, 73, 73, 0.584);
+    }
+
+    .generator-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .generator-section {
+        background: rgba(174, 174, 174, 0.311);
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #1f9ec7;
+        text-align: center;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(182, 182, 182, 0.694);
+    }
+
+    .voltage-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .voltage-table th {
+        text-align: left;
+        padding: 8px;
+        font-size: 11px;
+        opacity: 0.8;
+        border-bottom: 1px solid rgba(207, 207, 207, 0.284);
+    }
+
+    .voltage-table td {
+        padding: 8px;
+        font-size: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .voltage-table .value {
+        text-align: right;
+        font-weight: 600;
+        color: #4CAF50;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        font-size: 11px;
+        opacity: 0.9;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .status-grid-small {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .status-item {
+        text-align: center;
+        padding: 8px;
+        background: rgba(174, 174, 174, 0.311);
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .status-off {
+        color: #f44336;
+    }
+
+    .status-on {
+        color: #4CAF50;
+    }
+
+    .alerts-panel {
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+    .alert-item {
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border-left: 4px solid;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-high {
+        border-color: #f44336;
+        background: rgba(244, 67, 54, 0.1);
+    }
+
+    .alert-medium {
+        border-color: #FF9800;
+        background: rgba(255, 152, 0, 0.1);
+    }
+
+    .alert-low {
+        border-color: #4CAF50;
+        background: rgba(76, 175, 80, 0.1);
+    }
+
+    .alert-icon {
+        font-size: 16px;
+    }
+
+    .alert-content {
+        flex: 1;
+    }
+
+    .alert-title {
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .alert-desc {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+
+    .alert-time {
+        font-size: 10px;
+        opacity: 0.6;
+    }
+
+    .chart-container {
+        height: 100%;
+        position: relative;
+    }
+
+    .legend-container {
+        display: flex;
+        margin: 10px auto;
+        float: right;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        opacity: 0.9;
+        margin-right: 10px;
+    }
+
+    .legend-color {
+        width: 40px;
+        height: 12px;
+        border-radius: 2px;
+        display: inline-block;
+    }
+
+    @media (max-width: 1200px) {
+        .production-stats {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .charts-grid,
+        .dashboard-grid,
+        .generator-alerts-section,
+        .generator-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .production-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .data-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .status-grid-small {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .value-cell {
+        text-align: right;
+        font-weight: 600;
+    }
+
+    .value {
+        color: #4CAF50;
+    }
+
+    .unit-cell {
+        font-size: 11px;
+        opacity: 0.7;
+        text-align: left;
+    }
+</style>
+
+<script src="/javascripts/tong_quan.js"></script>

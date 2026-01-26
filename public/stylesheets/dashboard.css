@@ -1,0 +1,124 @@
+/* 
+tspan{
+    color: red;
+} */
+
+/* .amcharts-title:nth-child(2){
+    color: red;
+  } */
+     /* Chiều cao toàn bộ info-box khớp với select */
+.info-box {
+    height: 60px !important; 
+    min-height: 60px !important; 
+    display: flex;
+    align-items: center;
+    padding: 1rem !important;
+    /* min-width: 186px; */
+  }
+  
+  /* Icon nhỏ lại */
+  .info-box-icon {
+    font-size: 18px;
+    width: 32px !important;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .info-box-icon i {
+    font-size: 15px;
+  }
+
+  /* Nội dung info box hiển thị theo hàng ngang */
+  /* .info-box-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    line-height: 1.2;
+  } */
+  
+  /* Chữ trong info-box nhỏ lại cho khớp */
+  /* .info-box-text {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+  } */
+  
+  /* Số cũng nhỏ hơn và nằm cùng dòng */
+  /* .info-box-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 4px;
+    white-space: nowrap;
+  } */
+  
+  #dashboard_header {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    z-index: 900;
+    padding: 0 1rem;
+    background-color: transparent; /* nền mờ */
+  }
+
+  .info-box {
+    margin-bottom: 0;
+    padding: 5px !important;
+  }
+
+#dashboardSidebar {
+  position: fixed;
+  top: 61.5px;
+  right: -350px;
+  /* Ẩn mặc định */
+  width: 350px;
+  height: calc(100vh - 61.5px);
+  background: #fff;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 850;
+  overflow-y: auto;
+}
+
+#dashboardSidebar.active {
+  right: 0;
+}
+
+/* Nút toggle */
+#toggleDashboardSidebar {
+  position: fixed;
+  top: 61.5px;
+  right: 0;
+  /* mặc định dính cạnh phải màn hình */
+  width: 40px;
+  height: 40px;
+  border-radius: 5px 0 0 5px;
+  z-index: 901;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease-in-out;
+}
+
+/* Khi sidebar mở → nút đi theo cạnh trái của sidebar */
+#dashboardSidebar.active~#toggleDashboardSidebar {
+  right: 350px;
+  /* bằng đúng chiều rộng sidebar */
+}
+
+/* #dashboardSidebar .last-row {
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+} */
+.leaflet-control-attribution {
+  display: none !important;
+}
+/* 
+.bootstrap-select {
+  width: 273px !important;
+} */

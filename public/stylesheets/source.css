@@ -1,0 +1,108 @@
+.checkbox-menu li label {
+    display: block;
+    padding: 3px 10px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    margin:0;
+    transition: background-color .4s ease;
+}
+.checkbox-menu li input {
+    margin: 0px 5px;
+    top: 2px;
+    position: relative;
+}
+
+.checkbox-menu li.active label {
+    background-color: white;
+    /* font-weight:bold; */
+}
+
+.checkbox-menu li label:hover,
+.checkbox-menu li label:focus {
+    background-color: rgb(185, 195, 250);
+}
+
+.checkbox-menu li.active label:hover,
+.checkbox-menu li.active label:focus {
+    background-color: rgb(185, 203, 252);
+}
+
+#tableal .tableContain tr:hover{
+    background-color: white !important;
+    cursor: default !important;
+  }
+
+  #table_data :not(thead) > tr:hover{
+    background-color: white !important;
+    cursor: default !important;
+  }
+
+
+  th.rotated-text {
+    height: 230px !important;
+    white-space: nowrap;
+    padding: 0 !important;
+}
+
+/* th.rotated-text > div {
+    transform:
+        translate(18px, 200px)
+        rotate(-90deg);
+    width: 30px;
+} */
+
+th.rotated-text > div > span {
+    padding: 5px 10px;
+}
+
+
+
+.div_U {
+    transform:
+    translate(30px, 190px)
+    rotate(-90deg);
+    width: 30px;
+}
+
+.div_P {
+    transform:
+    translate(30px, 205px)
+    rotate(-90deg);
+    width: 30px;
+}
+
+.div_cosphi {
+    transform:
+    translate(30px, 175px)
+    rotate(-90deg);
+    width: 30px;
+}
+
+
+
+.border_th_d {
+    border-top: 1px solid #ddd !important; 
+    border-bottom: 1px solid #ddd !important; 
+    border-right: 1px solid #ddd !important;
+}
+
+.border_config_eq_th_d {
+    vertical-align: middle !important;
+    border-left: 1px solid #ddd !important;
+    border-top: 1px solid #ddd !important; 
+    border-bottom: 1px solid #ddd !important; 
+    border-right: 1px solid #ddd !important;
+}
+
+.border_config_eq_td_d {
+    border-top: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd !important;
+    border-right: 1px solid #ddd !important;
+}
+
+.text-danger-dd {
+    color: #f2da05
+}

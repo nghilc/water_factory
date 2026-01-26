@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Sao việt | Cảnh báo</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/plugins_2/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="/plugins_2/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/plugins_2/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="/plugins_2/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <!-- daterangepicker -->
+  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/plugins_2/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="/plugins_2/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="/plugins_2/summernote/summernote-bs4.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="/plugins_2/select2/css/select2.min.css">
+  <link rel="stylesheet" href="/plugins_2/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+  <link type="text/css" rel="stylesheet" href="/stylesheets/general_style.css">
+  <link type="text/css" rel="stylesheet" href="/stylesheets/style_2.css">
+
+</head>
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
+      <!-- Navbar -->
+<%- include('../partials/header') %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="margin-top: 60px;">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <!-- <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="/dashboard">SAO VIỆT</a></li>
+                <li class="breadcrumb-item active">Danh sách cảnh báo</li>
+            </ol>          
+        </div>
+        </div>
+      </div> -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">      
+        <!-- Main row -->
+         <div class="row mb-1 d-flex flex-wrap align-items-end">
+            <div class="col-lg-3 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="" >Đơn vị quản lý:</label>
+                    <select class="form-control filter_meter selectpicker" data-live-search="true" required id="filter_tram" autocomplete="off" data-dropup-auto="false">
+                            <!-- <option value="all">Tất cả</option>
+                        <% for(let i=0; i < danhsachtram.length; i++){ %>
+                            <option value="<%=danhsachtram[i].id %>" <%= danhsachtram[i].id == parent_id ? 'selected' : '' %> ><%=danhsachtram[i].name%></option>
+                        <%}%> -->
+                        <option value="all" dv_type="all" <%= (parent_id === "all" ? "selected" : '') %>>Các đơn vị quản lý</option>
+                        <% 
+                        // Lọc ra các nhóm chính
+                        const groups = danhsachtram.filter(item => item.donviquanly_id === null);
+                    
+                        groups.forEach(group => {
+                          // Tìm các trạm con có donviquanly_id = id của nhóm chính
+                          const subItems = danhsachtram.filter(item => item.donviquanly_id === group.id);
+                      %>
+                        <!-- Nhóm chính -->
+                        <option value="<%= group.id %>" dv_type="dvql" <%= (parent_id === 'dvql' + group.id) ? 'selected' : '' %> style="font-weight: bold;"><%= group.name %></option>
+                    
+                        <!-- Các trạm con -->
+                        <% subItems.forEach(tram => { %>
+                          <option value="<%= tram.id %>" dv_type="dvnd" <%= (parent_id === 'dvnd' + tram.id) ? 'selected' : '' %>>&nbsp;&nbsp;&nbsp;<%= tram.name %></option>
+                        <% }); %>
+                    
+                      <% }); %>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="" >Tên trạm:</label>
+                    <select class="form-control selectpicker" required id="filter_meter" data-live-search="true" autocomplete="off">
+                        <option MeterCode="all" NodeCode = "all" <%= (MeterCode == 'all' && NodeCode == 'all' ) ? 'selected' : '' %>>Tất cả</option>
+                        <% for(let i=0; i < meter_list.length; i++){ %>
+                            <option data-tokens="<%= meter_list[i].MeterCode %>" MeterCode = "<%= meter_list[i].MeterCode %>" NodeCode="<%= meter_list[i].NodeCode %>" <%= (meter_list[i].MeterCode == MeterCode && meter_list[i].NodeCode == NodeCode ) ? 'selected' : '' %> ><%= meter_list[i].name %></option>
+                        <%}%>
+                    </select>
+                </div>
+ 
+            </div>
+            <div class="col-lg-3 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="" >Từ ngày:</label>
+                    <input class="form-control" type="text" autocomplete="off" id="alert_time_from">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="" >Đến ngày:</label>
+                    <input class="form-control" type="text" autocomplete="off" id="alert_time_to">
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-10 col-12">
+                <div class="form-group">
+                    <label for="" >Loại cảnh báo:</label>
+                    <!-- <select class="select2bs4 form-control filter_meter" multiple="multiple" data-placeholder="Chọn loại cảnh báo" style="width: 100%;" id="filter_alert_type">
+                        <option value="terminal_index" selected>Sản lượng</option>
+                        <option value="flowRate" selected>Lưu lượng</option>
+                        <option value="pressure" selected>Áp suất</option>
+                        <option value="measure_sensor" selected>Mực nước thực tế</option>
+                        <option value="measure_static" selected>Mực nước tĩnh</option>
+                        <option value="measure_dynamic" selected>Mực nước động</option>
+                        <option value="measure_delta" selected>Hiệu mực nước</option>
+                        <option value="ValueReverse" selected>Sản lượng ngược</option>
+                        <option value="PressureVol" selected>Áp suất điện áp</option>
+                        <option value="Voltage" selected>Pin</option>
+                        <option value="voltage_ac_quy" selected>Ắc quy</option>
+
+                    </select>                 -->
+                    <%
+                    const fieldOptions = {
+                        "low_terminal_index": "Cảnh báo sản lượng dưới ngưỡng",
+                        "high_terminal_index": "Cảnh báo sản lượng vượt ngưỡng",
+                        "low_flowRate": "Cảnh báo lưu lượng dưới ngưỡng",
+                        "high_flowRate": "Cảnh báo lưu lượng vượt ngưỡng",
+                        "low_pressure": "Cảnh báo áp suất dưới ngưỡng",
+                        "high_pressure": "Cảnh báo áp suất vượt ngưỡng",
+                        "low_PressureVol": "Cảnh báo áp suất điện áp dưới ngưỡng",
+                        "high_PressureVol": "Cảnh báo áp suất điện áp vượt ngưỡng",
+                        "low_measure_sensor": "Cảnh báo mực nước dưới ngưỡng",
+                        "high_measure_sensor": "Cảnh báo mực nước vượt ngưỡng",
+                        "CHANGE_DIRECTION": "Cảnh báo ngược xung",
+                        "LOST_DEVICE": "Cảnh báo tháo dỡ thiết bị",
+                        "MAGNETIC_DETECT": "Cảnh báo nhiễu từ trường",
+                        "HARD_RESET": "Cảnh báo reset thiết bị",
+                    };
+
+                    const selectedFields = Object.keys(data_field_config)
+                        .filter(key => data_field_config[key] === 1);
+
+                    const unselectedFields = Object.keys(fieldOptions)
+                        .filter(key => !selectedFields.includes(key));
+                    %>
+
+                <select class="select2bs4 form-control filter_meter" multiple="multiple" data-placeholder="Chọn loại cảnh báo" style="width: 100%;" id="filter_alert_type">
+                <% selectedFields.forEach(key => { %>
+                    <option value="<%= key %>" selected><%= fieldOptions[key] %></option>
+                <% }); %>
+
+                <% unselectedFields.forEach(key => { %>
+                    <option value="<%= key %>"><%= fieldOptions[key] %></option>
+                <% }); %>
+                </select>
+                </div>
+            </div>
+            <div class="col-auto" >
+                <button class="btn btn-primary btn-sm" style="margin-bottom: 17px" onclick="init_alert()"> <i class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</button>
+            </div>
+            <!-- <div class="col-auto" >
+                <button class="btn btn-primary" style="margin-bottom: 16px">Lưu bộ lọc</button>
+            </div> -->
+         </div>
+        <div class="row">
+          <section class="col-lg-12">
+            <div class="card">
+                <div class="card-body" style="min-height: 35rem;">
+                    <div class="" id="alert_table_container">
+                        <table id="alert_table" class="table table-bordered table-striped" class="display">
+                            <thead id="alert_table_head" style="background-color: #a8dbf0;">
+                                <th class="border_th_d" style="min-width: 7%">STT</th>
+                                <th class="border_th_d">Thời gian cảnh báo</th>
+                                <th class="border_th_d">Nội dung cảnh báo</th>
+                                <th class="border_th_d">Ngưỡng cảnh báo</th>
+                                <th class="border_th_d">Giá trị cảnh báo</th>
+
+                            </thead>
+                            <tbody id="alert_table_body">
+    
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+          </section>
+          <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <div id="loading-overlay" style="display: none;">
+    <div class="spinner-border text-primary" role="status"></div>
+    <span>Đang tải dữ liệu...</span>
+</div>
+<div id="notification" class="text-center"></div>
+
+<!-- Popup cảnh báo -->
+<div id="alert-container" style=" font-size: small;"></div>
+
+<button id="backToTop" class="back-to-top">
+    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+  </button>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+ <!-- jQuery -->
+<!-- <script src="/plugins_2/jquery/jquery.min.js"></script> -->
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins_2/jquery-ui/jquery-ui.min.js"></script>
+ <!-- amchartjs -->
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="/plugins_2/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="/plugins_2/select2/js/select2.full.min.js"></script>
+<!-- momentjs and daterangepicker -->
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
+<!-- ChartJS -->
+<script src="/plugins_2/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="/plugins_2/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="/plugins_2/jqvmap/jquery.vmap.min.js"></script>
+<script src="/plugins_2/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/plugins_2/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="/plugins_2/moment/moment.min.js"></script>
+<script src="/plugins_2/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/plugins_2/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="/plugins_2/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="/plugins_2/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/dist/js/adminlte.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/dist/js/pages/dashboard.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/dist/js/demo.js"></script>
+<!-- DataTables -->
+
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script> -->
+
+<!-- DataTable -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+    function showLoading() {
+        document.getElementById("loading-overlay").style.display = "flex";
+    }
+
+    function hideLoading() {
+        document.getElementById("loading-overlay").style.display = "none";
+    }
+    function show_notification(message, type) {
+                var notification = $("#notification");
+                notification.text(message).removeClass("error success").addClass(type);
+                notification.css("top", "20px").fadeIn();
+
+                // Ẩn sau 3 giây
+                setTimeout(function () {
+                    notification.fadeOut(function () {
+                        notification.css("top", "-50px");
+                    });
+                }, 5000);
+          }
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+  var alert_data_first = <%- alert_data %>
+  var user_id = <%- user_id %>
+</script>
+<script src="/javascripts/general.js"></script>
+
+<script src="/javascripts/data_alert.js"></script>
+</body>
+</html>

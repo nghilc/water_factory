@@ -1,0 +1,1493 @@
+<%if(may_phat_dien.length==0){%>
+    <div class="generator-page">
+        <!-- Header trang -->
+        <div class="page-header">
+            <div class="page-title">
+                <h2>🔌 <span id="meter_name">-</span></h2>
+                <div class="generator-status">
+                    <span class="generator-status-text status-running">ĐANG DỪNG</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thống kê nhanh -->
+        <div class="stats-grid">
+            <div class="stat-card-large">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon-large">⚡</div>
+                    <div class="stat-label-large">CÔNG SUẤT</div>
+                </div>
+                <div class="stat-value-large" id="general_P"></div>
+                <div class="stat-unit" id="general_P_u"></div>
+                <div class="stat-subvalue">0% tải</div>
+            </div>
+            <div class="stat-card-large">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon-large">🌡️</div>
+                    <div class="stat-label-large">NHIỆT ĐỘ</div>
+                </div>
+                <div class="stat-value-large" id="general_temp">-</div>
+                <div class="stat-unit" id="general_temp_u">°C</div>
+                <div class="stat-subvalue">Nước làm mát</div>
+            </div>
+            <div class="stat-card-large">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon-large">⏱️</div>
+                    <div class="stat-label-large">THỜI GIAN</div>
+                </div>
+                <div class="stat-value-large" style="font-size: 18px; color: #424242;" id="general_time"></div>
+                <!-- <div class="stat-value-large" id="general_time_CT"></div> -->
+                <!-- <div class="stat-unit">giờ</div> -->
+                <div class="stat-subvalue">Dữ liệu thời gian thực</div>
+            </div>
+            <div class="stat-card-large">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon-large">🛠️</div>
+                    <div class="stat-label-large">BẢO TRÌ</div>
+                </div>
+                <div class="stat-value-large" id="general_Ma_T_v">-</div>
+                <div class="stat-unit" id="general_Ma_T_u"></div>
+                <div class="stat-subvalue">Còn lại</div>
+            </div>
+        </div>
+
+        <div class="generator-grid">
+            <!-- Điện áp lưới -->
+            <div class="generator-section">
+                <div class="section-title"># ĐIỆN ÁP LƯỚI</div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Pha</th>
+                            <th>Điện áp</th>
+                            <th>Tần số dây</th>
+                            <th>Dây</th>
+                            <th>Điện áp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A</td>
+                            <td class="value-cell">
+                                <span class="value grid-voltage-a" id="V_A2_v">-</span>
+                                <span class="unit-cell" id="V_A2_u">(V)</span>
+                            </td>
+                            <td class="value-cell" rowspan="4">
+                                <span class="value" id="Freq2_v">-</span>
+                                <span class="unit-cell" id="Freq2_u">(V)</span>
+                            </td>
+                            <td>AB</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_AB2_v">-</span>
+                                <span class="unit-cell" id="V_AB2_u">(V)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td class="value-cell">
+                                <span class="value grid-voltage-b" id="V_B2_v">-</span>
+                                <span class="unit-cell" id="V_B2_u">(V)</span>
+                            </td>
+                            <!-- <td class="value-cell">-</td> -->
+                            <td>BC</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_BC2_v">-</span>
+                                <span class="unit-cell" id="V_BC2_u">(V)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C</td>
+                            <td class="value-cell">
+                                <span class="value grid-voltage-c" id="V_C2_v">-</span>
+                                <span class="unit-cell" id="V_C2_u">(V)</span>
+                            </td>
+                            <!-- <td class="value-cell">-</td> -->
+                            <td>CA</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_CA2_v">-</span>
+                                <span class="unit-cell" id="V_CA2_u">(V)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tổng</td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                            <!-- <td>-</td> -->
+                            <td class="value-cell">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Điện áp đầu ra -->
+            <div class="generator-section">
+                <div class="section-title"># ĐIỆN ÁP ĐẦU RA</div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Pha</th>
+                            <th>Điện áp</th>
+                            <th>Dòng điện</th>
+                            <th>Hệ số góc</th>
+                            <th>Công suất P</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A</td>
+                            <td class="value-cell">
+                                <span class="value output-voltage-a" id="V_A_v">-</span>
+                                <span class="unit-cell" id="V_A_u">(V)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value output-current-a" id="I_A_v">-</span>
+                                <span class="unit-cell" id="I_A_u">(A)</span>
+                            </td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_B_v">-</span>
+                                <span class="unit-cell" id="V_B_u">(V)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value" id="I_B_v">-</span>
+                                <span class="unit-cell" id="I_B_u">(A)</span>
+                            </td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                        </tr>
+                        <tr>
+                            <td>C</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_C_v">-</span>
+                                <span class="unit-cell" id="V_C_u">(V)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value" id="I_C_v">-</span>
+                                <span class="unit-cell" id="I_C_u">(A)</span>
+                            </td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                        </tr>
+                        <tr>
+                            <td>Tổng</td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">
+                                <span class="value" id="I_N_v">-</span>
+                                <span class="unit-cell" id="I_N_u">(A)</span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value" id="PF_T_v">-</span>
+                                <span class="unit-cell" id="PF_T_u"></span>
+                            </td>
+                            <td class="value-cell">
+                                <span class="value" id="A_Inst_T_v">-</span>
+                                <span class="unit-cell" id="A_Inst_T_u">(kW)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-bordered" style="width: 50%; margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Dây</th>
+                            <th>Điện áp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AB</td>
+                            <td class="value-cell">
+                                <span class="value output-voltage-a" id="V_AB_v">-</span>
+                                <span class="unit-cell" id="V_AB_u">(V)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>BC</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_BC_v">-</span>
+                                <span class="unit-cell" id="V_BC_u">(V)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CA</td>
+                            <td class="value-cell">
+                                <span class="value" id="V_CA_v">-</span>
+                                <span class="unit-cell" id="V_CA_u">(V)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Thông tin chung -->
+            <div class="generator-section section-full">
+                <div class="section-title"># THÔNG TIN CHUNG</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-label">Tốc độ</div>
+                        <div class="info-value generator-speed" id="Speed_v">-</div>
+                        <div class="info-unit" id="Speed_u">RPM</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Điện áp kích từ</div>
+                        <div class="info-value battery-voltage" id="V_Bat_v">-</div>
+                        <div class="info-unit" id="V_Bat_u">V</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Nhiệt độ nước</div>
+                        <div class="info-value water-temp" id="Tem_W_v">-</div>
+                        <div class="info-unit" id="Tem_W_u">°C</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Áp suất dầu</div>
+                        <div class="info-value oil-pressure" id="P_Oil_v">-</div>
+                        <div class="info-unit" id="P_Oil_u">bar</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Thời gian chạy từ lúc KD</div>
+                        <div class="info-value" id="Run_T_v">-</div>
+                        <div class="info-unit" id="Run_T_u">giờ</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Thời gian chạy tổng</div>
+                        <div class="info-value" id="Run_TT_v">-</div>
+                        <div class="info-unit" id="Run_TT_u">giờ</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Thời gian bảo trì</div>
+                        <div class="info-value" id="Ma_T_v">-</div>
+                        <div class="info-unit" id="Ma_T_u">giờ</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Thời điểm bảo trì</div>
+                        <div class="info-value" id="Ma_D">-</div>
+                        <!-- <div class="info-unit">dd-mm-yyyy</div> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trạng thái đầu vào -->
+            <div class="generator-section">
+                <div class="section-title"># TRẠNG THÁI ĐẦU VÀO</div>
+                <div class="io-grid" id="sta_in_container">
+                    <div class="io-card">
+                        <div class="io-label">EMER</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.1</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.2</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.3</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.4</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.5</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trạng thái đầu ra -->
+            <div class="generator-section">
+                <div class="section-title"># TRẠNG THÁI ĐẦU RA</div>
+                <div class="io-grid" id="sta_out_container">
+                    <div class="io-card">
+                        <div class="io-label">FUEL</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">CRANK</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.1</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.2</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.3</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                    <div class="io-card">
+                        <div class="io-label">AUX.4</div>
+                        <div class="io-value">
+                            <span class="status-indicator status-off"></span>
+                            <span class="status-text text-off">Tắt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div class="generator-section section-full">
+                <div class="section-title"># CẢNH BÁO</div>
+                <div class="alert-section">
+                    <div class="alert-title">
+                        <span>⚠️</span>
+                        <span>CẢNH BÁO HỆ THỐNG</span>
+                    </div>
+                    <div class="alert-content" id="Alarm">
+                        [Cylinder temperature sensor open] - Cảm biến nhiệt độ xi lanh mở
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel điều khiển -->
+        <div class="control-panel">
+            <button class="btn btn-success" data-action="start" disabled>KHỞI ĐỘNG</button>
+            <button class="btn btn-danger" data-action="stop" disabled>DỪNG</button>
+            <button class="btn btn-primary" data-action="auto" disabled>CHẾ ĐỘ AUTO</button>
+            <button class="btn btn-warning" data-action="reset" disabled>RESET CẢNH BÁO</button>
+            <button class="btn btn-dark" disabled>CÀI ĐẶT</button>
+        </div>
+
+    
+    </div>
+    <%}%>
+        <% for(let i=0; i < may_phat_dien.length; i++){ %>
+            <div class="generator-page">
+                <!-- Header trang -->
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>🔌<span>
+                                <%=may_phat_dien[i].name%>
+                            </span></h2>
+                        <div class="generator-status">
+                            <span class="generator-status-text status-running">ĐANG DỪNG</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thống kê nhanh -->
+                <div class="stats-grid">
+                    <div class="stat-card-large">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon-large">⚡</div>
+                            <div class="stat-label-large">CÔNG SUẤT</div>
+                        </div>
+                        <div class="stat-value-large">
+                            <%= ((may_phat_dien[i].A_Inst_T_v !=null) ? may_phat_dien[i].A_Inst_T_v : '-' ) %>
+                        </div>
+                        <div class="stat-unit">
+                            <%=(may_phat_dien[i].A_Inst_T_u !=null) ? may_phat_dien[i].A_Inst_T_u : "-" %>
+                        </div>
+                        <!-- <div class="stat-subvalue">0% tải</div> -->
+                    </div>
+                    <div class="stat-card-large">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon-large">🌡️</div>
+                            <div class="stat-label-large">NHIỆT ĐỘ</div>
+                        </div>
+                        <div class="stat-value-large">
+                            <%=(may_phat_dien[i].Tem_W_v !=null) ? may_phat_dien[i].Tem_W_v : "-" %>
+                        </div>
+                        <div class="stat-unit">
+                            <%=(may_phat_dien[i].Tem_W_u !=null) ? may_phat_dien[i].Tem_W_u : "-" %>
+                        </div>
+                        <div class="stat-subvalue">Nước làm mát</div>
+                    </div>
+                    <div class="stat-card-large">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon-large">⏱️</div>
+                            <div class="stat-label-large">THỜI GIAN</div>
+                        </div>
+                        <div class="stat-value-large" style="font-size: 18px; color: #424242;">
+                            <%=(may_phat_dien[i].last_data_time !=null) ? new
+                                Date(may_phat_dien[i].last_data_time).toLocaleString('en-GB') : "-" %>
+                        </div>
+                        <!-- <div class="stat-value-large" id="general_time_CT"></div> -->
+                        <!-- <div class="stat-unit">giờ</div> -->
+                        <div class="stat-subvalue">Dữ liệu thời gian thực</div>
+                    </div>
+                    <div class="stat-card-large">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon-large">🛠️</div>
+                            <div class="stat-label-large">BẢO TRÌ</div>
+                        </div>
+                        <div class="stat-value-large">
+                            <%=(may_phat_dien[i].Ma_T_v !=null) ? may_phat_dien[i].Ma_T_v : "-" %>
+                        </div>
+                        <div class="stat-unit">
+                            <%=(may_phat_dien[i].Ma_T_u !=null) ? may_phat_dien[i].Ma_T_u : "-" %>
+                        </div>
+                        <div class="stat-subvalue">Còn lại</div>
+                    </div>
+                </div>
+
+                <div class="generator-grid">
+                    <!-- Điện áp lưới -->
+                    <div class="generator-section">
+                        <div class="section-title"># ĐIỆN ÁP LƯỚI</div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Pha</th>
+                                    <th>Điện áp</th>
+                                    <th>Tần số dây</th>
+                                    <th>Dây</th>
+                                    <th>Điện áp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>A</td>
+                                    <td class="value-cell">
+                                        <span class="value grid-voltage-a">
+                                            <%=(may_phat_dien[i].V_A2_v !=null) ? may_phat_dien[i].V_A2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_A2_u !=null) ? '(' + may_phat_dien[i].V_A2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell" rowspan="4">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].Freq2_v !=null) ? may_phat_dien[i].Freq2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].Freq2_u !=null) ? '(' + may_phat_dien[i].Freq2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                    <td>AB</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_AB2_v !=null) ? may_phat_dien[i].V_AB2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_AB2_u !=null) ? '(' + may_phat_dien[i].V_AB2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td class="value-cell">
+                                        <span class="value grid-voltage-b">
+                                            <%=(may_phat_dien[i].V_B2_v !=null) ? may_phat_dien[i].V_B2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_B2_u !=null) ? '(' + may_phat_dien[i].V_B2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                    <!-- <td class="value-cell">-</td> -->
+                                    <td>BC</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_BC2_v !=null) ? may_phat_dien[i].V_BC2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_BC2_u !=null) ? '(' + may_phat_dien[i].V_BC2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td class="value-cell">
+                                        <span class="value grid-voltage-c">
+                                            <%=(may_phat_dien[i].V_C2_v !=null) ? may_phat_dien[i].V_C2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_C2_u !=null) ? '(' + may_phat_dien[i].V_C2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                    <!-- <td class="value-cell">-</td> -->
+                                    <td>CA</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_CA2_v !=null) ? may_phat_dien[i].V_CA2_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_CA2_u !=null) ? '(' + may_phat_dien[i].V_CA2_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <!-- <td>-</td> -->
+                                    <td class="value-cell">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="view-details-btn dien_ap_luoi_btn" metercode="<%=may_phat_dien[i].MeterCode%>"
+                            meter_name="<%=may_phat_dien[i].name%>">
+                            <input type="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Xem chi tiết
+                        </div>
+                    </div>
+
+                    <!-- Điện áp đầu ra -->
+                    <div class="generator-section">
+                        <div class="section-title"># ĐIỆN ÁP ĐẦU RA</div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Pha</th>
+                                    <th>Điện áp</th>
+                                    <th>Dòng điện</th>
+                                    <th>Hệ số góc</th>
+                                    <th>Công suất P</th>
+                                    <th>Công suất Q</th>
+                                    <th>Công suất S</th>
+                                    <th>Tần số dây</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>A</td>
+                                    <td class="value-cell">
+                                        <span class="value output-voltage-a">
+                                            <%=(may_phat_dien[i].V_A_v !=null) ? may_phat_dien[i].V_A_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_A_u !=null) ? '(' + may_phat_dien[i].V_A_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value output-current-a">
+                                            <%=(may_phat_dien[i].I_A_v !=null) ? may_phat_dien[i].I_A_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].I_A_u !=null) ? '(' + may_phat_dien[i].I_A_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell" rowspan="4">
+                                        <span class="value output-current-a">
+                                            <%=(may_phat_dien[i].Freq_v !=null) ? may_phat_dien[i].Freq_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].Freq_u !=null) ? '(' + may_phat_dien[i].Freq_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_B_v !=null) ? may_phat_dien[i].V_B_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_B_u !=null) ? '(' + may_phat_dien[i].V_B_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].I_B_v !=null) ? may_phat_dien[i].I_B_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].I_B_u !=null) ? '(' + may_phat_dien[i].I_B_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_C_v !=null) ? may_phat_dien[i].V_C_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_C_u !=null) ? '(' + may_phat_dien[i].V_C_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].I_C_v !=null) ? may_phat_dien[i].I_C_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].I_C_u !=null) ? '(' + may_phat_dien[i].I_C_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng</td>
+                                    <td class="value-cell">-</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].I_N_v !=null) ? may_phat_dien[i].I_N_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].I_N_u !=null) ? '(' + may_phat_dien[i].I_N_u +')' : ""
+                                                %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].PF_T_v !=null) ? may_phat_dien[i].PF_T_v : "-" %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].A_Inst_T_v !=null) ? may_phat_dien[i].A_Inst_T_v : "-"
+                                                %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].A_Inst_T_u !=null) ? '(' + may_phat_dien[i].A_Inst_T_u
+                                                +')' : "" %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].Q_Inst_T_v !=null) ? may_phat_dien[i].Q_Inst_T_v : "-"
+                                                %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].Q_Inst_T_u !=null) ? '(' + may_phat_dien[i].Q_Inst_T_u
+                                                +')' : "" %>
+                                        </span>
+                                    </td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].S_Inst_T_v !=null) ? may_phat_dien[i].S_Inst_T_v : "-"
+                                                %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].S_Inst_T_u !=null) ? '(' + may_phat_dien[i].S_Inst_T_u
+                                                +')' : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="view-details-btn dien_ap_ra_pha_btn" metercode="<%=may_phat_dien[i].MeterCode%>"
+                            meter_name="<%=may_phat_dien[i].name%>">
+                            <input type="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Xem chi tiết
+                        </div>
+                        <table class="table table-bordered" style="width: 50%; margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>Dây</th>
+                                    <th>Điện áp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>AB</td>
+                                    <td class="value-cell">
+                                        <span class="value output-voltage-a">
+                                            <%=(may_phat_dien[i].V_AB_v !=null) ? may_phat_dien[i].V_AB_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_AB_u !=null) ? '(' + may_phat_dien[i].V_AB_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BC</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_BC_v !=null) ? may_phat_dien[i].V_BC_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_BC_u !=null) ? '(' + may_phat_dien[i].V_BC_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CA</td>
+                                    <td class="value-cell">
+                                        <span class="value">
+                                            <%=(may_phat_dien[i].V_CA_v !=null) ? may_phat_dien[i].V_CA_v : "-" %>
+                                        </span>
+                                        <span class="unit-cell">
+                                            <%=(may_phat_dien[i].V_CA_u !=null) ? '(' + may_phat_dien[i].V_CA_u +')'
+                                                : "" %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="view-details-btn dien_ap_ra_day_btn" metercode="<%=may_phat_dien[i].MeterCode%>"
+                            meter_name="<%=may_phat_dien[i].name%>">
+                            <input type="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Xem chi tiết
+                        </div>
+                    </div>
+
+                    <!-- Thông tin chung -->
+                    <div class="generator-section section-full">
+                        <div class="section-title"># THÔNG TIN CHUNG</div>
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <div class="info-label">Tốc độ</div>
+                                <div class="info-value generator-speed">
+                                    <%=(may_phat_dien[i].Speed_v !=null) ? may_phat_dien[i].Speed_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].Speed_u !=null) ? '(' + may_phat_dien[i].Speed_u +')' : "" %>  </div>                            
+                                </div>
+                            <div class="info-card">
+                                <div class="info-label">Điện áp kích từ</div>
+                                <div class="info-value battery-voltage">
+                                    <%=(may_phat_dien[i].V_Bat_v !=null) ? may_phat_dien[i].V_Bat_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].V_Bat_u !=null) ? '(' + may_phat_dien[i].V_Bat_u +')' : "" %>
+                                </div>                            
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Nhiệt độ nước</div>
+                                <div class="info-value water-temp">
+                                    <%=(may_phat_dien[i].Tem_W_v !=null) ? may_phat_dien[i].Tem_W_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].Tem_W_u !=null) ? '(' + may_phat_dien[i].Tem_W_u +')' : "" %>
+                                </div>                            
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Áp suất dầu</div>
+                                <div class="info-value oil-pressure">
+                                    <%=(may_phat_dien[i].P_Oil_v !=null) ? may_phat_dien[i].P_Oil_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].P_Oil_u !=null) ? '(' + may_phat_dien[i].P_Oil_u +')' : "" %>
+                                </div>       
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Thời gian chạy từ lúc KD</div>
+                                <div class="info-value">
+                                    <%=(may_phat_dien[i].Run_T_v !=null) ? may_phat_dien[i].Run_T_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].Run_T_u !=null) ? '(' + may_phat_dien[i].Run_T_u +')' : "" %>
+                                </div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Thời gian chạy tổng</div>
+                                <div class="info-value">
+                                    <%=(may_phat_dien[i].Run_TT_v !=null) ? may_phat_dien[i].Run_TT_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].Run_TT_u !=null) ? '(' + may_phat_dien[i].Run_TT_u +')' : "" %>
+                                </div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Thời gian bảo trì</div>
+                                <div class="info-value">
+                                    <%=(may_phat_dien[i].Ma_T_v !=null) ? may_phat_dien[i].Ma_T_v : "-" %>
+                                </div>
+                                <div class="info-unit">
+                                    <%=(may_phat_dien[i].Ma_T_u !=null) ? '(' + may_phat_dien[i].Ma_T_u +')' : "" %>
+                                </div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Thời điểm bảo trì</div>
+                                <div class="info-value">
+                                    <%=(may_phat_dien[i].Ma_D !=null) ? may_phat_dien[i].Ma_D : "-" %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trạng thái đầu vào -->
+                    <div class="generator-section">
+                        <div class="section-title"># TRẠNG THÁI ĐẦU VÀO</div>
+                        <div class="io-grid">
+                            <% if (may_phat_dien[i].Sta_In) { let sta_in=JSON.parse(may_phat_dien[i].Sta_In); for (let
+                                key in sta_in) { %>
+                                <div class="io-card">
+                                    <div class="io-label">
+                                        <%= key %>
+                                    </div>
+                                    <div class="io-value">
+                                        <span class="status-indicator status-<%= sta_in[key] %>"></span>
+                                        <span class="status-text">
+                                            <%= sta_in[key]==="on" ? "Bật" : "Tắt" %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <% } } %>
+ 
+                        </div>
+                    </div>
+
+                    <!-- Trạng thái đầu ra -->
+                    <div class="generator-section">
+                        <div class="section-title"># TRẠNG THÁI ĐẦU RA</div>
+                        <div class="io-grid">
+                            <% if (may_phat_dien[i].Sta_Out) { let sta_out=JSON.parse(may_phat_dien[i].Sta_Out); for
+                                (let key in sta_out) { %>
+                                <div class="io-card">
+                                    <div class="io-label">
+                                        <%= key %>
+                                    </div>
+                                    <div class="io-value">
+                                        <span class="status-indicator status-<%= sta_out[key] %>"></span>
+                                        <span class="status-text">
+                                            <%= sta_out[key]==="on" ? "Bật" : "Tắt" %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <% } } %>
+                        </div>
+                    </div>
+
+                    <!-- Cảnh báo -->
+                    <div class="generator-section section-full">
+                        <div class="section-title"># CẢNH BÁO</div>
+                        <div class="alert-section">
+                            <div class="alert-title">
+                                <span>⚠️</span>
+                                <span>CẢNH BÁO HỆ THỐNG</span>
+                            </div>
+                            <div class="alert-content">
+                                <%= may_phat_dien[i].Alarm %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel điều khiển -->
+                <div class="control-panel">
+                    <button class="btn btn-success" data-action="start" disabled>KHỞI ĐỘNG</button>
+                    <button class="btn btn-danger" data-action="stop" disabled>DỪNG</button>
+                    <button class="btn btn-primary" data-action="auto" disabled>CHẾ ĐỘ AUTO</button>
+                    <button class="btn btn-warning" data-action="reset" disabled>RESET CẢNH BÁO</button>
+                    <button class="btn btn-dark" disabled>CÀI ĐẶT</button>
+                </div>
+
+
+            </div>
+            <%}%>
+            <!-- Popup History -->
+            <!-- modal lịch sử dữ liệu -->
+            <div id="lich_su_du_lieu" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+                data-backdrop="static">
+                <div class="modal-dialog " role="document" style="max-width: 90%; height: 800px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>📊 Lịch sử - <span id="modal_title"></span></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-1 d-flex flex-wrap align-items-end">
+                                <div class="col-md-3 col-6">
+                                    <div class="form-group">
+                                        <label for="">Từ ngày:</label>
+                                        <input class="form-control" type="text" autocomplete="off" id="meter_data_time_from">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="form-group">
+                                        <label for="">Đến ngày:</label>
+                                        <input class="form-control" type="text" autocomplete="off" id="meter_data_time_to">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-primary mr-2" style="margin-bottom: 16px" onclick="init_data()"> <i
+                                            class="fa fa-search" aria-hidden="true"></i> Xem dữ liệu</button>
+                                    <button class="btn btn-success" style="margin-bottom: 16px" id="export_data"> Xuất dữ
+                                        liệu</button>
+                                </div>
+                            </div>
+                            <div id="may_phat_dien_table">
+                                <table class="table table-bordered">
+                                    <thead id="may_phat_dien_thead">
+                              
+                                    </thead>
+                                    <tbody id="may_phat_dien_tbody">
+                              
+                                    </tbody>
+                                </table>
+                                </div>
+      
+       
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        
+                <style>
+                    .generator-page {
+                        max-width: 1400px;
+                        margin: 0 auto;
+                    }
+
+                    .stats-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 20px;
+                        margin-bottom: 25px;
+                    }
+
+                    .stat-card-large {
+                        background: rgba(207, 207, 207, 0.284);
+                        border-radius: 12px;
+                        padding: 20px;
+                        text-align: center;
+                    }
+
+                    .stat-icon-large {
+                        font-size: 32px;
+                        margin-bottom: 10px;
+                    }
+
+                    .stat-value-large {
+                        font-size: 28px;
+                        font-weight: bold;
+                        margin: 10px 0;
+                        color: #4CAF50;
+                    }
+
+                    .stat-label-large {
+                        font-size: 14px;
+                        opacity: 0.8;
+                    }
+
+                    .stat-unit {
+                        font-size: 11px;
+                        opacity: 0.7;
+                    }
+
+                    .stat-subvalue {
+                        font-size: 12px;
+                        margin-top: 4px;
+                        opacity: 0.8;
+                    }
+
+                    .generator-status {
+                        background: rgba(207, 207, 207, 0.284);
+                        padding: 8px 16px;
+                        border-radius: 20px;
+                        font-size: 14px;
+                        font-weight: 600;
+                    }
+
+                    .status-running {
+                        background: rgba(76, 175, 80, 0.2);
+                        color: #4CAF50;
+                    }
+
+                    .status-stopped {
+                        background: rgba(244, 67, 54, 0.2);
+                        color: #f44336;
+                    }
+
+                    .generator-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 25px;
+                        margin-bottom: 25px;
+                    }
+
+                    .generator-section {
+                        background: rgba(207, 207, 207, 0.284);
+                        border-radius: 15px;
+                        padding: 25px;
+                        backdrop-filter: blur(10px);
+                    }
+
+                    .section-full {
+                        grid-column: 1 / -1;
+                    }
+
+                    .section-title {
+                        font-size: 18px;
+                        font-weight: 600;
+                        margin-bottom: 20px;
+                        color: #1f9ec7;
+                        border-bottom: 1px solid rgba(134, 134, 134, 0.691);
+                        padding-bottom: 10px;
+                    }
+
+                    .data-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        background: rgba(255, 255, 255, 0.05);
+                        border-radius: 10px;
+                        overflow: hidden;
+                    }
+
+                    .data-table th {
+                        background: rgba(207, 207, 207, 0.284);
+                        padding: 15px 12px;
+                        text-align: left;
+                        font-weight: 600;
+                        font-size: 13px;
+                        border-bottom: 2px solid rgba(207, 207, 207, 0.284);
+                    }
+
+                    .data-table td {
+                        padding: 12px;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                        font-size: 13px;
+                    }
+
+                    .data-table tr:last-child td {
+                        border-bottom: none;
+                    }
+
+                    .data-table tr:hover {
+                        background: rgba(174, 174, 174, 0.311);
+                    }
+
+                    .value-cell {
+                        text-align: right;
+                        font-weight: 600;
+                    }
+
+                    .value {
+                        color: #4CAF50;
+                    }
+
+                    .unit-cell {
+                        font-size: 11px;
+                        opacity: 0.7;
+                        text-align: left;
+                    }
+
+                    .info-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 15px;
+                    }
+
+                    .info-card {
+                        background: rgba(174, 174, 174, 0.311);
+                        padding: 20px;
+                        border-radius: 10px;
+                        text-align: center;
+                    }
+
+                    .info-label {
+                        font-size: 12px;
+                        opacity: 0.8;
+                        margin-bottom: 8px;
+                        text-transform: uppercase;
+                    }
+
+                    .info-value {
+                        font-size: 20px;
+                        font-weight: 700;
+                        margin: 5px 0;
+                        color: #4CAF50;
+                    }
+
+                    .io-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 12px;
+                    }
+
+                    .io-card {
+                        background: rgba(174, 174, 174, 0.311);
+                        padding: 15px;
+                        border-radius: 8px;
+                        text-align: center;
+                    }
+
+                    .io-label {
+                        font-size: 11px;
+                        opacity: 0.8;
+                        margin-bottom: 8px;
+                    }
+
+                    .io-value {
+                        font-size: 14px;
+                        font-weight: 600;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                    }
+
+                    .status-indicator {
+                        display: inline-block;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                    }
+
+                    .status-on {
+                        background: #4CAF50;
+                    }
+
+                    .status-off {
+                        background: #78909C;
+                    }
+
+                    .status-text {
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 11px;
+                        font-weight: 600;
+                    }
+
+                    .text-on {
+                        background: rgba(76, 175, 80, 0.2);
+                        color: #4CAF50;
+                    }
+
+                    .text-off {
+                        background: rgba(120, 144, 156, 0.2);
+                        color: #78909C;
+                    }
+
+                    .alert-section {
+                        background: rgba(244, 67, 54, 0.1);
+                        border: 1px solid rgba(244, 67, 54, 0.3);
+                        border-radius: 10px;
+                        padding: 20px;
+                    }
+
+                    .alert-title {
+                        color: #f44336;
+                        font-weight: 600;
+                        margin-bottom: 10px;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+
+                    .alert-content {
+                        font-size: 14px;
+                        opacity: 0.9;
+                    }
+
+                    .control-panel {
+                        display: flex;
+                        gap: 15px;
+                        margin-top: 25px;
+                        justify-content: center;
+                    }
+
+                    .control-btn {
+                        padding: 12px 24px;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        font-size: 14px;
+                        transition: all 0.3s ease;
+                        min-width: 120px;
+                    }
+
+                    .btn-start {
+                        background: #4CAF50;
+                        color: white;
+                    }
+
+                    .btn-stop {
+                        background: #f44336;
+                        color: white;
+                    }
+
+                    .btn-auto {
+                        background: #2196F3;
+                        color: white;
+                    }
+
+                    .btn-reset {
+                        background: #FF9800;
+                        color: white;
+                    }
+
+                    .control-btn:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                    }
+
+                    .control-btn:disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                        transform: none;
+                    }
+
+                    @media (max-width: 1200px) {
+                        .generator-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .info-grid {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+
+                        .io-grid {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+
+                        .stats-grid {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+                    }
+
+                    @media (max-width: 768px) {
+                        .info-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .io-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .stats-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .control-panel {
+                            flex-direction: column;
+                            align-items: center;
+                        }
+
+                        .control-btn {
+                            width: 100%;
+                            max-width: 200px;
+                        }
+
+                        .data-table {
+                            font-size: 12px;
+                        }
+
+                        .data-table th,
+                        .data-table td {
+                            padding: 8px 6px;
+                        }
+                    }
+
+
+            
+
+    
+                    .settings-section {
+                        background: rgba(174, 174, 174, 0.311);
+                        border-radius: 10px;
+                        padding: 20px;
+                        margin-bottom: 20px;
+                    }
+
+                    .settings-section-title {
+                        font-size: 16px;
+                        font-weight: 600;
+                        margin-bottom: 15px;
+                        color: #1f9ec7;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+
+                    .settings-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 15px;
+                    }
+
+                    .setting-item {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+
+                    .setting-label {
+                        font-size: 13px;
+                        opacity: 0.9;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                    }
+
+                    .setting-input-group {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+
+                    .setting-input {
+                        flex: 1;
+                        background: rgba(207, 207, 207, 0.284);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        color: white;
+                        padding: 10px 12px;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        outline: none;
+                        transition: all 0.3s ease;
+                    }
+
+                    .setting-input:focus {
+                        border-color: #4CAF50;
+                        background: rgba(255, 255, 255, 0.15);
+                    }
+
+                    .setting-unit {
+                        font-size: 12px;
+                        opacity: 0.7;
+                        min-width: 40px;
+                    }
+
+                    .setting-select {
+                        flex: 1;
+                        background: rgba(207, 207, 207, 0.284);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        color: white;
+                        padding: 10px 12px;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        outline: none;
+                        transition: all 0.3s ease;
+                    }
+
+                    .setting-select:focus {
+                        border-color: #4CAF50;
+                        background: rgba(255, 255, 255, 0.15);
+                    }
+
+                    .setting-select option {
+                        background: #1e3c72;
+                        color: white;
+                    }
+
+                    .settings-actions {
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 10px;
+                        margin-top: 20px;
+                        padding-top: 20px;
+                        border-top: 1px solid rgba(207, 207, 207, 0.284);
+                    }
+
+                    .btn-save {
+                        background: #4CAF50;
+                        color: white;
+                        border: none;
+                        padding: 12px 25px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                    }
+
+                    .btn-cancel {
+                        background: rgba(207, 207, 207, 0.284);
+                        color: white;
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        padding: 12px 25px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                    }
+
+                    .btn-save:hover,
+                    .btn-cancel:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                    }
+
+                    .view-details-btn {
+                        margin-top: 15px;
+                        padding: 8px 15px;
+                        /* background: rgba(76, 175, 79, 0.716);
+                        border: 1px solid rgba(76, 175, 79, 0.747); */
+                        background: rgba(31, 158, 199, 0.716);
+                        border: 1px solid rgba(31, 158, 199, 0.747);
+                        border-radius: 8px;
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        width: fit-content;
+                        cursor: pointer;
+                    }
+
+                    .view-details-btn:hover {
+                        background: rgba(31, 158, 199, 0.918);
+                    }
+                </style>
+                <script src="/javascripts/may_phat_dien.js"></script>

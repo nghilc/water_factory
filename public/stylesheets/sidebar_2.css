@@ -1,0 +1,129 @@
+    body {
+        overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 52.25px; /* Đảm bảo sidebar nằm dưới thanh menu */
+        left: 0;
+        height: calc(100% - 52.25px); /* Chiều cao của sidebar sẽ tự động điều chỉnh dựa trên chiều cao của topbar */
+        width: 280px;
+        background-color: #ffffff;
+        color: #fff;
+        /* border-right: 1px solid #a5a5a5; */
+        padding: 5px 5px 10px 10px;
+        transition: all 0.3s ease;
+        overflow-y: auto; /* Thêm thanh trượt khi nội dung quá dài */
+        overflow-x: auto;
+    }
+    #sidebar.overlay {
+        z-index: 1040;
+      }
+    /* Content */
+    #content {
+        transition: all 0.3s ease;
+        margin-left: 280px; /* Mặc định nội dung sẽ hiển thị cùng với sidebar */
+        padding-top: 52.25px; /* Đảm bảo nội dung không bị trùng với topbar */
+    }
+
+    /* Sidebar toggle button */
+    .sidebar-toggle-btn {
+        position: absolute;
+        top: 5px; /* Điều chỉnh vị trí của nút bấm theo chiều dọc */
+        left: 10px; /* Điều chỉnh vị trí của nút bấm theo chiều ngang */
+        z-index: 1001; /* Đảm bảo nút bấm luôn nằm trên topbar */
+        cursor: pointer;
+    }
+
+    #close_sidebar_btn{
+        width: 56px;
+        height: 46px;
+    }
+    .sidebar-toggle-btn span {
+        display: block;
+        width: 40px;
+        height: 40px;
+        background-color: #f8f9fa;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+      }
+  
+    .sidebar-toggle-btn span::before {
+    content: "\2630";
+    font-size: 20px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 767px) {
+    #sidebar {
+        width: 0;
+        height: calc(100% - 52.25px); /* Đảm bảo sidebar chiếm toàn bộ chiều cao khi trên thiết bị di động */
+        top: 52.25px; /* Đảm bảo sidebar bắt đầu từ đỉnh trang */
+    }
+    #content {
+        margin-left: 0; /* Đảm bảo rằng nội dung không bị ẩn khi sidebar ẩn đi */
+        padding-top: 52.25px; /* Đảm bảo nội dung không bị trùng với topbar */
+    }
+    /* Sidebar đè lên content khi hiện */
+    #sidebar.overlay {
+        width: 280px;
+        z-index: 1050; /* Đảm bảo sidebar luôn nằm trên nội dung */
+    }
+    .navbar-toggler {
+        position: absolute;
+        left: 50px; /* Điều chỉnh vị trí của nút bấm theo chiều ngang */
+        top: 12px; /* Điều chỉnh vị trí của nút bấm theo chiều dọc */
+        z-index: 1001;
+    }
+    .navbar-collapse {
+        text-align: right; /* Đảm bảo nội dung topbar float right trên điện thoại */
+    }
+    }
+
+    /* Topbar */
+    .navbar {
+        margin-bottom: 0;
+        z-index: 1000; /* Đảm bảo topbar luôn nằm trên các thành phần khác */
+        }
+    
+        .flag-icon {
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        position: relative;
+        display: inline-block;
+        width: 1.33333333em;
+        line-height: 1em;
+        }
+    
+        .flag-icon-vn {
+        background-image: url(../flags/4x3/vn.svg);
+    }
+
+@media (min-width: 1140px) {
+    .show_big_hide_mobie{
+        /* visibility: visible; */
+        display: block ;
+    }
+    .hide_big_show_mobie{
+        /* visibility: hidden; */
+        display: none !important;
+    }
+}
+@media (max-width: 1140px) {
+    .show_big_hide_mobie{
+        /* visibility: hidden; */
+        display: none ;
+    }
+    .hide_big_show_mobie{
+        /* visibility: visible; */
+        display: block !important;
+    }
+}
+
+
+.dash_underline{
+    border-bottom: dashed 1px rgba(207, 207, 207, 0.7); 
+    width: 100%;
+}

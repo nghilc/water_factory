@@ -1,0 +1,66 @@
+select option[disabled]:first-child {
+    color: #6c757d; /* Màu text mờ giống placeholder Bootstrap */
+  }
+
+  #loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9999;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 10px;
+}
+
+body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-size: 0.88rem;
+}
+
+.fix_fontsize{
+  font-size: 0.88rem !important;
+}
+
+.navbar-nav li a.dropdown-item:hover{
+  background-color: #49b6ff;
+}
+
+
+/* popup cảnh báo */
+#alert-container {
+  position: fixed;
+  bottom: 100px;
+  right: 10px;
+  z-index: 1500;
+}
+
+.alert-popup {
+  width: 350px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
+  color: white !important;
+  /* text-shadow:
+  -1px -1px 0 black,
+   1px -1px 0 black,
+  -1px  1px 0 black,
+   1px  1px 0 black; */
+
+}
+
+.alert-popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}

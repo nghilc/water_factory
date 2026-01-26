@@ -1,0 +1,346 @@
+<input class="form-control" type="hidden" id="server_address_read" value="<%= server_address %>">
+<section class="col-lg-12">
+
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong>Cấu hình tần suất</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="retain_config_freq">
+                        <label class="form-check-label font-weight-bold" for="retain_config_freq">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="" >Tần suất thu thập:</label>
+                        <div class="input-group mt-2">
+                            <select class="form-control" id="freq_time">
+                                <option value="5" >5 phút</option>
+                                <option value="10" selected>10 phút</option>
+                                <option value="15">15 phút</option>
+                                <option value="30">30 phút</option>
+                                <option value="60">60 phút</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">x</span>
+                            </div>
+                            <select class="form-control" id="freq_coefficient">
+                                <option value="1" selected>1 lần</option>
+                                <option value="2">2 lần</option>
+                                <option value="3">3 lần</option>
+                                <option value="4">4 lần</option>
+                                <option value="5">5 lần</option>
+                                <option value="6">6 lần</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">=</span>
+                            </div>
+                            <input type="number" class="form-control" id="txtRs" readonly value="10">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-2 d-flex justify-content-end">
+                    <button class="btn btn-success" id="config_freq" MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>" >Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong> Cấu hình đồng hồ</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="txtRetainMeter">
+                        <label class="form-check-label font-weight-bold" for="txtRetainMeter">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Hệ số xung:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.multiplier %>" id="multiplier">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Chỉ số chốt cài đặt:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.first_index %>" id="first_index">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="btnSendMeter"  MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>" >Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong> Cấu hình cảnh báo pin</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="txtAlertPin">
+                        <label class="form-check-label font-weight-bold" for="txtAlertPin">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Ngưỡng cảnh báo pin:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.threshold_pin %>" id="txtAlertPinMin">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="btnAlertPin" MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>" >Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong>  Cấu hình cảnh báo sản lượng</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="txtRetainTerminalIndex">
+                        <label class="form-check-label font-weight-bold" for="txtRetainTerminalIndex">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Ngưỡng sản lượng dưới:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.low_terminal_index_threshold %>" id="txtTerminalIndexMin">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Ngưỡng sản lượng trên:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.high_terminal_index_threshold %>" id="txtTerminalIndexMax">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="btnTerminalIndex" MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>" >Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong> Cấu hình cảnh báo lưu lượng</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="txtFlowRate">
+                        <label class="form-check-label font-weight-bold" for="txtFlowRate">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Ngưỡng lưu lượng dưới:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.low_flowRate_threshold %>" id="txtFlowRateMin">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Ngưỡng lưu lượng trên:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.high_flowRate_threshold %>" id="txtFlowRateMax">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="btnFlowRate" MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>">Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong> Cấu hình mực nước</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="">
+                        <label class="form-check-label font-weight-bold" for="">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Bù mực nước:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.compen_value %>" id="compen_value">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Hệ số bù mực nước:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.conver_value %>" id="conver_value">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="" MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>" disabled>Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong> Cấu hình Analog và RS485</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="txtRetainPressure">
+                        <label class="form-check-label font-weight-bold" for="txtRetainPressure">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="" >Nhập giá trị đầu vào &lt;=&#62;đầu ra</label>
+                        <div class="input-group mt-2">
+                            <input type="number" class="form-control" id="X1" maxlength="5" value="<%= meter_info.X1 %>">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">-</span>
+                            </div>
+                            <input type="number" class="form-control" id="X2" maxlength="5" value="<%= meter_info.X2 %>">
+                            <select class="form-control" id="Entity_Ux" name="Entity.Ux">
+                                <option value="" <%= meter_info.UX === null ? 'selected' : '' %> >Đơn vị</option>
+                                <option value="mA" <%= meter_info.UX === 'mA' ? 'selected' : '' %>  >mA</option>
+                                <option value="mV" <%= meter_info.UX === 'mV' ? 'selected' : '' %>  >mV</option>
+                                <option value="V" <%= meter_info.UX === 'V' ? 'selected' : '' %>  >Vol</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&lt;=&#62;</span>
+                            </div>
+                            <input type="number" class="form-control" id="Y1" maxlength="5" value="<%= meter_info.Y1 %>">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">-</span>
+                            </div>
+                            <input type="number" class="form-control" id="Y2" maxlength="5" value="<%= meter_info.Y2 %>">
+                            <select class="form-control" id="Entity_Uy" name="Entity.Uy">
+                                <option value="" <%= meter_info.UY === null ? 'selected' : '' %>>Đơn vị</option>
+                                <option value="Bar" <%= meter_info.UY === 'Bar' ? 'selected' : '' %> >Bar</option>
+                                <option value="Met" <%= meter_info.UY === 'Met' ? 'selected' : '' %> >Mét</option>
+                                <option value="mV" <%= meter_info.UY === 'mV' ? 'selected' : '' %> >mV</option>
+                                <option value="mA" <%= meter_info.UY === 'mA' ? 'selected' : '' %> >mA</option>
+                                <option value="V" <%= meter_info.UY === 'V' ? 'selected' : '' %> >Vol</option>
+                                <option value="C" <%= meter_info.UY==='C' ? 'selected' : '' %> >°C</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="cbxAnalog" >Cấu hình cảm biến:</label>
+                        <select class="form-control" id="cbxAnalog">
+                            <option <%= meter_info.AnalogType == 0 ? 'selected' : '' %> value="0">Áp suất (Mặc định)</option>
+                            <option <%= meter_info.AnalogType == 1 ? 'selected' : '' %> value="1">Đo mực nước (Thiết bị cũ)</option>
+                            <option <%= meter_info.AnalogType == 2 ? 'selected' : '' %> value="2">Đo điện áp</option>
+                            <option <%= meter_info.AnalogType == 3 ? 'selected' : '' %> value="3">Đo mực nước thủy tĩnh (Analog)</option>
+                            <option <%= meter_info.AnalogType == 4 ? 'selected' : '' %> value="4">Đo mực nước siêu âm (Analog)</option>
+                            <option <%= meter_info.AnalogType == 5 ? 'selected' : '' %> value="5">Đo mực nước thủy tĩnh (RS485)</option>
+                            <option <%= meter_info.AnalogType == 6 ? 'selected' : '' %> value="6">Đo mực nước siêu âm (RS485)</option>
+                            <option <%= meter_info.AnalogType == 7 ? 'selected' : '' %> value="7">Nhiệt độ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12 mb-2" id="wire_length_container" 
+                style="display: <%= (meter_info.AnalogType == 3 || meter_info.AnalogType == 4 || meter_info.AnalogType == 5 || meter_info.AnalogType == 6 ) ? 'block' : 'none' %>" >
+                    <div class="form-group">
+                        <label for="wire_length">Chiều dài dây (m):</label>
+                        <input type="number" class="form-control" id="wire_length" autocomplete="off" value="<%= meter_info.wire_length %>">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12 mb-2" id="measure_static_container"
+                    style="display: <%= (meter_info.AnalogType == 3 || meter_info.AnalogType == 4 || meter_info.AnalogType == 5 || meter_info.AnalogType == 6) ? 'block' : 'none' %>">
+                    <div class="form-group">
+                        <label for="wire_length">Mực nước tĩnh (m):</label>
+                        <input type="number" class="form-control" id="measure_static" autocomplete="off"
+                            value="<%= meter_info.last_measure_static %>">
+                    </div>
+                </div>
+                
+                <div class=" row col-12 mb-2">
+                    <div class="form-group col-3">
+                        <label for="" >Hệ số (nếu có)</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.Om %>" id="Om" >
+                    </div>
+                    <div class="form-check form-check-inline col-2" style="display: none;">
+                        <input class="form-check-input" type="checkbox" value="1" id="send_lcd_cm">
+                        <label class="form-check-label font-weight-bold" for="send_lcd_cm">
+                            Gửi lệnh hiển thị LCD
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline col-5" style="display: none;">
+                        <input class="form-check-input" type="checkbox" value="1" id="config_pressure_measure">
+                        <label class="form-check-label font-weight-bold" for="config_pressure_measure">
+                            Cấu hình cảm biến áp suất sang mực nước
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="btnSendConfigPre" MeterCode="<%= MeterCode%>" DcuCode="<%= DcuCode%>" NodeCode="<%= NodeCode%>" >Gửi lệnh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="txtRetainResetAndSave">
+                        <label class="form-check-label font-weight-bold" for="txtRetainResetAndSave">
+                            Retain
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Đặt lại chỉ số</label>
+                        <div>
+                            <button class="btn btn-danger" DcuCode="<%= DcuCode%>" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>" id="btnSendReset">Khôi phục cài đặt gốc</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Lưu kho</label>
+                        <div>
+                            <button class="btn btn-primary" DcuCode="<%= DcuCode%>" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>" id="btnSendSaveWare">Lưu kho</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+  </section>
+  

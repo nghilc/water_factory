@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>QUAWACO | Bản đồ tổng thể</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/plugins_2/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="/plugins_2/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/plugins_2/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="/plugins_2/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/plugins_2/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="/plugins_2/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="/plugins_2/summernote/summernote-bs4.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- leafmap -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+
+  <!-- Leaflet.markercluster -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" /> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+  <link type="text/css" rel="stylesheet" href="/stylesheets/general_style.css">
+  <link type="text/css" rel="stylesheet" href="/stylesheets/style_2.css">
+  <link type="text/css" rel="stylesheet" href="/stylesheets/dashboard.css">
+<style>
+  .popup-device {
+            font-family: Arial, sans-serif;
+            width: 260px;
+        }
+
+        .popup-header {
+            color: #2f2f2f;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px;
+            font-size: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .leaflet-container a {
+            color: #0078A8;
+            text-decoration: none;
+        }
+        .popup-time {
+            margin: 4px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .popup-time span{
+            text-align: right;
+            font-weight: bold;
+            color: #0055ff;
+        }
+
+        .popup-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .popup-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+
+        .popup-table td:first-child {
+            color: #000;
+        }
+
+        .popup-table td:last-child {
+            color: #0055ff;
+            text-align: right;
+        }
+</style>
+</head>
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
+      <!-- Navbar -->
+<%- include('../partials/header') %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="padding-top: 65px;">
+
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row" id ="dashboard_header">
+            <div class="col-1"></div>
+            <div class="col-xl-7 col-11">
+
+            </div>
+
+
+        </div>
+        <!-- new sidebar row -->
+<!-- Nút toggle riêng biệt -->
+<button class="btn btn-info" id="toggleDashboardSidebar">
+  <i class="fas fa-chevron-right"></i>
+</button>
+
+<!-- Sidebar Dashboard -->
+<div id="dashboardSidebar" class="active">
+  <div class="p-3" style="position: relative; height: 100%;">
+    <h5 class="text-center mb-3">BẢN ĐỒ TỔNG THỂ</h5>
+    <div class="row">
+            <div class="col-12 justify-content-end align-items-center mb-3">
+              <select class="form-control selectpicker" data-live-search="true" id="filter_danhsachtram" required autocomplete="off" data-dropup-auto="false" data-container="body" >
+                <option value="all" dv_type="all" >Các đơn vị quản lý
+                </option>
+            
+                <% 
+                // Lọc ra các nhóm chính 
+                const groups = danh_sach_xi_nghiep_nha_may.filter(item=> item.parent_id === null);
+            
+                  groups.forEach(group => {
+                  // Tìm các trạm con có donviquanly_id = id của nhóm chính
+                  const subItems = danh_sach_xi_nghiep_nha_may.filter(item => item.parent_id === group.org_id);
+                  %>
+                  <!-- Nhóm chính -->
+                  <option value="<%= group.org_id %>" dv_type="xi_nghiep" style="font-weight: bold;">
+                    <%= group.name %>
+                  </option>
+            
+                  <!-- Các trạm con -->
+                  <% subItems.forEach(tram=> { %>
+                    <option value="<%= tram.org_id %>"
+                      dv_type="nha_may">&nbsp;&nbsp;&nbsp;<%= tram.name %>
+                    </option>
+                    <% }); %>
+            
+                      <% }); %>
+              </select>
+            </div>
+            <div class="col-12 justify-content-end align-items-center mb-3">
+              <select class="form-control" id="meter_type_filter">
+                <option value="all">📋 Tất cả thiết bị</option>
+                <option value="MUCNUOC">🌊 Thiết bị đo mực nước</option>
+                <option value="DONGHO">⚡ Thiết bị máy bơm</option>
+                <option value="CSMT">📈 Thiết bị đo môi trường</option>
+                <option value="GENERATOR">🔌 Thiết bị máy phát điện</option>
+              </select>
+            </div>
+            <div class="col-12">
+                    <input type="text" id="searchInput" class="form-control w-100 mb-3" placeholder="Tìm kiếm trạm" autocomplete="off">
+            </div>
+    </div>
+    <div class="row" style="max-height: calc(100vh - 450px); overflow: auto; overflow-x: hidden;">
+      <table id="danhsachtram" class="table table-hover" style="width: 100%; table-layout: fixed;">
+        <thead>
+          <tr>
+            <!-- <th class="sortable" data_column="index" style="min-width: 70px;">STT <i class="fas fa-sort-down"></i></th> -->
+            <th class="sortable" data_column="name">Tên trạm <i class="fas fa-sort-down"></i></th>
+            <th class="sortable" data_column="status" style="width: 63px">TT <i class="fas fa-sort-down"></i></th>
+          </tr>
+        </thead>
+        <tbody id="danhsachtram_body">
+          <% for(let i=0; i < danh_sach_thiet_bị.length; i++){ %>
+            <tr MeterCode="<%= danh_sach_thiet_bị[i].MeterCode%>" NodeCode="<%= danh_sach_thiet_bị[i].NodeCode %>"
+              class="" meter_name="<%= danh_sach_thiet_bị[i].meter_name %>" row_id="<%= (i+1)%>"
+              meter_status="<%= danh_sach_thiet_bị[i].status_meter%>" location_lat="<% danh_sach_thiet_bị[i].lat %>" location_long="<% danh_sach_thiet_bị[i].lng %>" type="<% danh_sach_thiet_bị[i].meter_type %>">
+              <!-- <td class="text-center"><%= i+1 %></td> -->
+              <td class="text-left <%= ((danh_sach_thiet_bị[i].is_pipe) ? 'text-primary' : '') %>">
+                <%= danh_sach_thiet_bị[i].meter_name %>
+              </td>
+              <% if(danh_sach_thiet_bị[i].status_meter==2){ %>
+                <td class="text-center" meter_status="<%= danh_sach_thiet_bị[i].status_meter%>"><span><i
+                      class="fa fa-circle text-warning"></i></span></td>
+                <%}else if(danh_sach_thiet_bị[i].status_meter==1){ %>
+                  <td class="text-center" meter_status="<%= danh_sach_thiet_bị[i].status_meter%>"><span><i
+                        class="fa fa-circle text-success"></i></span></td>
+                  <%}else{ %>
+                    <td class="text-center" meter_status="<%= danh_sach_thiet_bị[i].status_meter%>"><span><i
+                          class="fa fa-circle text-danger"></i></span></td>
+                    <%}%>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+    </div>
+    <div class="row last-row" style="position: absolute; bottom: 0; width: 95%;">
+      <div class="col-6">
+        <div class="info-box mb-3 hover_class" id="dashboard_total_link_monitoring" style="background-color: #d5d5d598;">
+          <img width="32px" height="32px" src="images/4.png" alt="icon trạng thái" />
+    
+          <div class="info-box-content">
+            <span class="info-box-text">Tổng số</span>
+            <span class="info-box-number" id="dash_board_total">
+
+            </span>
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-6">
+        <div class="info-box mb-3 hover_class" id="dashboard_lost_link_monitoring">
+          <img width="32px" height="32px" src="images/5.png" alt="icon trạng thái" />
+    
+          <div class="info-box-content">
+            <span class="info-box-text">Mất tín hiệu</span>
+            <span class="info-box-number" id="dashboard_lost_connect">
+
+            </span>
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-6">
+        <div class="info-box mb-3 hover_class" id="dashboard_good_link_monitoring">
+          <img width="32px" height="32px" src="images/2.png" alt="icon trạng thái" />
+    
+          <div class="info-box-content">
+            <span class="info-box-text">Kết nối</span>
+            <span class="info-box-number" id="dashboard_good">
+
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="info-box mb-3 hover_class" id="dashboard_exceeded_link_monitoring">
+          <img width="32px" height="32px" src="images/3.png" alt="icon trạng thái" />
+    
+          <div class="info-box-content">
+            <span class="info-box-text">Cảnh báo</span>
+            <span class="info-box-number" id="dashboard_exceeded">
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const sidebar = document.getElementById('dashboardSidebar');
+  const toggleBtn = document.getElementById('toggleDashboardSidebar');
+
+  toggleBtn.addEventListener('click', function () {
+    sidebar.classList.toggle('active');
+
+    if (sidebar.classList.contains('active')) {
+      toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    } else {
+      toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    }
+  });
+</script>
+
+        <!-- Main row -->
+        <div class="row">
+          <section class="col-lg-12 connectedSortable">
+            <div class="card">
+                <div id="level_1_main_map" style="width: auto; height: calc(100vh - 80px);"></div>
+            </div>
+          </section>
+       
+
+          <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+ 
+
+
+  <div id="loading-overlay" style="display: none;">
+    <div class="spinner-border text-primary" role="status"></div>
+    <span>Đang tải dữ liệu...</span>
+</div>
+<div id="notification" class="text-center"></div>
+<!-- Popup cảnh báo -->
+<div id="alert-container" style=" font-size: small;"></div>
+  <!-- /.content-wrapper -->
+  <!-- modal quản lý đơn vị và trạm -->
+  <div id="modal_field_data" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+   <div class="modal-dialog " role="document" style="max-width: 90%; height: 800px;">
+       <div class="modal-content">
+           <div class="modal-header">
+                 <h4>Biểu đồ dữ diệu <span class="header-title"></span></h4>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           </div>
+           <div class="modal-body" style="min-height: 600px;">
+            <div class="row mb-1 d-flex flex-wrap align-items-end">
+              <div class="col-md-4 col-6">
+                <div class="form-group">
+                  <label for="">Từ ngày:</label>
+                  <input class="form-control" type="text" autocomplete="off" id="chart_time_from">
+                </div>
+              </div>
+              <div class="col-md-4 col-6">
+                <div class="form-group">
+                  <label for="">Đến ngày:</label>
+                  <input class="form-control" type="text" autocomplete="off" id="chart_time_to">
+                </div>
+              </div>
+              <!-- <div class="col-md-3 col-6">
+                <div class="form-group">
+                  <select class="form-control" id="data_search_moment">
+                    <option value="hour" selected>Giờ</option>
+                    <option value="day">Ngày</option>
+                    <option value="month">Tháng</option>
+                  </select>
+                </div>
+              </div> -->
+              <div class="col-md-4 col-12">
+                <div class="form-group">
+                  <button class="btn btn-primary mr-2" onclick="get_field_data()"><i class="fa fa-search" aria-hidden="true"></i>Tìm kiếm</button>
+                  <button class="btn btn-success" onclick="export_field_data()">Xuất excel</button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div id="chart_field" style="width: 100%; min-height: 500px;"></div>
+            </div>
+
+           </div>
+       </div>
+   </div>
+</div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="/plugins_2/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins_2/jquery-ui/jquery-ui.min.js"></script>
+<!-- amchartjs -->
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="/plugins_2/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="/plugins_2/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="/plugins_2/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="/plugins_2/jqvmap/jquery.vmap.min.js"></script>
+<script src="/plugins_2/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/plugins_2/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="/plugins_2/moment/moment.min.js"></script>
+<script src="/plugins_2/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/plugins_2/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="/plugins_2/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="/plugins_2/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/dist/js/adminlte.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/dist/js/pages/dashboard.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/dist/js/demo.js"></script>
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script> -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- <script src="/javascripts/leaflet.PopupMovable.js"></script> -->
+
+<!-- Leaflet.markercluster -->
+<!-- <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+
+<script src="/javascripts/SmoothWheelZoom.js"></script>
+<link rel="stylesheet" href="/stylesheets/Control.FullScreen.css" />
+<script src="/javascripts/Control.FullScreen.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+    var user_id = <%- user_id %>
+
+    $(function () {
+    $('.selectpicker').selectpicker();
+    $('#filter_danhsachtram').next('.bootstrap-select').css({
+        width: '100%'
+      });
+});
+
+    function showLoading() {
+        document.getElementById("loading-overlay").style.display = "flex";
+    }
+
+    function hideLoading() {
+        document.getElementById("loading-overlay").style.display = "none";
+    }
+    function show_notification(message, type) {
+                var notification = $("#notification");
+                notification.text(message).removeClass("error success").addClass(type);
+                notification.css("top", "20px").fadeIn();
+
+                // Ẩn sau 3 giây
+                setTimeout(function () {
+                    notification.fadeOut(function () {
+                        notification.css("top", "-50px");
+                    });
+                }, 5000);
+          }
+</script>
+<script src="/javascripts/general.js"></script>
+<script src="/javascripts/dashboard.js"></script>
+
+</body>
+</html>

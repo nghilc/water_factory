@@ -1,0 +1,369 @@
+/* chỉnh căn lề header datatable */
+td.text-right-data-table {
+    text-align: right;
+}
+
+td.text-left-data-table {
+    text-align: left;
+}
+
+td.text-center-data-table {
+    text-align: center;
+}
+th.text-center-data-table {
+    text-align: center;
+}
+
+th.text-middle-cell {
+    vertical-align : middle !important;
+}
+
+.select2-container{
+    background-color: white;
+}
+
+.square-box {
+    width: 2rem; /* Kích thước ô vuông */
+    height: 2rem;
+    background-color: #429dff; /* Màu nền */
+    color: white; /* Màu chữ */
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px; /* Bo góc nhẹ */
+}
+
+.selected-row {
+    background-color: #c6cace !important; /* Màu xanh nhạt */
+}
+
+.btn-active {
+    background-color: rgb(24, 144, 255);
+    color: white;
+}
+
+.btn-active:hover {
+    background-color: rgb(24, 144, 255) !important;
+    color: white !important;
+}
+
+.bootstrap-select .dropdown-toggle {
+    background-color: #FFFFFF !important; /* Màu vàng */
+    color: #495057 !important;
+    border: 1px solid #ced4da; /* Viền tùy chỉnh */
+}
+
+.hover_class:hover {
+    cursor: pointer;
+}
+
+select:hover {
+    cursor: pointer;
+}
+
+.table-hover tr:hover{
+    cursor: pointer;
+}
+
+/* .bootstrap-select .dropdown-menu li a {
+    cursor: pointer;
+} */
+
+/* .border_th_d {
+    border-top: 1px solid #ddd !important; 
+    border-bottom: 1px solid #ddd !important; 
+    border-right: 1px solid #ddd !important;
+}
+
+.border_config_eq_th_d {
+    vertical-align: middle !important;
+    border-left: 1px solid #ddd !important;
+    border-top: 1px solid #ddd !important; 
+    border-bottom: 1px solid #ddd !important; 
+    border-right: 1px solid #ddd !important;
+}
+
+.border_config_eq_td_d {
+    border-top: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd !important;
+    border-right: 1px solid #ddd !important;
+} */
+
+/* head_table_data {
+    border-bottom: 1px solid #ddd !important;
+
+} */
+
+table.dataTable thead th{
+    border-bottom: #ccc solid 1px !important;
+    padding: 10px 18px;
+}
+
+        /* Popup thông báo */
+        #notification {
+            position: fixed;
+            top: -50px; /* Ẩn ban đầu */
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 2000;
+            transition: top 0.5s ease-in-out;
+            min-width: 20rem;
+        }
+        #notification.error { background: #f44336; } /* Màu đỏ nếu lỗi */
+
+.GS::after {
+    content: "Giám sát";
+}
+
+@media (max-width: 1400px) {
+    .GS::after {
+        content: "GS"; /* Viết tắt */
+    }
+}
+
+.BD::after {
+    content: "Bản đồ";
+}
+
+@media (max-width: 1400px) {
+    .BD::after {
+        content: "BĐ";
+        /* Viết tắt */
+    }
+}
+
+.DL::after {
+    content: "Dữ liệu";
+}
+
+@media (max-width: 1400px) {
+    .DL::after {
+        content: "DL";
+        /* Viết tắt */
+    }
+}
+
+.brand-text::after {
+    content: "";
+}
+
+@media (max-width: 1300px) {
+    .brand-text::after {
+        content: ""; /* Viết tắt */
+    }
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.sortable { cursor: pointer; user-select: none; }
+.sortable i { color: gray; margin-left: 5px; }
+.active-sort { color: rgb(30, 154, 255) !important; } /* Màu tím khi đang được sort */
+
+
+.dropdown-menu li:hover{
+    background-color: #6db4ff !important;
+}
+
+.form-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+table thead th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.index_table {
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+#backToTop {
+    position: fixed;
+    bottom: 100px; /* Vị trí từ dưới lên */
+    right: 25px;  /* Vị trí từ bên phải */
+    background-color: #007bff; /* Màu nền của nút */
+    color: white; /* Màu chữ */
+    border: none;
+    border-radius: 50%; /* Làm tròn nút */
+    padding: 10px; /* Đệm bên trong */
+    font-size: 18px;
+    cursor: pointer;
+    display: none; /* Ẩn nút khi trang chưa cuộn */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    width: 60px;
+    height: 60px;
+}
+
+#backToTop:hover {
+    background-color: #0056b3; /* Màu khi hover */
+}
+
+
+/* #table_setrole_filter {
+    display: none;
+} */
+
+#danhsachdonvi_filter {
+    display: none;
+}
+
+#danhsachnhom_filter {
+    display: none;
+}
+
+
+#danhsachtram_filter {
+    display: none;
+}
+
+
+#danhsachtram td {
+    padding: 0.45rem !important;
+}
+
+
+
+.sticky-div {
+    position: sticky !important;
+    top: 61.5px !important; /* hoặc top: 60px nếu muốn nó cách đỉnh 60px */
+    /* border: 1px solid red; */
+    z-index: 500 !important; /* đảm bảo nằm trên các phần tử khác nếu cần */
+    background-color: #f4f6f9;
+  }
+
+
+  #table_data thead th {
+    position: sticky;
+    top: 0;
+    top: 61.5px !important; /* hoặc top: 60px nếu muốn nó cách đỉnh 60px */
+
+    background: #a8dbf0;
+    z-index: 501;
+  }
+
+
+ #navbarCollapse li a.active {
+    color: #ffe8a9 !important;
+  }
+
+  #navbarCollapse li:has(ul a.active) > a {
+    color: #ffe8a9 !important;
+
+  }
+
+
+  .icon-shadow {
+      box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+      /* optional */
+  }
+
+  .table-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+  }
+
+  .table-container thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      /* để nổi lên trên */
+  }
+
+  .table-container tfoot td {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+  }
+
+  /* keleton Loading */
+  .skeleton {
+      background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: 6px;
+  }
+
+  @keyframes skeleton-loading {
+      0% {
+          background-position: 200% 0;
+      }
+
+      100% {
+          background-position: -200% 0;
+      }
+  }
+
+  /* Skeleton cho icon */
+  .skeleton-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 8px;
+  }
+
+  /* Skeleton cho text lines */
+  .skeleton-line {
+      height: 16px;
+      margin-bottom: 6px;
+      border-radius: 6px;
+  }
+
+  .loading-overlay_chart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+  }
+
+  .spinner {
+      width: 50px;
+      height: 50px;
+      border: 6px solid #ccc;
+      border-top-color: #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+      to {
+          transform: rotate(360deg);
+      }
+  }
+
+
+  .popup_map_click:hover {
+      /* text-decoration: underline; */
+      color: rgb(0, 119, 255) !important;  
+    }
+
+    .popup_map_click {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .modal-body{
+        min-height: 500px;
+    }

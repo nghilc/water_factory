@@ -1,0 +1,4 @@
+node_modules
+.env
+config/config.js
+config/mysql_config.js

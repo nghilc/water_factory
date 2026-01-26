@@ -1,0 +1,889 @@
+<% const tabs=access_menu ? access_menu.split(',') : []; %>
+<section class="col-lg-12">
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong>Thông tin điểm đo</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1 d-flex flex-wrap align-items-end">
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="" >Mã trạm:</label>
+                        <input id="ma_tram" class="form-control" type="text" autocomplete="off" value="<%= meter_cycle.ma_tram%>" <%= (role == "admin" && tabs.includes("8")) ? "" : "readonly" %>>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="" >Tên trạm:</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= meter_info.name%>" id="meter_name" <%= (role == "admin" && tabs.includes("8")) ? "" : "readonly" %>>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="" >Mã thiết bị:</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= MeterCode%>" readonly>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="">Tần suất dữ liệu thu thập (phút) :</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= meter_info.frequency%>" readonly>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="">Mã công trình:</label>
+                        <input id="ma_cong_trinh" class="form-control" type="text" autocomplete="off" value="<%= meter_cycle.ma_cong_trinh%>" <%= (role=="admin" ) ? "" : "readonly" %>>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="">Mã tỉnh:</label>
+                        <input id="ma_tinh" class="form-control" type="text" autocomplete="off" value="<%= meter_cycle.ma_tinh%>" <%= (role=="admin" ) ? "" : "readonly" %>>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="" >Vị trí Lat:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%=(meter_info.lat) ? Number(meter_info.lat) : null %>" id="meter_info_lat" <%= (role == "admin" && tabs.includes("8")) ? "" : "readonly" %>>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="" >Vị trí Long:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= (meter_info.lng) ? Number(meter_info.lng) : null %>" id="meter_info_lng" <%= (role == "admin" && tabs.includes("8")) ? "" : "readonly" %>>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="" >Serial sim:</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= meter_info.serial_sim%>" readonly>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="" >Firmware version:</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= meter_info.firmware_version%>" readonly>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="" >Network status:</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= meter_info.network_status%>" readonly>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="form-group">
+                        <label for="" >Device Mode Power:</label>
+                        <input class="form-control" type="text" autocomplete="off" value="<%= meter_info.mode_power%>" readonly>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="form-group">
+                        <label for="" >Địa chỉ:</label>
+                        <textarea spellcheck="false" class="form-control" style="min-height: 100px; width: 100%; resize: none;" id="address_info"  <%= (role == "admin" && tabs.includes("8")) ? "" : "readonly" %>><%= meter_info.address %></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="form-group">
+                        <label for="" >Ghi chú:</label>
+                        <textarea placeholder="Tên đồng hồ BLOCK; Địa chỉ lắp đặt; Loại đồng hồ; Hãng sản xuất; Đường kính; Seri đồng hồ; Seri chì - chì kẹp thêm công ty; Số sim; Cấp chính xác; Thông tin đại lượng Q1, Q4; Số khách hàng quản lý; Ngày lắp đặt; Ngày kiểm định;... "
+                        spellcheck="false" class="form-control" style="min-height: 100px; width: 100%; resize: none;" id="note_info"  <%= (role == "admin" && tabs.includes("8")) ? "" : "readonly" %>><%= meter_info.note %></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-md-10 col-12">
+                    <div class="form-group">
+                        <label for="" >Thông số:</label>
+                        <%
+                            const fieldOptions = {
+                                "ValOfNum": "Chỉ số",
+                                "terminal_index": "Sản lượng",
+                                "flowRate": "Lưu lượng",
+                                "pressure": "Áp suất",
+                                "measure_sensor": "Mực nước đo được",
+                                "measure_static": "Mực nước tĩnh",
+                                "measure_dynamic": "Mực nước động",
+                                "measure_delta": "Hiệu mực nước",
+                                "ValueReverse": "Chỉ số ngược",
+                                "ValueForward": "Chỉ số thuận",
+                                "Voltage": "Điện áp pin",
+                                "voltage_ac_quy": "Điện áp ác quy",
+                                "PressureVol": "Áp suất điện áp",
+                                "VoltageOfMeter": "Điện áp đồng hồ",
+                                "Temp": "Nhiệt độ"
+                            };
+
+                            const selectedFields = Object.keys(data_field_config)
+                                .filter(key => data_field_config[key] === 1);
+
+                            const unselectedFields = Object.keys(fieldOptions)
+                                .filter(key => !selectedFields.includes(key));
+                            %>
+
+                        <select class="select2bs4 form-control filter_meter" multiple="multiple" data-placeholder="Chọn trường dữ liệu" style="width: 100%;" id="filter_field" <%= (role == "admin" && tabs.includes("8")) ? "" : "disabled" %>>
+                        <% selectedFields.forEach(key => { %>
+                            <option value="<%= key %>" selected><%= fieldOptions[key] %></option>
+                        <% }); %>
+
+                        <% unselectedFields.forEach(key => { %>
+                            <option value="<%= key %>"><%= fieldOptions[key] %></option>
+                        <% }); %>
+                        </select>
+                     
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-12">
+                    <div class="form-group">
+                        <label for="" ></label>
+                        <input type="checkbox" class="bootstrap_toggle" <%= (field_config_type_auto == 1) ? 'checked' : ""  %> <%= (role == "admin" && tabs.includes("8")) ? "" : "disabled" %> data-toggle="toggle" data-on="<%= __('Auto')%>" data-off="<%= __('Manual')%>" data-onstyle="success" data-offstyle="success" data-width="100" data-size="sm" id="type_auto">
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >TẮT BẬT KÊNH THIẾT BỊ THU THẬP</label>
+                        <div>
+                            <input type="checkbox" class="bootstrap_toggle" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>" data-toggle="toggle" data-onstyle="success" data-offstyle="secondary" data-width="100" id="collection_channel_device" data-size="sm" data-on="Bật" data-off="Tắt" <%= (meter_info.collection_channel_device == 1) ? 'checked' : ""  %> <%= (role == "admin" && tabs.includes("8")) ? "" : "disabled" %>>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >ĐỒNG BỘ DỮ LIỆU SỞ TÀI NGUYÊN MÔI TRƯỜNG</label>
+                        <div>
+                            <input type="checkbox" class="bootstrap_toggle" data-toggle="toggle" data-onstyle="success" data-offstyle="secondary" data-width="100" id="sync_tnmt_data" data-on="Bật" data-off="Tắt" data-size="sm" <%= (meter_info.sync_tnmt_data == 1) ? 'checked' : ""  %> disabled>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-12 d-flex justify-content-start">
+                    <button class="btn btn-danger" id="delete_meter_acc" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Xóa điểm đo khỏi tài khoản</button>
+                    <% if(role == "admin" && tabs.includes("8")){ %>
+                        <button class="btn btn-secondary ml-2" id="log_user" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Lịch sử cài
+                            đặt</button>
+
+                    <% } %>
+                    <% if(role == "admin" && parent_role == 0  && tabs.includes("8")){ %>
+                    <button class="btn btn-danger ml-2" id="delete_data" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Xóa bản tin</button>
+                    <%}%>
+                </div>
+                <% if(role=="admin"  && tabs.includes("8")){ %>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="save_info_meter" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Lưu</button>
+                </div>
+                <% } %>
+            </div>
+
+        </div>
+    </div>
+    <% if(role == "admin" && tabs.includes("8")){ %>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong>Đồng bộ dữ liệu sở tài nguyên môi trường</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1 d-flex flex-wrap align-items-end">
+                <div class="col-lg-12 col-md-12 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Đồng bộ</label>
+                        <div>
+                            <input type="checkbox" class="bootstrap_toggle" data-toggle="toggle" data-onstyle="success" data-offstyle="secondary" data-width="100" id="sync_tnmt_data" data-on="Bật" data-off="Tắt" data-size="sm" <%= (meter_cycle.enabled) ? 'checked' : ""  %> >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="">Đường dẫn FTP:</label>
+                        <input id="ip_ftp" class="form-control" type="text" autocomplete="off" value="<%= meter_cycle.ip_ftp %>" >
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="">Trường dữ liệu:</label>
+                        <select id="field_ftp" class="form-control" value="<%= meter_cycle.field_ftp %>">
+                            <option value="LUULUONG">Lưu lượng</option>
+                            <option value="MUCNUOC">Mực nước</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="">Chu kỳ gửi (Phút):</label>
+                        <input id="cycle_min" class="form-control" type="number" autocomplete="off" value="<%= meter_cycle.cycle_min %>">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="">Bắt đầu chu kỳ:</label>
+                        <input id="cycle_time" class="form-control" type="time" autocomplete="off" value="<%= meter_cycle.cycle_time %>" >
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="">Tài khoản FTP:</label>
+                        <input id="user_ftp" class="form-control" type="text" autocomplete="off" value="<%= meter_cycle.user_ftp %>">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="">Mật khẩu FTP:</label>
+                        <input class="form-control" type="password" autocomplete="off" value="" id="pass_ftp">
+                    </div>
+                </div>
+                <% if(role=="admin" ){ %>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button class="btn btn-success" id="save_cycle_meter" MeterCode="<%= MeterCode %>"
+                            NodeCode="<%= NodeCode %>">Lưu</button>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong>Cài đặt cảnh báo</strong></h5>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#alert_voltage">Cảnh báo điện áp</a>
+                    </li>
+                <% if(data_field_config.terminal_index === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#terminal_index">Cảnh báo sản lượng vượt ngưỡng</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.terminal_index===1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#water_output">Cảnh báo sản lượng khai thác</a>
+                    </li>
+                    <%}%>
+                <% if(data_field_config.flowRate === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#flowRate">Lưu lượng</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.pressure === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#pressure">Áp suất</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.measure_sensor === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#measure_sensor">Mực nước đo được</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.measure_static === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#measure_static">Mực nước tĩnh</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.measure_dynamic === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#measure_dynamic">Mực nước động</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.measure_delta === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#measure_delta">Hiệu mực nước</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.ValueReverse === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#ValueReverse">Chỉ số ngược</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.PressureVol === 1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#PressureVol">Áp suất điện áp</a>
+                    </li>
+                <%}%>
+                <% if(data_field_config.Temp===1){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#Temp">Nhiệt độ</a>
+                    </li>
+                <%}%>
+
+            </ul>
+            <div class="tab-content">
+                <% let isFirst_2 = true; %>
+                    <div class="tab-pane fade active show" id="alert_voltage">
+                        <div class="row mt-3">
+                                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                                    <div class="form-group">
+                                        <label for="" >Ngưỡng cảnh báo điện áp pin:</label>
+                                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.threshold_pin %>" id="threshold_pin">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                                    <div class="form-group">
+                                        <label for="" >Ngưỡng cảnh báo điện áp ắc quy</label>
+                                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.threshold_battery %>" id="threshold_battery">
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="alert_voltage" id="save_alert_voltage">Lưu</button>
+                        </div>
+                    </div>
+                <% if(data_field_config.terminal_index === 1){ %>
+                    <div class="tab-pane fade " id="terminal_index" >
+                        <div class="row mt-3">
+                            <!-- <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Qmax:</label>
+                                    <input id="terminal_index_Qmax" class="form-control" type="number" autocomplete="off" value="">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Qmin:</label>
+                                    <input id="terminal_index_Qmin" class="form-control" type="number" autocomplete="off" value="">
+                                </div>
+                            </div> -->
+                                <div class="col">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Ngưỡng dưới</th>
+                                                <th>Ngưỡng trên</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th class=" text-center-data-table align-middle">Tỷ lệ vượt ngưỡng trong ngày</th>
+                                                <td><input type="number" class="form-control"
+                                                        value="<%= meter_info.min_threshold_terminal_index %>"
+                                                        id="min_threshold_terminal_index"></td>
+                                                <td><input type="number" class="form-control"
+                                                        value="<%= meter_info.max_threshold_terminal_index %>"
+                                                        id="max_threshold_terminal_index"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="terminal_index" id="save_threshold_terminal_index">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.terminal_index===1){ %>
+                    <div class="tab-pane fade " id="water_output">
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th class=" text-center-data-table align-middle">Tỷ lệ khai thác trong ngày</th>
+                                            <td><input type="number" class="form-control"
+                                                    value="<%= meter_info.min_exploitation_rate %>"
+                                                    id="min_exploitation_rate"></td>
+                                            <td><input type="number" class="form-control"
+                                                    value="<%= meter_info.max_exploitation_rate %>"
+                                                    id="max_exploitation_rate"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class=" text-center-data-table align-middle">Giới hạn khai thác trong ngày</th>
+                                            <td colspan="2"><input type="number" class="form-control"
+                                                        value="<%= meter_info.daily_exploitation_limit %>" id="daily_exploitation_limit"></td>
+                                        </tr>      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>"
+                                field="water_output" id="save_water_output">Lưu</button>
+                        </div>
+                    </div>
+                
+                    <%}%>
+                <% if(data_field_config.flowRate === 1){ %>
+                    <div class="tab-pane fade " id="flowRate" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for(let i=0; i < grouped_alert_config.flowRate.length; i++){ %>
+                                            <tr class="tr_flowRate">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_flowRate" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.flowRate[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_flowRate" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.flowRate[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_flowRate" value="<%= grouped_alert_config.flowRate[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_flowRate" value="<%= grouped_alert_config.flowRate[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="flowRate">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.pressure === 1){ %>
+                    <div class="tab-pane fade " id="pressure" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i< grouped_alert_config.pressure.length; i++){ %>
+                                            <tr class="tr_pressure">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_pressure" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.pressure[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_pressure" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.pressure[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_pressure" value="<%= grouped_alert_config.pressure[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_pressure" value="<%= grouped_alert_config.pressure[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="pressure">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.measure_sensor === 1){ %>
+                    <div class="tab-pane fade " id="measure_sensor" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i < grouped_alert_config.measure_sensor.length; i++){ %>
+                                            <tr class="tr_measure_sensor">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_measure_sensor" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.measure_sensor[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_measure_sensor" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.measure_sensor[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_measure_sensor" value="<%= grouped_alert_config.measure_sensor[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_measure_sensor" value="<%= grouped_alert_config.measure_sensor[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="measure_sensor">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.measure_static === 1){ %>
+                    <div class="tab-pane fade " id="measure_static" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i< grouped_alert_config.measure_static.length; i++){ %>
+                                            <tr class="tr_measure_static">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_measure_static" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.measure_static[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_measure_static" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.measure_static[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_measure_static" value="<%= grouped_alert_config.measure_static[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_measure_static" value="<%= grouped_alert_config.measure_static[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="measure_static">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.measure_dynamic === 1){ %>
+                    <div class="tab-pane fade " id="measure_dynamic" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i< grouped_alert_config.measure_dynamic.length; i++){ %>
+                                            <tr class="tr_measure_dynamic">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_measure_dynamic" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.measure_dynamic[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_measure_dynamic" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.measure_dynamic[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_measure_dynamic" value="<%= grouped_alert_config.measure_dynamic[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_measure_dynamic" value="<%= grouped_alert_config.measure_dynamic[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="measure_dynamic">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.measure_delta === 1){ %>
+                    <div class="tab-pane fade " id="measure_delta" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i< grouped_alert_config.measure_delta.length; i++){ %>
+                                            <tr class="tr_measure_delta">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_measure_delta" placeholder="HH:mm (Giờ:phút)"  value="<%= grouped_alert_config.measure_delta[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_measure_delta" placeholder="HH:mm (Giờ:phút)"  value="<%= grouped_alert_config.measure_delta[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_measure_delta"  value="<%= grouped_alert_config.measure_delta[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_measure_delta" value="<%= grouped_alert_config.measure_delta[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="measure_delta">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.ValueReverse === 1){ %>
+                    <div class="tab-pane fade " id="ValueReverse" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i< grouped_alert_config.ValueReverse.length; i++){ %>
+                                            <tr class="tr_ValueReverse">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_ValueReverse" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.ValueReverse[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_ValueReverse" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.ValueReverse[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_ValueReverse" value="<%= grouped_alert_config.ValueReverse[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_ValueReverse"  value="<%= grouped_alert_config.ValueReverse[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="ValueReverse">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+
+                <% if(data_field_config.PressureVol === 1){ %>
+                    <div class="tab-pane fade " id="PressureVol" >
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered" >
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <% for(let i=0; i< grouped_alert_config.PressureVol.length; i++){ %>
+                                            <tr class="tr_PressureVol">
+                                                <td  class="index_table"><%=(i+1)%></td>
+                                                <td><input type="time" class="form-control start_PressureVol" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.PressureVol[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_PressureVol" placeholder="HH:mm (Giờ:phút)" value="<%= grouped_alert_config.PressureVol[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_PressureVol" value="<%= grouped_alert_config.PressureVol[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_PressureVol"  value="<%= grouped_alert_config.PressureVol[i].max_value %>"></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>" field="PressureVol">Lưu</button>
+                        </div>
+                    </div>
+                    
+                <%}%>
+                <% if(data_field_config.Temp===1){ %>
+                    <div class="tab-pane fade " id="Temp">
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Bắt đầu [HH:mm (Giờ:phút)]</th>
+                                            <th>[HH:mm (Giờ:phút)]</th>
+                                            <th>Ngưỡng dưới</th>
+                                            <th>Ngưỡng trên</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for(let i=0; i< grouped_alert_config.Temp.length; i++){ %>
+                                            <tr class="tr_Temp">
+                                                <td class="index_table">
+                                                    <%=(i+1)%>
+                                                </td>
+                                                <td><input type="time" class="form-control start_Temp"
+                                                        placeholder="HH:mm (Giờ:phút)"
+                                                        value="<%= grouped_alert_config.Temp[i].start_time %>"></td>
+                                                <td><input type="time" class="form-control end_Temp"
+                                                        placeholder="HH:mm (Giờ:phút)"
+                                                        value="<%= grouped_alert_config.Temp[i].end_time %>"></td>
+                                                <td><input type="number" class="form-control low_Temp"
+                                                        value="<%= grouped_alert_config.Temp[i].min_value %>"></td>
+                                                <td><input type="number" class="form-control high_Temp"
+                                                        value="<%= grouped_alert_config.Temp[i].max_value %>"></td>
+                                            </tr>
+                                            <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success save_alert_config" MeterCode="<%= MeterCode %>" NodeCode="<%= NodeCode %>"
+                                field="Temp">Lưu</button>
+                        </div>
+                    </div>
+                
+                    <%}%>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <h5><strong>Cài đặt điểm đo</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-1  d-flex flex-wrap align-items-end">
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label font-weight-bold">
+                            Cấu hình động xung:
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Hệ số xung:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.multiplier %>" id="multiplier">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Chỉ số chốt cài đặt:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.first_index %>" id="first_index">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="multiplier_first_index" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Lưu</button>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label font-weight-bold">
+                            Cấu hình mực nước:
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Bù mực nước:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.compen_value %>" id="compen_value">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Hệ số bù mực nước:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.conver_value %>" id="conver_value">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="">Diện tích đáy:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.tank_base_bottom %>"
+                            id="tank_base_bottom">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="compen_value_conver_value" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Lưu</button>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label font-weight-bold">
+                            Cấu hình cổng đo áp suất:
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="" >Nhập giá trị đầu vào &lt;=&#62;đầu ra</label>
+                        <div class="input-group mt-2">
+                            <input type="number" class="form-control" id="X1" maxlength="5" value="<%= meter_info.X1 %>">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">-</span>
+                            </div>
+                            <input type="number" class="form-control" id="X2" maxlength="5" value="<%= meter_info.X2 %>">
+                            <select class="form-control" id="Entity_Ux" name="Entity.Ux">
+                                <option value="" <%= meter_info.UX === null ? 'selected' : '' %> >Đơn vị</option>
+                                <option value="mA" <%= meter_info.UX === 'mA' ? 'selected' : '' %>  >mA</option>
+                                <option value="mV" <%= meter_info.UX === 'mV' ? 'selected' : '' %>  >mV</option>
+                                <option value="V" <%= meter_info.UX === 'V' ? 'selected' : '' %>  >Vol</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&lt;=&#62;</span>
+                            </div>
+                            <input type="number" class="form-control" id="Y1" maxlength="5" value="<%= meter_info.Y1 %>">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">-</span>
+                            </div>
+                            <input type="number" class="form-control" id="Y2" maxlength="5" value="<%= meter_info.Y2 %>">
+                            <select class="form-control" id="Entity_Uy" name="Entity.Uy">
+                                <option value="" <%= meter_info.UY === null ? 'selected' : '' %>>Đơn vị</option>
+                                <option value="Bar" <%= meter_info.UY === 'Bar' ? 'selected' : '' %> >Bar</option>
+                                <option value="Met" <%= meter_info.UY === 'Met' ? 'selected' : '' %> >Mét</option>
+                                <option value="mV" <%= meter_info.UY === 'mV' ? 'selected' : '' %> >mV</option>
+                                <option value="mA" <%= meter_info.UY === 'mA' ? 'selected' : '' %> >mA</option>
+                                <option value="V" <%= meter_info.UY === 'V' ? 'selected' : '' %> >Vol</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row col-12 mb-2">
+                    <div class="form-group col-3">
+                        <label for="" >Hệ số (nếu có)</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.Om %>" id="Om" >
+                    </div>
+                    <div class="form-check form-check-inline col-5">
+                        <input class="form-check-input" type="checkbox" id="config_pressure_measure">
+                        <label class="form-check-label font-weight-bold" for="">
+                            Cấu hình cảm biến áp suất sang mực nước
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="pressuer_config" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Lưu</button>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label font-weight-bold">
+                           Chuyển đổi áp suất:
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="show_bar_to_m" <%= (meter_info.bar_to_met == 1) ? 'checked' : "" %> >
+                        <label class="form-check-label font-weight-bold" for="show_bar_to_m">
+                            Hiển thị đơn vị Bar sang mét
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Hệ số chuyển đổi:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.conver_factor %>" id="conver_factor">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mb-2">
+                    <div class="form-group">
+                        <label for="" >Hệ số bù:</label>
+                        <input class="form-control" type="number" autocomplete="off" value="<%= meter_info.compen_factor %>" id="compen_factor">
+                    </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <span style="color: red; font-weight: bold;">
+                        Giá trị hiển thị (giá trị >= 0) = giá trị nhận đc x hệ số chuyển đổi + hệ số bù
+                    </span>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-success" id="save_setting_conversion" MeterCode="<%= MeterCode%>" NodeCode="<%= NodeCode%>">Lưu</button>
+                </div>
+ 
+            </div>
+
+        </div>
+    </div>
+    <% } %>
+  </section>
+  

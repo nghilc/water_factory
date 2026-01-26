@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Sao việt | Thất thoát theo DMA</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/plugins_2/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="/plugins_2/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/plugins_2/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/plugins_2/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins_2/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/plugins_2/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/plugins_2/summernote/summernote-bs4.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/plugins_2/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/plugins_2/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link type="text/css" rel="stylesheet" href="/stylesheets/general_style.css">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/style_2.css">
+
+</head>
+
+<body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <%- include('../partials/header') %>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper" style="padding-top: 60px;">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <!-- <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="/dashboard">SAO VIỆT</a></li>
+                <li class="breadcrumb-item active">Giám sát tổng quan</li>
+            </ol>          
+        </div>
+        </div>
+      </div> -->
+                </div>
+                <!-- /.content-header -->
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <!-- Main row -->
+                        <div class="row mb-3 d-flex flex-wrap align-items-end">
+                            <div class="col-auto">
+                                <button class="btn btn-primary mr-2" onclick="get_dma_list()">Làm mới <i class="ion-refresh" aria-hidden="true"></i></button>
+
+                                <button class="btn btn-success" onclick="add_dma()"> Thêm mới | +</button>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <section class="col-12">
+                                <div class="card">
+                                    <div class="card-body" style="min-height: calc(100vh - 160px);; overflow: auto;">
+                                        <table id="table_dma_list_data" class="table table-bordered table-striped"
+                                            style="width:100%">
+                                            <thead style="background-color: #a8dbf0;">
+                                                <th class="border_th_d" style="min-width: 7%">STT</th>
+                                                <th class="border_th_d">Mã DMA</th>
+                                                <th class="border_th_d">Tên DMA</th>
+                                                <th class="border_th_d">Mô tả về DMA</th>
+                                                <th class="border_th_d">Số đồng hồ tổng</th>
+                                                <th class="border_th_d">Số đồng hồ nhánh</th>
+                                                <th class="border_th_d">Hành động</th>
+                                            </thead>
+                                            <tbody id="body_table_dma_list_data">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- right col -->
+                        </div>
+                        <!-- /.row (main row) -->
+                    </div><!-- /.container-fluid -->
+                </section>
+                <!-- /.content -->
+            </div>
+            <div id="loading-overlay" style="display: none;">
+                <div class="spinner-border text-primary" role="status"></div>
+                <span>Đang tải dữ liệu...</span>
+            </div>
+            <div id="notification" class="text-center"></div>
+
+            <!-- Popup cảnh báo -->
+            <div id="alert-container" style=" font-size: small;"></div>
+
+
+            <!-- modal thêm DMA -->
+            <div id="add_dma" class="modal fade" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog " role="document" style="max-width: 90%; height: 800px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="add_dma_title">Thêm mới DMA</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="">Đơn vị quản lý:</label>
+                                        <select class="form-control" id="group_dvql">
+            
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Tên DMA:</label>
+                                        <input type="text" class="form-control" id="dma_name" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Mã DMA:</label>
+                                        <input type="text" class="form-control" id="dma_code" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Mô tả DMA:</label>
+                                        <input type="text" class="form-control" id="dma_note" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Ngưỡng cảnh báo thất thoát (m3):</label>
+                                        <input type="number" class="form-control" id="loss_threshold" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="">Chu kỳ kiểm tra thất thoát (phút) - (Để 0 hoặc trống nếu tắt cảnh báo)</label>
+                                        <input type="number" class="form-control" id="loss_fre" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Đồng hồ tổng:</label>
+                                        <select class="select2bs4 form-control" multiple="multiple" data-placeholder="Chọn đồng hồ tổng"
+                                            style="width: 100%;" id="select_meter_in">
+                                        </select>                                    
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Đồng hồ nhánh:</label>
+                                        <select class="select2bs4 form-control" multiple="multiple" data-placeholder="Chọn đồng hồ nhánh"
+                                            style="width: 100%;" id="select_meter_out">
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" id="save_add_dma" style="display: none;">Lưu</button>
+                            <button class="btn btn-success" id="save_edit_dma" style="display: none;">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <!-- <script src="/plugins_2/jquery/jquery.min.js"></script> -->
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- jQuery UI 1.11.4 -->
+    <script src="/plugins_2/jquery-ui/jquery-ui.min.js"></script>
+    <!-- amchartjs -->
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="/plugins_2/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="/plugins_2/select2/js/select2.full.min.js"></script>
+
+    <!-- ChartJS -->
+    <script src="/plugins_2/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="/plugins_2/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="/plugins_2/jqvmap/jquery.vmap.min.js"></script>
+    <script src="/plugins_2/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/plugins_2/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="/plugins_2/moment/moment.min.js"></script>
+    <script src="/plugins_2/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="/plugins_2/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="/plugins_2/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="/plugins_2/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/js/adminlte.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/dist/js/demo.js"></script>
+    <!-- DataTables -->
+
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script> -->
+
+    <!-- DataTable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
+    <!-- momentjs and daterangepicker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- bootsrap-select -->
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script>
+        var user_id = <% - user_id %>
+
+            $(function () {
+                $('.selectpicker').selectpicker();
+            });
+        function showLoading() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+
+        function hideLoading() {
+            document.getElementById("loading-overlay").style.display = "none";
+        }
+        $('.select2bs4').select2({
+            theme: 'bootstrap4',
+            closeOnSelect: false,
+            tags: true
+
+        })
+
+        $(".select2bs4").on("select2:select", function (evt) {
+            var element = evt.params.data.element;
+            var $element = $(element);
+
+            $element.detach();
+            $(this).append($element);
+            $(this).trigger("change");
+        });
+
+        function show_notification(message, type) {
+            var notification = $("#notification");
+            notification.text(message).removeClass("error success").addClass(type);
+            notification.css("top", "20px").fadeIn();
+
+            // Ẩn sau 3 giây
+            setTimeout(function () {
+                notification.fadeOut(function () {
+                    notification.css("top", "-50px");
+                });
+            }, 5000);
+        }
+    </script>
+    <script src="/javascripts/general.js"></script>
+    <script src="/javascripts/dma_manage.js"></script>
+
+</body>
+
+</html>

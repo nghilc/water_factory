@@ -1,0 +1,39 @@
+npm install - g express
+npm install -g express-generator
+express --ejs saovietProject // ten project 
+cd saovietProject
+npm install
+SET DEBUG=saovietProject:* // cho phép chúng ta xem các hoạt động đang xảy ra trên server
+npm i body-parser
+npm i serve-favicon
+
+
+
+
+
+app.set() thiết lập các thông số cho project
+app.use() cấu hình các module middleware như favicon, logger, bodyParser...v.v
+goài ra phương thức app.use() còn được dùng để chỉ định hàm xử lý cho từng yêu cầu HTTP
+
+
+npm install mysql -save
+npm install 
+npm install connect-flash
+npm install body-parser
+npm install passport
+npm install passport-local
+npm install express-session
+npm install connect-flash
+
+npm install sequelize --save
+
+npm install bcrypt-nodejs -save
+Dùng để mã hóa mật khẩu hai chiều chống các hacker có thể đánh cắp.
+
+npm install dotenv -save
+Dotenv là một module tải các biến môi trường từ tệp .env vào process.env. Lưu trữ cấu hình trong .env tách biệt với code để bảo mật thông tin.
+
+npm install express-validator --save
+Dùng để kiểm tra xem bạn có nhập đúng email và xác minh xem mình có nhập đúng những yêu cầu về password như: phải chứa kí tự, chữ hoa hay trên 5 từ,..
+
+npm install --save exceljs  export excel

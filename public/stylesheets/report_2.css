@@ -1,0 +1,4 @@
+.select2-selection__rendered {
+    max-height: 100px !important; /* Giới hạn chiều cao */
+    overflow-y: auto !important;  /* Hiển thị thanh cuộn */
+}

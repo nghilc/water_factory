@@ -1,0 +1,673 @@
+<div class="pump-monitoring-page">
+    <!-- Header trang -->
+    <% const onl=pumps.filter(x=> x.status === 1).length; %>
+
+        <div class="page-header">
+            <div class="page-title">
+                <h5>⚡ GIÁM SÁT TỔ BƠM NƯỚC THÔ</h5>
+                <div class="devices-count">
+                    <%=onl%> máy bơm đang hoạt động
+                </div>
+            </div>
+        </div>
+
+        <!-- Thống kê tổng quan bơm -->
+        <div class="pump-stats">
+            <div class="pump-stat-card">
+                <div class="pump-stat-icon">⚡</div>
+                <div class="pump-stat-value">
+                    <%=onl%>/<%=pumps.length%>
+                </div>
+                <div class="pump-stat-label">MÁY BƠM ĐANG CHẠY</div>
+            </div>
+            <div class="pump-stat-card">
+                <div class="pump-stat-icon">💧</div>
+                <div class="pump-stat-value">-</div>
+                <div class="pump-stat-label">LƯU LƯỢNG TỔNG (m³/h)</div>
+            </div>
+            <div class="pump-stat-card">
+                <div class="pump-stat-icon">🔥</div>
+                <div class="pump-stat-value">-</div>
+                <div class="pump-stat-label">CẢNH BÁO NHIỆT ĐỘ</div>
+            </div>
+            <div class="pump-stat-card">
+                <div class="pump-stat-icon">⏱️</div>
+                <div class="pump-stat-value">98.5%</div>
+                <div class="pump-stat-label">HIỆU SUẤT VẬN HÀNH</div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ hiệu suất -->
+        <div class="card-dd mb-20">
+            <h5>📊 HIỆU SUẤT TỔ BƠM</h5>
+            <div class="chart-container" style="height: 300px;">
+                <div id="pump-performance-chart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Danh sách máy bơm -->
+        <div id="pumps-container" class="pump-list-container">
+            
+        </div>
+
+        <!-- Cảnh báo tổ bơm -->
+        <div class="alert-panel">
+            <h5>⚠️ CẢNH BÁO TỔ BƠM</h5>
+            <div class="alert-item alert-high">
+                <div class="alert-icon">🔴</div>
+                <div class="alert-content">
+                    <div class="alert-title">Nhiệt độ Bơm P-003 quá cao</div>
+                    <div class="alert-desc">Nhiệt độ: 82°C - Vượt ngưỡng an toàn</div>
+                    <div class="alert-time">Cập nhật: 14:30</div>
+                </div>
+            </div>
+            <div class="alert-item alert-medium">
+                <div class="alert-icon">🟡</div>
+                <div class="alert-content">
+                    <div class="alert-title">Lưu lượng Bơm P-003 thấp</div>
+                    <div class="alert-desc">Lưu lượng: 480 m³/h - Dưới ngưỡng hoạt động</div>
+                    <div class="alert-time">Cập nhật: 14:15</div>
+                </div>
+            </div>
+            <div class="alert-item alert-low">
+                <div class="alert-icon">🟢</div>
+                <div class="alert-content">
+                    <div class="alert-title">Vận hành ổn định</div>
+                    <div class="alert-desc">6/8 máy bơm hoạt động bình thường</div>
+                    <div class="alert-time">Cập nhật: 14:00</div>
+                </div>
+            </div>
+        </div>
+
+</div>
+<!-- modal lịch sử dữ liệu -->
+<div id="lich_su_du_lieu" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+    data-backdrop="static">
+    <div class="modal-dialog " role="document" style="max-width: 90%; height: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>📊 Lịch sử - <span id="modal_title"></span></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-1 d-flex flex-wrap align-items-end">
+                    <div class="col-md-3 col-6">
+                        <div class="form-group">
+                            <label for="">Từ ngày:</label>
+                            <input class="form-control" type="text" autocomplete="off" id="meter_data_time_from">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="form-group">
+                            <label for="">Đến ngày:</label>
+                            <input class="form-control" type="text" autocomplete="off" id="meter_data_time_to">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary mr-2" style="margin-bottom: 16px" onclick="init_data()"> <i
+                                class="fa fa-search" aria-hidden="true"></i> Xem dữ liệu</button>
+                        <!-- <button class="btn btn-success" style="margin-bottom: 16px" onclick="export_data()"> Xuất dữ
+                            liệu</button> -->
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="nuocThoTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab-chart" data-toggle="tab" href="#chart" role="tab">
+                            Biểu đồ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " id="tab-history" data-toggle="tab" href="#history" role="tab">
+                            Lịch sử
+                        </a>
+                    </li>
+
+                </ul>
+                <!-- Tab content -->
+                <div class="tab-content mt-3">
+
+                    <!-- TAB LỊCH SỬ -->
+                    <!-- TAB BIỂU ĐỒ -->
+                    <div class="tab-pane fade show active" id="chart" role="tabpanel">
+
+                        <div id="history_chart_div" style="width: 100%; height: 500px;"></div>
+
+                    </div>
+                    <div class="tab-pane fade " id="history" role="tabpanel" style="width: 100%; min-height: 500px;">
+
+                        <table id="history_table" class="table w-100">
+                            <thead id="history_table_thead" style="background-color: #a8dbf0;">
+
+                            </thead>
+                            <tbody id="history_table_tbody">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Popup History -->
+
+<style>
+    .pump-monitoring-page {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .pump-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .pump-stat-card {
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    /* .pump-stat-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+    } */
+
+    .pump-stat-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .pump-stat-value {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 10px 0;
+        color: #4CAF50;
+    }
+
+    .pump-stat-label {
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .pump-list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .pump-item {
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 15px;
+        padding: 20px;
+        backdrop-filter: blur(10px);
+        border-left: 4px solid;
+        transition: all 0.3s ease;
+    }
+
+    .pump-item.running {
+        border-left-color: #4CAF50;
+        animation: pulse-running 3s infinite;
+    }
+
+    .pump-item.stopped {
+        border-left-color: #78909C;
+    }
+
+    .pump-item.warning {
+        border-left-color: #FF9800;
+    }
+
+    .pump-item.danger {
+        border-left-color: #f44336;
+    }
+
+    @keyframes pulse-running {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .pump-icon {
+        font-size: 28px;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rrgba(207, 207, 207, 0.284);
+        border-radius: 12px;
+        margin-right: 10px;
+    }
+
+    .pump-combined-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        align-items: start;
+        margin: 20px 0;
+    }
+
+    .pump-combined-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .metric-card-combined {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        border: 2px solid rgba(207, 207, 207, 0.284);
+        transition: transform 0.3s ease;
+    }
+
+    .metric-card-combined:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .metric-label-combined {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .metric-value-combined {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 8px 0;
+        color: #4CAF50;
+    }
+
+    .metric-unit-combined {
+        font-size: 11px;
+        opacity: 0.7;
+    }
+
+    .metric-status-combined {
+        font-size: 10px;
+        margin-top: 8px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        display: inline-block;
+    }
+
+    .status-normal {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+    }
+
+    .status-warning {
+        background: rgba(255, 152, 0, 0.2);
+        color: #FF9800;
+    }
+
+    .status-danger {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+    }
+
+    .pump-combined-charts {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .chart-section-combined {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        height: 200px;
+    }
+
+    .chart-title-combined {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-align: center;
+        opacity: 0.9;
+    }
+
+    .mini-chart-container-combined {
+        height: 140px;
+        position: relative;
+    }
+
+    .pump-controls-combined {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        justify-content: flex-end;
+    }
+
+    .control-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-start {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .btn-stop {
+        background: #f44336;
+        color: white;
+    }
+
+    .btn-auto {
+        background: #2196F3;
+        color: white;
+    }
+
+    .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .control-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .alert-panel {
+        background: rgba(207, 207, 207, 0.284);
+        border-radius: 15px;
+        padding: 25px;
+    }
+
+    .alert-item {
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border-left: 4px solid;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .alert-high {
+        border-color: #f44336;
+        background: rgba(244, 67, 54, 0.1);
+    }
+
+    .alert-medium {
+        border-color: #FF9800;
+        background: rgba(255, 152, 0, 0.1);
+    }
+
+    .alert-low {
+        border-color: #4CAF50;
+        background: rgba(76, 175, 80, 0.1);
+    }
+
+    .alert-icon {
+        font-size: 16px;
+    }
+
+    .alert-content {
+        flex: 1;
+    }
+
+    .alert-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .alert-desc {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+
+    .alert-time {
+        font-size: 11px;
+        opacity: 0.6;
+    }
+
+    /* Status badges */
+    .status-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-running {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+    }
+
+    .status-stopped {
+        background: rgba(120, 144, 156, 0.2);
+        color: #78909C;
+    }
+
+    .status-warning {
+        background: rgba(255, 152, 0, 0.2);
+        color: #FF9800;
+    }
+
+    .status-danger {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+    }
+
+    .mb-20 {
+        margin-bottom: 20px;
+    }
+
+    .gap-10 {
+        gap: 10px;
+    }
+
+    @media (max-width: 1200px) {
+        .pump-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .pump-combined-content {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .pump-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .pump-combined-metrics {
+            grid-template-columns: 1fr;
+        }
+
+        .pump-controls-combined {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .page-header {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+    }
+
+
+    .threshold-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .threshold-section {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .threshold-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #4CAF50;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .threshold-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .threshold-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .threshold-label {
+        font-size: 13px;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .threshold-input-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .threshold-input {
+        flex: 1;
+        background: rgba(207, 207, 207, 0.284);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .threshold-input:focus {
+        border-color: #4CAF50;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .threshold-unit {
+        font-size: 12px;
+        opacity: 0.7;
+        min-width: 40px;
+    }
+
+    .threshold-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(207, 207, 207, 0.284);
+    }
+
+    .btn-save {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel {
+        background: rgba(207, 207, 207, 0.284);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save:hover,
+    .btn-cancel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+</style>
+<style>
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+
+    .gap-10 {
+        gap: 10px;
+    }
+
+    /* .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    } */
+
+
+</style>
+<script src="/javascripts/to_bom.js"></script>

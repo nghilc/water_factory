@@ -1,0 +1,152 @@
+/* icon jstree */
+
+.wt-icon {
+    background-image: url("/images/wt-meter-icon.png") !important;
+    /* width: 10px !important; 
+    height: 10px !important; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.branch-icon {
+    background-image: url("/images/branch.png") !important;
+    /* width: 10px !important; 
+    height: 10px !important; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.father-wt-meter-icon{
+    background-image: url("/images/father-wt-meter-icon.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.father-wt-meter-icon-red{
+    background-image: url("/images/father-wt-meter-icon-red.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.wt-meter-icon-level_2{
+    background-image: url("/images/wt-meter-icon-level_2.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.wt-meter-icon-level_2-red{
+    background-image: url("/images/wt-meter-icon-level_2-red.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.wt-meter-icon{
+    background-image: url("/images/wt-meter-icon.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+.wt-meter-icon-red{
+    background-image: url("/images/wt-meter-icon-red.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+
+
+.back-icon {
+    background-image: url("/images/back-icon.png") !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 100%;
+}
+
+
+.jstree-default .jstree-clicked {
+    color: rgb(255, 255, 255) !important;
+    background-color: rgb(89, 201, 245) !important;
+  }
+
+  /* .jstree-default .jstree-wholerow-clicked {
+    background: #FFFFFF !important;
+    background: -webkit-linear-gradient(top, #FFFFFF 0%, #FFFFFF 100%) !important;
+    background: linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 100%) !important;
+} */
+
+  /* li[rel="treeitem"] > a { color: rgba(48, 11, 209, 0.747) !important; } */
+
+  li > .jstree-anchor{
+    color: black !important;
+  }
+
+
+
+  /* extra for boostrap4 */
+  .row-centered {
+    text-align: center;
+}
+
+.col-centered {
+    display: inline-block;
+    float: none;
+    /* reset the text-align */
+    text-align: left;
+    /* inline-block space fix */
+    margin-right: -4px;
+}
+
+
+/* .gm-style-iw + div {display: none;} */
+/* ẩn nút x trên infowindow */
+button.gm-ui-hover-effect {
+    visibility: hidden;
+}
+
+/* 
+
+option co anh */
+.ui-icon.video {
+    background: url("/images/wt-meter-icon.png") 0 0 no-repeat;
+  }
+  .ui-icon.podcast {
+    background: url("/images/wt-meter-icon.png") 0 0 no-repeat;
+  }
+  .ui-icon.rss {
+    background: url("/images/wt-meter-icon.png") 0 0 no-repeat;
+  }
+
+
+
+  /* .flip-horizontal, .x-grid-cell-inner, .x-column-header-text, .x-panel-header-text {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph;
+    filter: fliph; 
+} */
+
+.dot_red{
+    color: red !important;
+}
+
+.dot_green{
+    color: green !important;
+}

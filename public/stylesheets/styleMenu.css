@@ -1,0 +1,140 @@
+body {
+    font-family: "Open Sans",sans-serif !important;
+}
+
+
+
+
+.card-header {
+    background-color: rgb(211 211 211);
+}
+
+ul li a.nav-link {
+    color: white;
+}
+
+ul li a.modalTab {
+    color: #27a3de;
+}
+
+ul li a.nav-link.active {
+    color: #27a3de;
+}
+
+ul li a.nav-link:hover {
+    color: #27a3de !important;
+}
+
+
+/* ul li.active a.nav-link {
+    color: #2dfc80;
+  } */
+
+
+/* ul .nav-item.active> a::after {
+    background-color: #2dfc80;
+  } */
+
+.menuBarHover:hover {
+    background-color: darkgrey;
+}
+
+#chart3Name {
+    padding-left: 10px;
+}
+
+#div1 {
+    display: none;
+    opacity: 0;
+    box-shadow: 0 0.46875rem 2.1875rem rgb(4 9 20 / 3%), 0 0.9375rem 1.40625rem rgb(4 9 20 / 3%), 0 0.25rem 0.53125rem rgb(4 9 20 / 5%), 0 0.125rem 0.1875rem rgb(4 9 20 / 3%);
+    position: absolute;
+    left: 45%;
+    width: 50%;
+    height: 50px;
+    top: 0;
+    transition: all .2s;
+    border-radius: 50px;
+    padding: 0 10px;
+    background: #d3d3d3;
+}
+
+#div1 a {
+    color: black !important;
+}
+
+.btn-showad {
+    order: 3;
+    padding: 0px 15px;
+    display: none;
+}
+
+.tb_color {
+    padding-top: 10px;
+    border-radius: 5px;
+    border-top: 2px solid #0a54b9ba;
+    background-color: #edf1f5;
+}
+
+.tb_group {
+    margin-top: 50px !important;
+}
+
+@media (max-width: 991px) {
+    #chart3 {
+        position: relative;
+        left: -30px !important;
+    }
+    .table-responsive {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .header-menu .nav-item {
+        font-size: 13px !important;
+    }
+}
+
+@media screen and (max-width: 779px) {
+    #navbarSupportedContent {
+        padding-right: 0px !important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .left-sidebar {
+        display: block !important;
+        transition: all .5s;
+    }
+    .sidebar-link:hover {
+        background-color: red;
+    }
+    .btn-showad {
+        order: 3;
+        padding: 0px 15px;
+        display: block !important;
+    }
+    #div1 {
+        top: 80px;
+        opacity: 1;
+        transition: all .5s;
+    }
+    .topbar .top-navbar .dropdown-menu {
+        position: absolute;
+        width: 50%;
+        line-height: 10px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .dataTables_wrapper .dataTables_length {
+        float: left !important;
+    }
+    .dataTables_wrapper .dataTables_filter {
+        float: right !important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .btn {
+        font-size: 10px;
+    }
+}
