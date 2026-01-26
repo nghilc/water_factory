@@ -20,7 +20,7 @@ var i18n = require("i18n");
 const { Server } = require('socket.io');
 const WebSocket = require('ws');
 var wsManager = require('./ws-manager');
-let wss = new WebSocket.Server({ port: 5014 });
+let wss = new WebSocket.Server({ port: 5015 });
 
 // var initializePassport = require('./config/passport-config')
 // initializePassport(passport);

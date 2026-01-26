@@ -9,8 +9,6 @@ $(document).ready(function(){
         success: function(res){
             // LANG = res.lang;
             ROLE = res.role
-          TABS = res.access_menu ? res.access_menu.split(',') : []; 
-
         },
         error: function(xhr, status, error){
             if(xhr.status === 401){
@@ -62,6 +60,7 @@ $(document).ready(function(){
   $("#filter_tram").change(function(){
     let val = $(this).children("option:selected").val();
     let type = $(this).children("option:selected").attr("dv_type");
+    localStorage.setItem('org_id', val);
     ORG_ID = val;
     if (type != "all"){
       $("#mainNavigation").show();
@@ -105,4 +104,12 @@ $(document).ready(function () {
       .selectpicker('val', org_id)
       .trigger('change');
   })
+})
+
+$(document).ready(function(){
+  if (localStorage.getItem('org_id')){
+    $('#filter_tram')
+      .selectpicker('val', localStorage.getItem('org_id'))
+      .trigger('change');
+  }
 })

@@ -799,9 +799,18 @@ function calculateCentroid(points) {
 
 
 $(document).ready(function () {
+    if (localStorage.getItem('org_id')) {
+        $('#filter_danhsachtram')
+            .selectpicker('val', localStorage.getItem('org_id'))
+            .trigger('change');
+    }
+  })
+
+$(document).ready(function () {
     $("#filter_danhsachtram").change(function () {
         let val = $(this).children("option:selected").val();
         let type = $(this).children("option:selected").attr("dv_type")
+        localStorage.setItem('org_id', val);
         // update_dashboard_general_status(val, type);
         $("#meter_type_filter").val("all");
         $(".hover_class").css("background-color", "#fff");

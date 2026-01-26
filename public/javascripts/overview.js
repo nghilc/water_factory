@@ -25,11 +25,20 @@ $(document).ready(function(){
 
 
 
+window.onload = function () {
+  if (localStorage.getItem('org_id')) {
+    $('#filter_danhsachtram')
+      .selectpicker('val', localStorage.getItem('org_id'))
+      .trigger('change');
+  }  // Viết mã của bạn ở đây
+};
 
 $(document).ready(function(){
   $("#filter_danhsachtram").change(function () {
     let val = $(this).children("option:selected").val();
     let type = $(this).children("option:selected").attr("dv_type");
+    localStorage.setItem('org_id', val);
+
     let name = $(this).children("option:selected").text();
     $.ajax({
       url: "/overview/get/danhsachthietbi",
@@ -40,7 +49,13 @@ $(document).ready(function(){
       },
       success: function (res) {
         render_table_meter_list(res.danh_sach_thiet_bị)
-        $("#ten_tram").html(name + " " + res.count_status)
+        if (val == "all"){
+          $("#ten_tram").html("Tất cả" + " " + res.count_status)
+
+        }else{
+          $("#ten_tram").html(name + " " + res.count_status)
+
+        }
       },
       error: function (xhr, status, error) {
         if (xhr.status === 401) {
