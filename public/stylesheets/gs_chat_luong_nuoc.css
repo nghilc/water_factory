@@ -138,7 +138,7 @@
 
 .status-warning {
     background: rgba(255, 152, 0, 0.2);
-    color: #FF9800;
+    color: #8f5b0e;
 }
 
 .status-danger {
@@ -151,7 +151,7 @@
     padding: 8px 15px;
     /* background: rgba(76, 175, 79, 0.716);
     border: 1px solid rgba(76, 175, 79, 0.747); */
-    background: rgba(31, 158, 199, 0.716);
+    background: #2196F3;
     border: 1px solid rgba(31, 158, 199, 0.747);
     border-radius: 8px;
     color: white;
