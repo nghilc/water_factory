@@ -1,247 +1,148 @@
 <div class="environment-page screen active" id="tu-do-csmt">
- 
-           <div class="page-header">
-                <div class="page-title">
-                    <h4>📈 CHỈ SỐ MÔI TRƯỜNG CHẤT LƯỢNG NƯỚC</h4>
-                    <div class="devices-count"><span id="he_thong_giam_sat"></span> hệ thống giám sát</div>
+
+    <div class="page-header">
+        <div class="page-title">
+            <h4>📈 CHỈ SỐ MÔI TRƯỜNG CHẤT LƯỢNG NƯỚC</h4>
+            <div class="devices-count"><span id="he_thong_giam_sat"></span> hệ thống giám sát</div>
+        </div>
+    </div>
+
+    <!-- Thống kê tổng quan -->
+    <div class="stats-grid">
+        <div class="stat-card-large">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon-large">🌊</div>
+                <div class="stat-label-large">CHẤT LƯỢNG NƯỚC THÔ</div>
+            </div>
+            <div class="stat-value-large font-weight-bold text-success" id="chat_luong_nuoc_tho">...</div>
+            <!-- <div class="stat-subvalue"><span id="chi_so_on_dinh">...</span> chỉ số ổn định</div> -->
+        </div>
+        <div class="stat-card-large">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon-large">💧</div>
+                <div class="stat-label-large">CHẤT LƯỢNG NƯỚC SẠCH</div>
+            </div>
+            <div class="stat-value-large text-success font-weight-bold" id="chat_luong_nuoc_sach">TUYỆT VỜI</div>
+            <!-- <div class="stat-subvalue"><span id="chi_so_dat_chuan">...</span> chỉ số đạt chuẩn</div> -->
+        </div>
+        <div class="stat-card-large">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon-large">⚡</div>
+                <div class="stat-label-large">CẬP NHẬT</div>
+            </div>
+            <div class="stat-value-large" style="font-size: 18px;" id="thoi_gian">...</div>
+            <!-- <div class="stat-subvalue">Dữ liệu thời gian thực</div> -->
+        </div>
+        <div class="stat-card-large">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon-large">✅</div>
+                <div class="stat-label-large">TRẠNG THÁI</div>
+            </div>
+            <div class="stat-value-large" style="color: #4CAF50;" id="trang_thai">...</div>
+            <!-- <div class="stat-subvalue">Không có cảnh báo</div> -->
+        </div>
+    </div>
+    <!-- Chất lượng nước -->
+    <div class="row g-4 mt-4">
+        <div class="col-12 col-md-6">
+            <div class="row g-4" id="nuoc_tho_container">
+
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="row g-4" id="nuoc_sach_container">
+
+            </div>
+        </div>
+    </div>
+    <div style=" text-align: center;">
+        <button class="view-details-btn" id="cai_dat_nguong">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Cài đặt tiêu chuẩn chất lượng nước
+        </button>
+    </div>
+    <!-- Tiêu chuẩn chất lượng -->
+    <div class="card mt-20 water-quality-card">
+        <h5>📋 TIÊU CHUẨN CHẤT LƯỢNG NƯỚC</h5>
+        <div class="standards-grid">
+            <div class="standard-section">
+                <h4>Nước thô </h4>
+                <div class="standard-item">
+                    <span class="param-name">Độ đục:</span>
+                    <span class="param-limit">≤ <span id="tc_nuoc_tho_do_duc">...</span> NTU</span>
+                    <!-- <span class="param-status good">-</span> -->
+                </div>
+                <div class="standard-item">
+                    <span class="param-name">Độ pH:</span>
+                    <span class="param-limit"><span id="tc_nuoc_tho_ph_min">...</span> - <span
+                            id="tc_nuoc_tho_ph_max">...</span></span>
+                    <!-- <span class="param-status good">Đạt</span> -->
+                </div>
+                <div class="standard-item">
+                    <span class="param-name">Nhiệt độ:</span>
+                    <span class="param-limit">≤ <span id="tc_nuoc_tho_nhiet_do">...</span> °C</span>
+                    <!-- <span class="param-status good">Đạt</span> -->
                 </div>
             </div>
-    
-            <!-- Thống kê tổng quan -->
-            <div class="stats-grid">
-                <div class="stat-card-large">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon-large">🌊</div>
-                        <div class="stat-label-large">CHẤT LƯỢNG NƯỚC THÔ</div>
-                    </div>
-                    <div class="stat-value-large font-weight-bold text-success" id="chat_luong_nuoc_tho">...</div>
-                    <div class="stat-subvalue"><span id="chi_so_on_dinh">...</span> chỉ số ổn định</div>
+            <div class="standard-section">
+                <h4>Nước sạch </h4>
+                <div class="standard-item">
+                    <span class="param-name">Độ đục:</span>
+                    <span class="param-limit">≤ <span id="tc_nuoc_sach_do_duc">...</span> NTU</span>
+                    <!-- <span class="param-status good">Đạt</span> -->
                 </div>
-                <div class="stat-card-large">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon-large">💧</div>
-                        <div class="stat-label-large">CHẤT LƯỢNG NƯỚC SẠCH</div>
-                    </div>
-                    <div class="stat-value-large text-success font-weight-bold" id="chat_luong_nuoc_sach">TUYỆT VỜI</div>
-                    <div class="stat-subvalue"><span id="chi_so_dat_chuan">...</span> chỉ số đạt chuẩn</div>
+                <div class="standard-item">
+                    <span class="param-name">Độ pH:</span>
+                    <span class="param-limit"><span id="tc_nuoc_sach_ph_min">...</span> - <span
+                            id="tc_nuoc_sach_ph_max">...</span></span>
+                    <!-- <span class="param-status good">Đạt</span> -->
                 </div>
-                <div class="stat-card-large">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon-large">⚡</div>
-                        <div class="stat-label-large">CẬP NHẬT</div>
-                    </div>
-                    <div class="stat-value-large" style="font-size: 18px;" id="thoi_gian">...</div>
-                    <div class="stat-subvalue">Dữ liệu thời gian thực</div>
+                <div class="standard-item">
+                    <span class="param-name">Clo dư:</span>
+                    <span class="param-limit"><span id="tc_nuoc_sach_clo_du_min">...</span> - <span
+                            id="tc_nuoc_sach_clo_du_max">...</span> mg/l</span>
+                    <!-- <span class="param-status good">Đạt</span> -->
                 </div>
-                <div class="stat-card-large">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon-large">✅</div>
-                        <div class="stat-label-large">TRẠNG THÁI</div>
-                    </div>
-                    <div class="stat-value-large" style="color: #4CAF50;" id="trang_thai">...</div>
-                    <div class="stat-subvalue">Không có cảnh báo</div>
+                <div class="standard-item">
+                    <span class="param-name">EC:</span>
+                    <span class="param-limit">≤ <span id="tc_nuoc_sach_EC">...</span> uS/cm</span>
+                    <!-- <span class="param-status good">-</span> -->
                 </div>
             </div>
-            <!-- Chất lượng nước -->
-            <div class="water-quality-grid">
-                <!-- Nước thô -->
-                <div class="water-quality-card" data-type="raw">
-                    <h5>🌊 NƯỚC THÔ - <span class="name_nuoc_tho"></span></h5>
-                    <div class="parameter-grid">
-                        <div class="parameter-item">
-                            <div class="parameter-name">Nhiệt độ</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value" id="nuoc_tho_nhiet_do">...</div>
-                                <div class="parameter-unit">°C</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_tho_nhiet_do">Ổn định</span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">Độ pH</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value raw-ph" id="nuoc_tho_ph">...</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_tho_ph">Bình thường</span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">Độ đục</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value raw-turbidity" id="nuoc_tho_do_duc">...</div>
-                                <div class="parameter-unit">NTU</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_tho_do_duc"></span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">Độ cứng</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value" id="nuoc_tho_do_cung">...</div>
-                                <div class="parameter-unit">mg/l</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_tho_do_cung"></span>
-                        </div>
-                    </div>
-                    <div class="view-details-btn xem_chi_tiet_du_lieu" id="xem_chi_tiet_nuoc_tho">
-                        <input type="hidden" id="meter_code_nuoc_tho" data-title="-" />
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        Xem chi tiết
-                    </div>
-                </div>
-                <!-- Nước sạch -->
-                <div class="water-quality-card" data-type="clean">
-                    <h5>💧 NƯỚC SẠCH - <span class="name_nuoc_sach"></span></h5>
-                    <div class="parameter-grid">
-                        <div class="parameter-item">
-                            <div class="parameter-name">Nhiệt độ</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value clean-temp" id="nuoc_sach_nhiet_do">...</div>
-                                <div class="parameter-unit">°C</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_sach_nhiet_do">Bình thường</span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">Độ pH</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value clean-ph" id="nuoc_sach_ph">...</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_sach_ph">Bình thường</span>
-                        </div>
-    
-                        <div class="parameter-item">
-                            <div class="parameter-name">Clo dư</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value clean-chlorine" id="nuoc_sach_clo_du">...</div>
-                                <div class="parameter-unit">mg/l</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_sach_clo_du">Bình thường</span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">Độ đục</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value clean-turbidity" id="nuoc_sach_do_duc"></div>
-                                <div class="parameter-unit">NTU</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_sach_do_duc">Bình thường</span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">Độ mặn</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value" id="nuoc_sach_do_man">...</div>
-                                <div class="parameter-unit">%</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_sach_do_man"></span>
-                        </div>
-                        <div class="parameter-item">
-                            <div class="parameter-name">EC</div>
-                            <div class="d-flex align-items-center">
-                                <div class="parameter-value clean-ec" id="nuoc_sach_EC">...</div>
-                                <div class="parameter-unit">uS/cm</div>
-                            </div>
-                            <span class="parameter-status status-good nuoc_sach_EC"></span>
-                        </div>
-                    </div>
-                    <div class="view-details-btn" id="xem_chi_tiet_nuoc_sach">
-                        <input type="hidden" id="meter_code_nuoc_sach" data-title="-" />
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        Xem chi tiết
-                    </div>
-                </div>
+        </div>
+    </div>
+    <!-- Cảnh báo chất lượng -->
+    <div class="alert-panel water-quality-card">
+        <h5>✅ TRẠNG THÁI CHẤT LƯỢNG</h5>
+        <div class="alert-item alert-low">
+            <div class="alert-icon">🟢</div>
+            <div class="alert-content">
+                <div class="alert-title">Chất lượng nước thô ổn định</div>
+                <div class="alert-desc">Tất cả chỉ số trong ngưỡng cho phép</div>
+                <div class="alert-time">Cập nhật: 14:45</div>
             </div>
-            <div style="margin-top: 20px; text-align: center;">
-                <button class="view-details-btn" id="cai_dat_nguong">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 20h9"></path>
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                    </svg>
-                    Cài đặt tiêu chuẩn chất lượng nước
-                </button>
+        </div>
+        <div class="alert-item alert-low">
+            <div class="alert-icon">🟢</div>
+            <div class="alert-content">
+                <div class="alert-title">Chất lượng nước sạch đạt chuẩn</div>
+                <div class="alert-desc">Đáp ứng QCVN 01:2023/BYT</div>
+                <div class="alert-time">Cập nhật: 14:45</div>
             </div>
-            <!-- Tiêu chuẩn chất lượng -->
-            <div class="card mt-20 water-quality-card">
-                <h5>📋 TIÊU CHUẨN CHẤT LƯỢNG NƯỚC</h5>
-                <div class="standards-grid">
-                    <div class="standard-section">
-                        <h4>Nước thô </h4>
-                        <div class="standard-item">
-                            <span class="param-name">Độ đục:</span>
-                            <span class="param-limit">≤ <span id="tc_nuoc_tho_do_duc">...</span> NTU</span>
-                            <!-- <span class="param-status good">-</span> -->
-                        </div>
-                        <div class="standard-item">
-                            <span class="param-name">Độ pH:</span>
-                            <span class="param-limit"><span id="tc_nuoc_tho_ph_min">...</span> - <span
-                                    id="tc_nuoc_tho_ph_max">...</span></span>
-                            <!-- <span class="param-status good">Đạt</span> -->
-                        </div>
-                        <div class="standard-item">
-                            <span class="param-name">Nhiệt độ:</span>
-                            <span class="param-limit">≤ <span id="tc_nuoc_tho_nhiet_do">...</span> °C</span>
-                            <!-- <span class="param-status good">Đạt</span> -->
-                        </div>
-                    </div>
-                    <div class="standard-section">
-                        <h4>Nước sạch </h4>
-                        <div class="standard-item">
-                            <span class="param-name">Độ đục:</span>
-                            <span class="param-limit">≤ <span id="tc_nuoc_sach_do_duc">...</span> NTU</span>
-                            <!-- <span class="param-status good">Đạt</span> -->
-                        </div>
-                        <div class="standard-item">
-                            <span class="param-name">Độ pH:</span>
-                            <span class="param-limit"><span id="tc_nuoc_sach_ph_min">...</span> - <span
-                                    id="tc_nuoc_sach_ph_max">...</span></span>
-                            <!-- <span class="param-status good">Đạt</span> -->
-                        </div>
-                        <div class="standard-item">
-                            <span class="param-name">Clo dư:</span>
-                            <span class="param-limit"><span id="tc_nuoc_sach_clo_du_min">...</span> - <span
-                                    id="tc_nuoc_sach_clo_du_max">...</span> mg/l</span>
-                            <!-- <span class="param-status good">Đạt</span> -->
-                        </div>
-                        <div class="standard-item">
-                            <span class="param-name">EC:</span>
-                            <span class="param-limit">≤ <span id="tc_nuoc_sach_EC">...</span> uS/cm</span>
-                            <!-- <span class="param-status good">-</span> -->
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <div class="alert-item alert-low">
+            <div class="alert-icon">🟢</div>
+            <div class="alert-content">
+                <div class="alert-title">Hệ thống xử lý hoạt động tốt</div>
+                <div class="alert-desc">Hiệu suất xử lý: 98.5%</div>
+                <div class="alert-time">Cập nhật: 14:30</div>
             </div>
-            <!-- Cảnh báo chất lượng -->
-            <div class="alert-panel water-quality-card">
-                <h5>✅ TRẠNG THÁI CHẤT LƯỢNG</h5>
-                <div class="alert-item alert-low">
-                    <div class="alert-icon">🟢</div>
-                    <div class="alert-content">
-                        <div class="alert-title">Chất lượng nước thô ổn định</div>
-                        <div class="alert-desc">Tất cả chỉ số trong ngưỡng cho phép</div>
-                        <div class="alert-time">Cập nhật: 14:45</div>
-                    </div>
-                </div>
-                <div class="alert-item alert-low">
-                    <div class="alert-icon">🟢</div>
-                    <div class="alert-content">
-                        <div class="alert-title">Chất lượng nước sạch đạt chuẩn</div>
-                        <div class="alert-desc">Đáp ứng QCVN 01:2023/BYT</div>
-                        <div class="alert-time">Cập nhật: 14:45</div>
-                    </div>
-                </div>
-                <div class="alert-item alert-low">
-                    <div class="alert-icon">🟢</div>
-                    <div class="alert-content">
-                        <div class="alert-title">Hệ thống xử lý hoạt động tốt</div>
-                        <div class="alert-desc">Hiệu suất xử lý: 98.5%</div>
-                        <div class="alert-time">Cập nhật: 14:30</div>
-                    </div>
-                </div>
-            </div>
+        </div>
+    </div>
 </div>
 
 <!-- modal lịch sử dữ liệu -->
@@ -441,9 +342,9 @@
 
 <style>
     /* .environment-page {
-        max-width: 1400px;
-        margin: 0 auto;
-    } */
+ max-width: 1400px;
+ margin: 0 auto;
+} */
 
     .stats-grid {
         display: grid;
@@ -493,14 +394,14 @@
         border-radius: 15px;
         padding: 20px;
         /* backdrop-filter: blur(10px);
-        transition: transform 0.3s ease; */
+ transition: transform 0.3s ease; */
         /* cursor: pointer; */
     }
 
     /* .water-quality-card:hover {
-        transform: translateY(-5px);
-        background: rgba(255, 255, 255, 0.15);
-    } */
+ transform: translateY(-5px);
+ background: rgba(255, 255, 255, 0.15);
+} */
 
     .water-quality-card h3 {
         margin-bottom: 15px;
@@ -571,7 +472,7 @@
         margin-top: 15px;
         padding: 8px 15px;
         /* background: rgba(76, 175, 79, 0.716);
-        border: 1px solid rgba(76, 175, 79, 0.747); */
+ border: 1px solid rgba(76, 175, 79, 0.747); */
         background: #2196F3;
         border: 1px solid rgba(31, 158, 199, 0.747);
         border-radius: 8px;
@@ -586,8 +487,8 @@
     }
 
     .view-details-btn:hover {
-    background: rgba(31, 158, 199, 0.918);
-}
+        background: rgba(31, 158, 199, 0.918);
+    }
 
     .standards-grid {
         display: grid;
@@ -597,7 +498,7 @@
 
     .standard-section h4 {
         margin-bottom: 15px;
-        color: #1f9ec7  ;
+        color: #1f9ec7;
         font-size: 16px;
     }
 
@@ -737,7 +638,7 @@
     }
 
 
- 
+
     /* Device Detail Screen */
     .device-detail-header {
         display: flex;
@@ -820,7 +721,7 @@
         align-items: center;
         padding: 10px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.691);
-}
+    }
 
     .parameter-setting:last-child {
         border-bottom: none;
@@ -863,7 +764,8 @@
         background: rgba(252, 252, 252, 0.563);
         border: 1px solid rgb(255, 255, 255);
         border-radius: 5px;
-        color: rgb(0, 0, 0);;
+        color: rgb(0, 0, 0);
+        ;
         text-align: center;
     }
 
@@ -880,10 +782,6 @@
         padding-top: 20px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-
-
-
 </style>
 
 <script src="/javascripts/chi_so_moi_truong.js"></script>

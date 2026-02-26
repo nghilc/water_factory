@@ -88,7 +88,7 @@ $(document).ready(function () {
 })
 
 
-$(document).ready(function(){
+$(document).ready(function () {
     get_data_nha_may();
 })
 
@@ -107,67 +107,286 @@ function get_data_nha_may() {
             let nuoc_sach = res.nuoc_sach;
             let tieu_chuan_nuoc_tho = res.tieu_chuan_nuoc_tho;
 
-            $(".name_nuoc_tho").html(show_empty_if_null_text(nuoc_tho.name));
-            $(".name_nuoc_sach").html(show_empty_if_null_text(nuoc_sach.name));
-            console.log(nuoc_tho.name, nuoc_sach.name)
-            $("#meter_code_nuoc_tho").val(nuoc_tho.meter_code);
-            $("#meter_code_nuoc_tho").attr('data-title', nuoc_tho.name);
-            $("#meter_code_nuoc_sach").val(nuoc_sach.meter_code);
-            $("#meter_code_nuoc_sach").attr('data-title', nuoc_sach.name);
+            // nước thô
+            $("#nuoc_tho_container").empty();
 
-            $("#chat_luong_nuoc_tho").html(general.chat_luong_nuoc_tho);
-            $("#chi_so_on_dinh").html(general.chi_so_on_dinh);
-            $("#chat_luong_nuoc_sach").html(general.chat_luong_nuoc_sach);
-            $("#chi_so_dat_chuan").html(general.chi_so_dat_chuan);
+            if (nuoc_tho.length > 0) {
+                let str = "";
+                for (let i = 0; i < nuoc_tho.length; i++) {
+                    str += `
+                <div class="col-12 mb-2">
+                <div class="water-quality-card" data-type="raw">
+                  <h5><span>${show_empty_if_null_text(nuoc_tho[i].name)}</span></h5>
+                  <div class="parameter-grid">
+                      <div class="parameter-item">
+                          <div class="parameter-name">Nhiệt độ</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value" >${show_empty_if_null_text(nuoc_tho[i].nhiet_do)}</div>
+                              <div class="parameter-unit">°C</div>
+                          </div>
+                      </div>
+                      <div class="parameter-item">
+                          <div class="parameter-name">Độ pH</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value raw-ph" >${show_empty_if_null_text(nuoc_tho[i].ph)}</div>
+                          </div>
+                      </div>
+                      <div class="parameter-item">
+                          <div class="parameter-name">Độ đục</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value raw-turbidity" >${nuoc_tho[i].do_duc ?? '-'}</div>
+                              <div class="parameter-unit">NTU</div>
+                          </div>
+                          </div>
+                      <div class="parameter-item">
+                          <div class="parameter-name">Độ cứng</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value" >${(nuoc_tho[i].do_cung ?? '-')}</div>
+                              <div class="parameter-unit">mg/l</div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="view-details-btn xem_chi_tiet_du_lieu xem_chi_tiet_nuoc_tho" MeterCode="${nuoc_tho[i].meter_code}" meter_name="${nuoc_tho[i].name}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2">
+                          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      Xem chi tiết
+                  </div>
+                </div>
+                </div>
+                `
+                }
+                $("#nuoc_tho_container").append(str);
+            } else {
+                let str = `
+                <div class="col-12 mb-2">
+                <div class="water-quality-card" data-type="raw">
+                  <h5><span>-</span></h5>
+                  <div class="parameter-grid">
+                      <div class="parameter-item">
+                          <div class="parameter-name">Nhiệt độ</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value" >-</div>
+                              <div class="parameter-unit">°C</div>
+                          </div>
+                      </div>
+                      <div class="parameter-item">
+                          <div class="parameter-name">Độ pH</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value raw-ph" >-</div>
+                          </div>
+                      </div>
+                      <div class="parameter-item">
+                          <div class="parameter-name">Độ đục</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value raw-turbidity" >-</div>
+                              <div class="parameter-unit">NTU</div>
+                          </div>
+                          </div>
+                      <div class="parameter-item">
+                          <div class="parameter-name">Độ cứng</div>
+                          <div class="d-flex align-items-center">
+                              <div class="parameter-value" >-</div>
+                              <div class="parameter-unit">mg/l</div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                </div>
+                </div>
+                `
+                $("#nuoc_tho_container").append(str);
+            }
+
+            // $(".name_nuoc_tho").html(show_empty_if_null_text(nuoc_tho.name));
+            // $(".name_nuoc_sach").html(show_empty_if_null_text(nuoc_sach.name));
+            // $("#meter_code_nuoc_tho").val(nuoc_tho.meter_code);
+            // $("#meter_code_nuoc_tho").attr('data-title', nuoc_tho.name);
+            // $("#meter_code_nuoc_sach").val(nuoc_sach.meter_code);
+            // $("#meter_code_nuoc_sach").attr('data-title', nuoc_sach.name);
+
+            $("#chat_luong_nuoc_tho").html("-");
+            $("#chat_luong_nuoc_sach").html("-");
             $("#thoi_gian").html(general.thoi_gian);
-            $("#trang_thai").html(general.trang_thai);
+            $("#trang_thai").html("-");
             $("#he_thong_giam_sat").html(general.he_thong_giam_sat);
+            // $("#nuoc_tho_do_duc").html(nuoc_tho.do_duc ?? '-');
+            // $("#nuoc_tho_ph").html(nuoc_tho.ph);
 
-            $("#nuoc_tho_do_duc").html(nuoc_tho.do_duc ?? '-');
-            $("#nuoc_tho_ph").html(nuoc_tho.ph);
+            // if (nuoc_tho.tt_ph == 1) {
+            //   $('.nuoc_tho_ph').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // } else {
+            //   $('.nuoc_tho_ph').html("Không đạt").removeClass('status-good').addClass('status-warning');
+            // }
+            // $("#nuoc_tho_nhiet_do").html(nuoc_tho.nhiet_do);
 
-            if (nuoc_tho.tt_ph == 1) {
-                $('.nuoc_tho_ph').html("Bình thường").removeClass('status-warning').addClass('status-good');
-            } else {
-                $('.nuoc_tho_ph').html("Không đạt").removeClass('status-good').addClass('status-warning');
-            }
-            $("#nuoc_tho_nhiet_do").html(nuoc_tho.nhiet_do);
-
-            if (nuoc_tho.tt_nhiet_do == 1) {
-                $('.nuoc_tho_nhiet_do').html("Bình thường").removeClass('status-warning').addClass('status-good');
-            } else {
-                $('.nuoc_tho_nhiet_do').html("Không đạt").removeClass('status-good').addClass('status-warning');
-            }
+            // if (nuoc_tho.tt_nhiet_do == 1) {
+            //   $('.nuoc_tho_nhiet_do').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // } else {
+            //   $('.nuoc_tho_nhiet_do').html("Không đạt").removeClass('status-good').addClass('status-warning');
+            // }
 
 
-            $("#nuoc_tho_do_cung").html(nuoc_tho.do_cung ?? '-');
+            // $("#nuoc_tho_do_cung").html(nuoc_tho.do_cung ?? '-');
 
-            $("#nuoc_sach_nhiet_do").html(nuoc_sach.nhiet_do);
-            if (nuoc_sach.tt_nhiet_do == 1) {
-                $('.nuoc_sach_nhiet_do').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // nước sạch
+            $("#nuoc_sach_container").empty();
+
+            if (nuoc_sach.length > 0) {
+                let str = "";
+                for (let i = 0; i < nuoc_sach.length; i++) {
+                    str += `
+                <div class="col-12 mb-2">
+                <div class="water-quality-card" data-type="clean">
+                  <h5><span>${show_empty_if_null_text(nuoc_sach[i].name)}</span></h5>
+                  <div class="parameter-grid">
+                    <div class="parameter-item">
+                      <div class="parameter-name">Nhiệt độ</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-temp">${show_empty_if_null_text(nuoc_sach[i].nhiet_do)}</div>
+                        <div class="parameter-unit">°C</div>
+                      </div>
+                      ${(nuoc_sach[i].nhiet_do == null) ? "" : ((nuoc_sach[i].tt_nhiet_do == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}
+                      </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Độ pH</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-ph">${show_empty_if_null_text(nuoc_sach[i].ph)}</div>
+                      </div>
+                      ${(nuoc_sach[i].ph == null) ? "" : ((nuoc_sach[i].tt_ph == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
+                      </div>
+      
+                    <div class="parameter-item">
+                      <div class="parameter-name">Clo dư</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-chlorine">${show_empty_if_null_text(nuoc_sach[i].clo_du)}</div>
+                        <div class="parameter-unit">mg/l</div>
+                      </div>
+                      ${(nuoc_sach[i].clo_du == null) ? "" : ((nuoc_sach[i].tt_clo_du == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
+                      </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Độ đục</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-turbidity">${nuoc_sach[i].do_duc ?? '-'}</div>
+                        <div class="parameter-unit">NTU</div>
+                      </div>
+                      ${(nuoc_sach[i].do_duc == null) ? "" : ((nuoc_sach[i].tt_do_duc == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
+                      </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Độ mặn</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value">${nuoc_sach.do_man ?? '-'}</div>
+                        <div class="parameter-unit">%</div>
+                      </div>
+                      ${(nuoc_sach[i].do_man == null) ? "" : ((nuoc_sach[i].tt_do_man == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
+                      </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">EC</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-ec">${nuoc_sach[i].EC ?? '-'}</div>
+                        <div class="parameter-unit">uS/cm</div>
+                      </div>
+                      ${(nuoc_sach[i].EC == null) ? "" : ((nuoc_sach[i].tt_EC == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
+                      </div>
+                  </div>
+                  <div class="view-details-btn xem_chi_tiet_du_lieu xem_chi_tiet_nuoc_sach" MeterCode="${nuoc_sach[i].meter_code}" meter_name="${nuoc_sach[i].name}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Xem chi tiết
+                  </div>
+                  </div>
+              </div>
+                `
+                }
+                $("#nuoc_sach_container").append(str);
             } else {
-                $('.nuoc_sach_nhiet_do').html("Không đạt").removeClass('status-good').addClass('status-warning');
+                let str = `
+                <div class="col-12 mb-2">
+                <div class="water-quality-card" data-type="clean">
+                  <h5><span>-</span></h5>
+                  <div class="parameter-grid">
+                    <div class="parameter-item">
+                      <div class="parameter-name">Nhiệt độ</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-temp">-</div>
+                        <div class="parameter-unit">°C</div>
+                      </div>
+                      </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Độ pH</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-ph">-</div>
+                      </div>
+                      </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Clo dư</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-chlorine">-</div>
+                        <div class="parameter-unit">mg/l</div>
+                      </div>
+                    </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Độ đục</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-turbidity">-</div>
+                        <div class="parameter-unit">NTU</div>
+                      </div>
+                    </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">Độ mặn</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value">-</div>
+                        <div class="parameter-unit">%</div>
+                      </div>
+                    </div>
+                    <div class="parameter-item">
+                      <div class="parameter-name">EC</div>
+                      <div class="d-flex align-items-center">
+                        <div class="parameter-value clean-ec">-</div>
+                        <div class="parameter-unit">uS/cm</div>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  </div>
+              </div>
+                `
+
+                $("#nuoc_sach_container").append(str);
             }
-            $("#nuoc_sach_ph").html(nuoc_sach.ph);
-            if (nuoc_sach.tt_ph == 1) {
-                $('.nuoc_sach_ph').html("Bình thường").removeClass('status-warning').addClass('status-good');
-            } else {
-                $('.nuoc_sach_ph').html("Không đạt").removeClass('status-good').addClass('status-warning');
-            }
-            $("#nuoc_sach_do_man").html(nuoc_sach.do_man);
-            $("#nuoc_sach_clo_du").html(nuoc_sach.clo_du);
-            if (nuoc_sach.tt_clo_du == 1) {
-                $('.nuoc_sach_clo_du').html("Bình thường").removeClass('status-warning').addClass('status-good');
-            } else {
-                $('.nuoc_sach_clo_du').html("Không đạt").removeClass('status-good').addClass('status-warning');
-            }
-            $("#nuoc_sach_do_duc").html(nuoc_sach.do_duc ?? '-');
-            if (nuoc_sach.tt_do_duc == 1) {
-                $('.nuoc_sach_do_duc').html("Bình thường").removeClass('status-warning').addClass('status-good');
-            } else {
-                $('.nuoc_sach_do_duc').html("Không đạt").removeClass('status-good').addClass('status-warning');
-            }
-            $("#nuoc_sach_EC").html(nuoc_sach.EC ?? '-');
+
+
+            // $("#nuoc_sach_nhiet_do").html(nuoc_sach.nhiet_do);
+            // if (nuoc_sach.tt_nhiet_do == 1) {
+            //   $('.nuoc_sach_nhiet_do').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // } else {
+            //   $('.nuoc_sach_nhiet_do').html("Không đạt").removeClass('status-good').addClass('status-warning');
+            // }
+            // $("#nuoc_sach_ph").html(nuoc_sach.ph);
+            // if (nuoc_sach.tt_ph == 1) {
+            //   $('.nuoc_sach_ph').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // } else {
+            //   $('.nuoc_sach_ph').html("Không đạt").removeClass('status-good').addClass('status-warning');
+            // }
+            // $("#nuoc_sach_do_man").html(nuoc_sach.do_man);
+            // $("#nuoc_sach_clo_du").html(nuoc_sach.clo_du);
+            // if (nuoc_sach.tt_clo_du == 1) {
+            //   $('.nuoc_sach_clo_du').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // } else {
+            //   $('.nuoc_sach_clo_du').html("Không đạt").removeClass('status-good').addClass('status-warning');
+            // }
+            // $("#nuoc_sach_do_duc").html(nuoc_sach.do_duc ?? '-');
+            // if (nuoc_sach.tt_do_duc == 1) {
+            //   $('.nuoc_sach_do_duc').html("Bình thường").removeClass('status-warning').addClass('status-good');
+            // } else {
+            //   $('.nuoc_sach_do_duc').html("Không đạt").removeClass('status-good').addClass('status-warning');
+            // }
+            // $("#nuoc_sach_EC").html(nuoc_sach.EC ?? '-');
 
 
             $("#tc_nuoc_tho_do_duc").html(tieu_chuan_nuoc_tho.do_duc);
@@ -198,27 +417,29 @@ function get_data_nha_may() {
 
 
 $(document).ready(function () {
-    $("#xem_chi_tiet_nuoc_tho").on("click", function () {
+    $(document).on("click", ".xem_chi_tiet_nuoc_tho", function () {
         $("#lich_su_du_lieu").modal("show");
-        $("#modal_title").html($("#meter_code_nuoc_tho").attr("data-title"));
+        $("#modal_title").html($(this).attr("meter_name"));
         $("#meter_data_time_from").data("daterangepicker").setStartDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
         $("#meter_data_time_from").data("daterangepicker").setEndDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
         $("#meter_data_time_to").data("daterangepicker").setStartDate(moment().startOf('minute'));
         $("#meter_data_time_to").data("daterangepicker").setEndDate(moment().startOf('minute'));
         TYPE = 1;
+        METERCODE = $(this).attr("MeterCode");
         get_and_render_chart_nuoc_tho();
     })
 })
 
 $(document).ready(function () {
-    $("#xem_chi_tiet_nuoc_sach").on("click", function () {
+    $(document).on("click", ".xem_chi_tiet_nuoc_sach", function () {
         $("#lich_su_du_lieu").modal("show");
-        $("#modal_title").html($("#meter_code_nuoc_sach").attr("data-title"));
+        $("#modal_title").html($(this).attr("meter_name"));
         $("#meter_data_time_from").data("daterangepicker").setStartDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
         $("#meter_data_time_from").data("daterangepicker").setEndDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
         $("#meter_data_time_to").data("daterangepicker").setStartDate(moment().startOf('minute'));
         $("#meter_data_time_to").data("daterangepicker").setEndDate(moment().startOf('minute'));
         TYPE = 2;
+        METERCODE = $(this).attr("MeterCode");
         get_and_render_chart_nuoc_sach();
     })
 })
@@ -240,7 +461,7 @@ var METERCODE = null;
 function get_and_render_chart_nuoc_tho() {
     let start_date = $("#meter_data_time_from").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 00:00:00";
     let end_date = $("#meter_data_time_to").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 23:59:59";
-    METERCODE = $('#meter_code_nuoc_tho').val();
+    // METERCODE = $('#meter_code_nuoc_tho').val();
     $.ajax({
         url: "/overview/get/du_lieu_nuoc",
         type: "GET",
@@ -451,7 +672,6 @@ function nuoc_tho_render_chart(raw_data) {
 function get_and_render_chart_nuoc_sach() {
     let start_date = $("#meter_data_time_from").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 00:00:00";
     let end_date = $("#meter_data_time_to").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 23:59:59";
-    METERCODE = $('#meter_code_nuoc_sach').val();
     $.ajax({
         url: "/overview/get/du_lieu_nuoc",
         type: "GET",
@@ -782,7 +1002,6 @@ $(document).ready(function () {
 function get_and_render_table_nuoc_tho() {
     let start_date = $("#meter_data_time_from").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 00:00:00";
     let end_date = $("#meter_data_time_to").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 23:59:59";
-    METERCODE = $('#meter_code_nuoc_tho').val();
     $.ajax({
         url: "/overview/get/du_lieu_nuoc",
         type: "GET",
@@ -870,7 +1089,6 @@ function nuoc_tho_modifi_data(data) {
 function get_and_render_table_nuoc_sach() {
     let start_date = $("#meter_data_time_from").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 00:00:00";
     let end_date = $("#meter_data_time_to").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 23:59:59";
-    METERCODE = $('#meter_code_nuoc_sach').val();
     $.ajax({
         url: "/overview/get/du_lieu_nuoc",
         type: "GET",

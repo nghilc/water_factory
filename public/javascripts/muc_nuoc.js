@@ -389,7 +389,7 @@ function render_water_level_realtime_chart(originalData) {
 
     var chartData = originalData.map(r => ({
         station: r.name,
-        unit: r.data_type === 1 ? "m" : "cm",
+        unit: r.last_unit,
         valueM: r.data_type === 1 ? r.last_measure_sensor : null,
         valueDynamicM: r.data_type === 1 ? r.last_measure_dynamic : null,
         valueCM: r.data_type === 2 ? r.last_measure_sensor : null,

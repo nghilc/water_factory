@@ -1,6 +1,33 @@
 const {access_db, query} = require("../config/mysql_config");
 const export_nuoc_tho_func = require("../config/evm_export_nuoc_tho")
 const export_nuoc_sach_func = require("../config/evm_export_nuoc_sach")
+
+var pad = function (num) { return ('00' + num).slice(-2) };
+function returnSQLDateFormat(dateObj) {
+    if (dateObj == "" || dateObj == null) return "-";
+    let date = new Date(dateObj);
+    let x = date.getFullYear() + '-' +
+        pad(date.getMonth() + 1) + '-' +
+        pad(date.getDate()) + ' ' +
+        pad(date.getHours()) + ':' +
+        pad(date.getMinutes()) + ':' +
+        pad(date.getSeconds());
+    return x;
+}
+
+function return_date_format_ddmmyyhhmmss(dateObj) {
+    if (dateObj == "" || dateObj == null) return "-";
+    let date = new Date(dateObj);
+    let x = pad(date.getDate()) + '-' +
+        pad(date.getMonth() + 1) + '-' + '20' +
+        pad(date.getFullYear()) + ' ' +
+        pad(date.getHours()) + ':' +
+        pad(date.getMinutes()) + ':' +
+        pad(date.getSeconds());
+    return x;
+}
+
+
 const overview_controller = {
     // hiển thị trang overview - giám sát tổng quan
     show_overview: async (req,res) => {
@@ -90,156 +117,133 @@ const overview_controller = {
                   });
             }
         },
-        get_dulieunhamay: async (req,res) => {
-                try{
-                    let config = await access_db("SELECT * FROM config_wmco", []);
-                    let result = await access_db("SELECT m.meter_type, m.data_type,(vm.last_ValOfNum - vm.last_ValOfNum_24h) as 'san_luong_tu_0h',(vm.tank_base_bottom * vm.last_measure_sensor) as 'dung_tich_be_hien_tai', vm.* FROM org_managers as mpm LEFT JOIN meters as m ON m.meter_serial = mpm.MeterCode LEFT JOIN view_totaleq as vm ON vm.MeterCode = mpm.MeterCode WHERE meter_type = 'CSMT' AND mpm.org_id = ?", [req.query.org_id]);
-                        let general = {
-                            chat_luong_nuoc_tho: "",
-                            chi_so_on_dinh: "",
-                            chat_luong_nuoc_sach: "",
-                            chi_so_dat_chuan: "",
-                            thoi_gian: new Date().toLocaleTimeString('vi-VN'),
-                            trang_thai: "",
-                            he_thong_giam_sat: 2
-                        }
-                        let nuoc_tho = {
-                            do_duc: null,
-                            tt_do_duc: null,
-                            ph: null,
-                            tt_ph: null,
-                            nhiet_do: null,
-                            tt_nhiet_do: null,
+    get_dulieunhamay: async (req, res) => {
+        try {
+            let config = await access_db("SELECT * FROM config_wmco", []);
+            let result = await access_db("SELECT m.meter_type, m.data_type,(vm.last_ValOfNum - vm.last_ValOfNum_24h) as 'san_luong_tu_0h',(vm.tank_base_bottom * vm.last_measure_sensor) as 'dung_tich_be_hien_tai', vm.* FROM org_managers as mpm LEFT JOIN meters as m ON m.meter_serial = mpm.MeterCode LEFT JOIN view_totaleq as vm ON vm.MeterCode = mpm.MeterCode WHERE meter_type = 'CSMT' AND mpm.org_id = ?", [req.query.org_id]);
+            let general = {
+                chat_luong_nuoc_tho: "",
+                chi_so_on_dinh: "",
+                chat_luong_nuoc_sach: "",
+                chi_so_dat_chuan: "",
+                thoi_gian: returnSQLDateFormat(new Date()),
+                trang_thai: "",
+                he_thong_giam_sat: 2
+            }
+            let nuoc_tho = [];
+            let nuoc_sach = [];
+            let tieu_chuan_nuoc_tho = {
+                do_duc: 50,
+                ph_min: 6.5,
+                ph_max: 8.5,
+                nhiet_do: 30
+            }
+            let tieu_chuan_nuoc_sach = {
+                do_duc: 2,
+                ph_min: 6.0,
+                ph_max: 8.5,
+                clo_du_min: 0.3,
+                clo_du_max: 1.0,
+                EC: 750
+            }
+            config.forEach(e => {
+                if (e.device_type == 1) {
+                    tieu_chuan_nuoc_tho = {
+                        do_duc: e.do_duc_max,
+                        ph_min: e.ph_min,
+                        ph_max: e.ph_max,
+                        nhiet_do: e.nhiet_do_max
+                    }
+                } else if (e.device_type == 2) {
+                    tieu_chuan_nuoc_sach = {
+                        nhiet_do: e.nhiet_do_max,
+                        do_duc: e.do_duc_max,
+                        ph_min: e.ph_min,
+                        ph_max: e.ph_max,
+                        clo_du_min: e.clo_du_min,
+                        clo_du_max: e.clo_du_max,
+                        EC: 750
+                    }
+                }
+            });
+            let chat_luong_nuoc_tho = 0;
+            let chat_luong_nuoc_sach = 0;
+            if (result.length > 0) {
+                result.forEach(element => {
+                    if (element.data_type == 1) {
+                        //console.log(tieu_chuan_nuoc_tho.ph_min);
+                        nuoc_tho.push({
+                            name: element.name,
+                            last_data_time: element.last_data_time,
+                            meter_code: element.MeterCode,
+                            do_duc: element.last_DoDuc,
+                            tt_do_duc: 0,
+                            ph: element.last_PH,
+                            tt_ph: tieu_chuan_nuoc_tho.ph_min <= element.last_PH && tieu_chuan_nuoc_tho.ph_max >= element.last_PH ? 1 : 0,
+                            nhiet_do: element.last_Temp,
+                            tt_nhiet_do: tieu_chuan_nuoc_tho.nhiet_do >= element.last_Temp ? 1 : 0,
                             do_cung: null,
-                            tt_do_cung: null
-
+                            tt_do_cung: 0
+                        })
+                        if (tieu_chuan_nuoc_tho.ph_min <= element.last_PH && tieu_chuan_nuoc_tho.ph_max >= element.last_PH &&
+                            tieu_chuan_nuoc_tho.nhiet_do >= element.last_Temp) {
+                            chat_luong_nuoc_tho = 1;
                         }
-                        let nuoc_sach = {
-                            nhiet_do: null,
-                            tt_nhiet_do: null,
-                            ph: null,
-                            tt_ph: null,
+                    } else if (element.data_type == 2) {
+                        nuoc_sach.push({
+                            name: element.name,
+                            last_data_time: element.last_data_time,
+                            nhiet_do: element.last_Temp,
+                            meter_code: element.MeterCode,
+                            tt_nhiet_do: tieu_chuan_nuoc_sach.nhiet_do >= element.last_Temp ? 1 : 0,
+                            ph: element.last_PH,
+                            tt_ph: tieu_chuan_nuoc_sach.ph_min <= element.last_PH && tieu_chuan_nuoc_sach.ph_max >= element.last_PH ? 1 : 0,
                             do_man: null,
                             tt_do_man: null,
-                            clo_du: null,
-                            tt_clo_du: null,
-                            do_duc: null,
-                            tt_do_duc: null,
+                            clo_du: element.last_CloDu,
+                            tt_clo_du: tieu_chuan_nuoc_sach.clo_du_min <= element.last_CloDu && tieu_chuan_nuoc_sach.clo_du_max >= element.last_CloDu ? 1 : 0,
+                            do_duc: element.last_DoDuc,
+                            tt_do_duc: tieu_chuan_nuoc_sach.do_duc >= element.last_DoDuc ? 1 : 0,
                             EC: null,
                             tt_EC: null
-                        }
-                        let tieu_chuan_nuoc_tho = {
-                            do_duc: 50,
-                            ph_min: 6.5,
-                            ph_max: 8.5,
-                            nhiet_do: 30
-                        }
-                        let tieu_chuan_nuoc_sach = {
-                            do_duc: 2,
-                            ph_min: 6.0,
-                            ph_max: 8.5,
-                            clo_du_min: 0.3,
-                            clo_du_max: 1.0,
-                            EC: 750
-                        }
-                        config.forEach(e => {
-                            if (e.device_type == 1) {
-                                tieu_chuan_nuoc_tho = {
-                                    do_duc: e.do_duc_max,
-                                    ph_min: e.ph_min,
-                                    ph_max: e.ph_max,
-                                    nhiet_do: e.nhiet_do_max
-                                }
-                            } else if (e.device_type == 2) {
-                                tieu_chuan_nuoc_sach = {
-                                    nhiet_do: e.nhiet_do_max,
-                                    do_duc: e.do_duc_max,
-                                    ph_min: e.ph_min,
-                                    ph_max: e.ph_max,
-                                    clo_du_min: e.clo_du_min,
-                                    clo_du_max: e.clo_du_max,
-                                    EC: 750
-                                }
-                            }
-                        });
-                        let chat_luong_nuoc_tho = 0;
-                        let chat_luong_nuoc_sach = 0;
-                        if (result.length > 0) {
-                            result.forEach(element => {
-                                if (element.data_type == 1) {
-                                    //console.log(tieu_chuan_nuoc_tho.ph_min);
-                                    nuoc_tho = {
-                                        name: element.name,
-                                        last_data_time: element.last_data_time,
-                                        meter_code: element.MeterCode,
-                                        do_duc: null,
-                                        tt_do_duc: 0,
-                                        ph: element.last_PH,
-                                        tt_ph: tieu_chuan_nuoc_tho.ph_min <= element.last_PH && tieu_chuan_nuoc_tho.ph_max >= element.last_PH ? 1 : 0,
-                                        nhiet_do: element.last_Temp,
-                                        tt_nhiet_do: tieu_chuan_nuoc_tho.nhiet_do >= element.last_Temp ? 1 : 0,
-                                        do_cung: null,
-                                        tt_do_cung: 0
-                                    }
-                                    if (tieu_chuan_nuoc_tho.ph_min <= element.last_PH && tieu_chuan_nuoc_tho.ph_max >= element.last_PH &&
-                                        tieu_chuan_nuoc_tho.nhiet_do >= element.last_Temp) {
-                                        chat_luong_nuoc_tho = 1;
-                                    }
-                                } else if (element.data_type == 2) {
-                                    nuoc_sach = {
-                                        name: element.name,
-                                        last_data_time: element.last_data_time,
-                                        nhiet_do: element.last_Temp,
-                                        meter_code: element.MeterCode,
-                                        tt_nhiet_do: tieu_chuan_nuoc_sach.nhiet_do >= element.last_Temp ? 1 : 0,
-                                        ph: element.last_PH,
-                                        tt_ph: tieu_chuan_nuoc_sach.ph_min <= element.last_PH && tieu_chuan_nuoc_sach.ph_max >= element.last_PH ? 1 : 0,
-                                        do_man: null,
-                                        tt_do_man: null,
-                                        clo_du: element.last_CloDu,
-                                        tt_clo_du: tieu_chuan_nuoc_sach.clo_du_min <= element.last_CloDu && tieu_chuan_nuoc_sach.clo_du_max >= element.last_CloDu ? 1 : 0,
-                                        do_duc: element.last_DoDuc,
-                                        tt_do_duc: tieu_chuan_nuoc_sach.do_duc >= element.last_DoDuc ? 1 : 0,
-                                        EC: null,
-                                        tt_EC: null
-                                    }
-                                    if (tieu_chuan_nuoc_sach.nhiet_do >= element.last_Temp && tieu_chuan_nuoc_sach.ph_min <= element.last_PH && tieu_chuan_nuoc_sach.ph_max >= element.last_PH &&
-                                        tieu_chuan_nuoc_sach.clo_du_min <= element.last_CloDu && tieu_chuan_nuoc_sach.clo_du_max >= element.last_CloDu && tieu_chuan_nuoc_sach.do_duc >= element.last_DoDuc) {
-                                        chat_luong_nuoc_sach = 1;
-                                    }
-                                }
-                            });
-                        } else {
-                            chat_luong_nuoc_tho = null;
-                            chat_luong_nuoc_sach = null;
-                        }
-
-                        general = {
-                            chat_luong_nuoc_tho: chat_luong_nuoc_tho != null && chat_luong_nuoc_tho != "" ? (chat_luong_nuoc_tho == 1 ? "TỐT" : "KHÔNG TỐT") : "-",
-                            chi_so_on_dinh: "2/2",
-                            chat_luong_nuoc_sach: chat_luong_nuoc_sach == 1 ? "TUYỆT VỜI" : "KHÔNG ĐẠT",
-                            chi_so_dat_chuan: "6/6",
-                            thoi_gian: new Date().toLocaleTimeString('vi-VN'),
-                            trang_thai: chat_luong_nuoc_tho != null && chat_luong_nuoc_sach != null ? (chat_luong_nuoc_tho == 1 && chat_luong_nuoc_sach == 1 ? "ỔN ĐỊNH" : "KHÔNG ỔN ĐỊNH") : "-",
-                            he_thong_giam_sat: 2
-                        }
-                        res.json({
-                            message: true,
-                            general: general,
-                            nuoc_tho: nuoc_tho,
-                            nuoc_sach: nuoc_sach,
-                            tieu_chuan_nuoc_tho: tieu_chuan_nuoc_tho,
-                            tieu_chuan_nuoc_sach: tieu_chuan_nuoc_sach,
-
                         })
-                }catch(error){
-                    console.error('API dashboard error:', error);
-                    res.status(500).json({ 
-                        success: false,
-                        message: 'Lỗi server' 
-                      });
-                }
-            },
+                        if (tieu_chuan_nuoc_sach.nhiet_do >= element.last_Temp && tieu_chuan_nuoc_sach.ph_min <= element.last_PH && tieu_chuan_nuoc_sach.ph_max >= element.last_PH &&
+                            tieu_chuan_nuoc_sach.clo_du_min <= element.last_CloDu && tieu_chuan_nuoc_sach.clo_du_max >= element.last_CloDu && tieu_chuan_nuoc_sach.do_duc >= element.last_DoDuc) {
+                            chat_luong_nuoc_sach = 1;
+                        }
+                    }
+                });
+            } else {
+                chat_luong_nuoc_tho = null;
+                chat_luong_nuoc_sach = null;
+            }
+
+            general = {
+                chat_luong_nuoc_tho: chat_luong_nuoc_tho != null && chat_luong_nuoc_tho != "" ? (chat_luong_nuoc_tho == 1 ? "TỐT" : "KHÔNG TỐT") : "-",
+                chi_so_on_dinh: "2/2",
+                chat_luong_nuoc_sach: chat_luong_nuoc_sach == 1 ? "TUYỆT VỜI" : "KHÔNG ĐẠT",
+                chi_so_dat_chuan: "6/6",
+                thoi_gian: returnSQLDateFormat(new Date()),
+                trang_thai: chat_luong_nuoc_tho != null && chat_luong_nuoc_sach != null ? (chat_luong_nuoc_tho == 1 && chat_luong_nuoc_sach == 1 ? "ỔN ĐỊNH" : "KHÔNG ỔN ĐỊNH") : "-",
+                he_thong_giam_sat: 2
+            }
+            res.json({
+                message: true,
+                general: general,
+                nuoc_tho: nuoc_tho,
+                nuoc_sach: nuoc_sach,
+                tieu_chuan_nuoc_tho: tieu_chuan_nuoc_tho,
+                tieu_chuan_nuoc_sach: tieu_chuan_nuoc_sach,
+
+            })
+        } catch (error) {
+            console.error('API dashboard error:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Lỗi server'
+            });
+        }
+        },
             get_du_lieu_nuoc: async (req,res) => {
                 try{
                     const meter_code = req.query.meter_code;

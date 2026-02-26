@@ -33,7 +33,17 @@ function render_map(id, type) {
         success: function (res) {
             init_map(res.danh_sach_thiet_bị);
             render_table_meter_list(res.danh_sach_thiet_bị)
-            render_status(res.danh_sach_thiet_bị)
+            render_status(res.danh_sach_thiet_bị);
+            requestAnimationFrame(() => {
+                if (load_local == 0) {
+                    if (localStorage.getItem('meter_type_filter')) {
+                        $('#meter_type_filter').val(localStorage.getItem('meter_type_filter')).trigger('change');
+                    };
+                    load_local = 1;
+                }
+            });
+
+
         },
         error: function (xhr, status, error) {
             if (xhr.status === 401) {
@@ -49,18 +59,18 @@ function render_map(id, type) {
     })
 }
 
-function render_status(meter_list){
+function render_status(meter_list) {
     let onl = 0;
     let off = 0;
     let warning = 0;
     meter_list.forEach(e => {
-        if (e.status_meter == 1 || e.status_meter == 2){
+        if (e.status_meter == 1 || e.status_meter == 2) {
             onl += 1
         }
-        if (e.status_meter == 2){
+        if (e.status_meter == 2) {
             warning += 1
         }
-        if (e.status_meter == 0){
+        if (e.status_meter == 0) {
             off += 1
         }
     });
@@ -179,15 +189,16 @@ $(document).ready(function () {
             let matchType =
                 selectedType === "all" || rowType === selectedType;
 
-            let statusType = 
-                STATUS_TYPE === "all" || (STATUS_TYPE == "lost" && status == 0) || (STATUS_TYPE == "good" && (status == 1 || status == 2)) || (STATUS_TYPE == "exceeded" && status == 2)    
-                $tr.toggle(matchSearch && matchType && statusType);
+            let statusType =
+                STATUS_TYPE === "all" || (STATUS_TYPE == "lost" && status == 0) || (STATUS_TYPE == "good" && (status == 1 || status == 2)) || (STATUS_TYPE == "exceeded" && status == 2)
+            $tr.toggle(matchSearch && matchType && statusType);
         });
     });
 
     $("#meter_type_filter").on("change", function () {
         let searchValue = $("#searchInput").val().toLowerCase();
         let selectedType = $("#meter_type_filter").val(); // 1,2,3, all
+        localStorage.setItem('meter_type_filter', selectedType);
 
         $("#danhsachtram tbody tr").each(function () {
             let $tr = $(this);
@@ -521,7 +532,7 @@ function init_map(data) {
     L.control.fullscreen({
         position: 'topleft'
     }).addTo(Lmap);
-    
+
     // nút lưu cấu hình
     // var save_btn = L.easyButton({
     //     states: [{
@@ -560,7 +571,7 @@ function init_map(data) {
     // save_btn.addTo(Lmap);
 
     const svgicon = 'data:image/png;base64,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';
-    
+
 
     var redPinIcon = L.divIcon({
         className: 'custom-svg-marker',
@@ -643,8 +654,8 @@ function init_map(data) {
                             <div class="popup-header">${(data[i].name)}</div>
                             <table class="popup-table">
                                 <tr><td>Dữ liệu gần nhất</td><td>${(new Date(data[i].last_data_time).toLocaleString('en-GB'))}</td></tr>
-                                <tr><td>Mực nước hiện tại</td><td>${show_if_null(data[i].last_measure_sensor)} (${(data[i].data_type === 1 ? "m" : "cm")})</td></tr>
-                                <tr><td>Mực nước động</td><td>${show_if_null(data[i].last_measure_dynamic)} (${(data[i].data_type === 1 ? "m" : "cm")})</td></tr>
+                                <tr><td>Mực nước hiện tại</td><td>${show_if_null(data[i].last_measure_sensor)} (${(data[i].last_unit)})</td></tr>
+                                <tr><td>Mực nước động</td><td>${show_if_null(data[i].last_measure_dynamic)} (${(data[i].last_unit)})</td></tr>
                             </table>
                         </div>
                     </div>`;
@@ -696,10 +707,10 @@ function init_map(data) {
                     </div>`;
                         break;
                 }
-                
 
-          
-     
+
+
+
 
 
                 const popup2 = new L.Popup({
@@ -718,10 +729,10 @@ function init_map(data) {
                     // }
                 ).addTo(Lmap);
                 OBJ_MARKERS[data[i].MeterCode] = marker;
-                 arr_marker.push({
+                arr_marker.push({
                     marker: marker,
-                     status: data[i].status_meter
-                 })
+                    status: data[i].status_meter
+                })
 
                 // marker.on('mouseover', function () {
                 //             let currentId = arr_marker.find(m => m.marker === this)?.donvinguoidung_id;
@@ -749,9 +760,9 @@ function init_map(data) {
 
         // var myBounds = new L.LatLngBounds(myPoints);
         // var lcent =  Lmap.fitBounds(myBounds).getCenter(); 
-  
-            // Lmap.setView(myPoints[0], ZOOM);
-        if (myPoints.length > 0){
+
+        // Lmap.setView(myPoints[0], ZOOM);
+        if (myPoints.length > 0) {
             var centroid = calculateCentroid(myPoints);
             Lmap.setView(centroid, ZOOM);
         }
@@ -797,6 +808,7 @@ function calculateCentroid(points) {
     return [centroidLat, centroidLng];
 }
 
+let load_local = 0;
 
 $(document).ready(function () {
     if (localStorage.getItem('org_id')) {
@@ -804,7 +816,24 @@ $(document).ready(function () {
             .selectpicker('val', localStorage.getItem('org_id'))
             .trigger('change');
     }
-  })
+})
+
+// $(document).ready(function () {
+//     const orgId = localStorage.getItem('org_id');
+//     if (!orgId) return;
+
+//     const $select = $('#filter_danhsachtram');
+
+//     // chờ selectpicker init
+//     const waitPicker = setInterval(() => {
+//         if ($select.data('selectpicker')) {
+//             $select
+//                 .selectpicker('val', orgId)
+//                 .trigger('change');
+//             clearInterval(waitPicker);
+//         }
+//     }, 50);
+// });
 
 $(document).ready(function () {
     $("#filter_danhsachtram").change(function () {
@@ -819,6 +848,8 @@ $(document).ready(function () {
         render_map(val, type);
     })
 })
+
+
 
 function show_0_if_null(x) {
     if (x == null) return 0;
@@ -868,8 +899,8 @@ $(document).ready(function () {
         NODECODE = $(this).attr("NodeCode");
 
         FIELD = $(this).attr("field");
-        NAME = $("#"+METERCODE+"_header_name")[0].innerText;
-        $('span.header-title').html($(this)[0].innerText.toLowerCase()+" - "+NAME);
+        NAME = $("#" + METERCODE + "_header_name")[0].innerText;
+        $('span.header-title').html($(this)[0].innerText.toLowerCase() + " - " + NAME);
         $("#modal_field_data").modal("show");
         get_field_data();
     })
