@@ -31,7 +31,8 @@ function render_map(id, type) {
             showLoading();  // Hiện overlay khi bắt đầu tải
         },
         success: function (res) {
-            init_map(res.danh_sach_thiet_bị);
+            MAP_TYPE = res.map_type;
+            init_map(res.danh_sach_thiet_bị, res.map_type);
             render_table_meter_list(res.danh_sach_thiet_bị)
             render_status(res.danh_sach_thiet_bị);
             requestAnimationFrame(() => {
@@ -107,17 +108,21 @@ $(document).ready(function () {
         let location_long = $(this).attr("location_long");
         let MeterCode = $(this).attr("MeterCode")
         if (location_lat != "" && location_lat != null && location_lat != "null" && location_long != "" && location_long != null && location_long != "null") {
-            if (OBJ_MARKERS[MeterCode]) {
-                Lmap.closePopup();
-
+            // if (MAP_TYPE == 1) {
+            //     if (OBJ_MARKERS[MeterCode]) {
+            //         Lmap.closePopup();
+            //         let marker = OBJ_MARKERS[MeterCode];
+            //         markers.zoomToShowLayer(marker, function () {
+            //             marker.openPopup();
+            //         });
+            //     }
+            // }else{
                 let marker = OBJ_MARKERS[MeterCode];
 
                 Lmap.setView(marker.getLatLng(), 16);
                 marker.openPopup();
-                // markers.zoomToShowLayer(marker, function () {
-                //     marker.openPopup();
-                // });
-            }
+            // }
+
         } else {
             show_notification("Điểm đo chưa cài đặt vị trí", "error")
         }
@@ -346,7 +351,9 @@ var Lmap = null;
 var OBJ_MARKERS = {};
 var markers;
 var arr_marker = [];
-function init_map(data) {
+var MAP_TYPE = 1;
+
+function init_map(data, map_type) {
     arr_marker = [];
     let ZOOM = localStorage.getItem('zoom_store') || 13;
     markers = null;
@@ -410,7 +417,6 @@ function init_map(data) {
     };
     L.control.layers(baseLayers, null, { position: 'topleft' }).addTo(Lmap);
     Lmap.on('baselayerchange', function (e) {
-        console.log(e)
         if (e.name === 'Vệ tinh') {
             localStorage.setItem('type_map', 'satellite');
         } else {
@@ -603,14 +609,14 @@ function init_map(data) {
     const redicon = new L.icon({
         iconUrl: '/images/redicon-removebg-preview.png',
         iconSize: [80, 80],
-        iconAnchor: [10, 40],
-        popupAnchor: [0, -30],
+        iconAnchor: [40, 80],
+        popupAnchor: [0, -80],
     })
     const blueicon = new L.icon({
         iconUrl: '/images/blueiconpng-removebg-preview.png',
         iconSize: [80, 80],
-        iconAnchor: [10, 40],
-        popupAnchor: [0, -30],
+        iconAnchor: [40, 80],
+        popupAnchor: [0, -80],
     })
 
     const icon = new L.icon({
@@ -641,7 +647,9 @@ function init_map(data) {
         popupAnchor: [0, -30],
     })
 
-    // markers = L.markerClusterGroup();
+    // if (map_type == 1) {
+    //     markers = L.markerClusterGroup();
+    // }    
     if (data.length > 0) {
         var myPoints = [];//
         for (var i = 0; i < data.length; i++) {
@@ -707,12 +715,6 @@ function init_map(data) {
                     </div>`;
                         break;
                 }
-
-
-
-
-
-
                 const popup2 = new L.Popup({
                     autoClose: false,
                     offset: [0, 10],
@@ -727,35 +729,27 @@ function init_map(data) {
                     //     autoPan: true, 
                     //     autoPanPadding: [50, 50] 
                     // }
-                ).addTo(Lmap);
+                )
                 OBJ_MARKERS[data[i].MeterCode] = marker;
                 arr_marker.push({
                     marker: marker,
                     status: data[i].status_meter
                 })
+                if (map_type == 1) {
+                    // markers.addLayer(marker);
+                    marker.addTo(Lmap);
 
-                // marker.on('mouseover', function () {
-                //             let currentId = arr_marker.find(m => m.marker === this)?.donvinguoidung_id;
-                //             arr_marker.forEach(m => {
-                //                 if (m.donvinguoidung_id === currentId && m.donvinguoidung_id != null) {
-                //                     m.marker.setOpacity(1); // giữ nguyên
-                //                 } else {
-                //                     m.marker.setOpacity(0.3); // làm mờ
-                //                 }
-                //             });
-                // });
-
-                // marker.on('mouseout', function () {
-                //     arr_marker.forEach(m => m.marker.setOpacity(1));
-                // });
-
-                // markers.addLayer(marker);
+                } else {
+                    marker.addTo(Lmap).openPopup();
+                }
 
 
                 myPoints.push(new Array(data[i].lat, data[i].lng));
             }
         }
-
+        // if (map_type == 1) {
+        //     Lmap.addLayer(markers);
+        // }
         // Lmap.addLayer(markers);
 
         // var myBounds = new L.LatLngBounds(myPoints);

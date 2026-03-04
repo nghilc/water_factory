@@ -10,8 +10,7 @@ router.post('/post/user_info', middlewares_auth.ensure_authenticated, profile.po
 router.get('/get/user_info', middlewares_auth.ensure_authenticated, profile.get_user_info);
 
 router.post('/post/change_password', middlewares_auth.ensure_authenticated, profile.post_change_password);
-router.post('/post/menu_option', middlewares_auth.ensure_authenticated, profile.post_menu_option);
-router.post('/post/change_noti_popup_status', middlewares_auth.ensure_authenticated, profile.post_change_noti_popup_status);
+router.post('/post/map_type', middlewares_auth.ensure_authenticated, profile.post_map_type);
 
 module.exports = router;
 

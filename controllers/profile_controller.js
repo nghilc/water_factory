@@ -14,12 +14,8 @@ function isValidEmail(email) {
 
 const profile_controller = {
     show_profile: async (req,res) => {
-        let dvql = await access_db("SELECT t2.org_name, t1.donviquanly_id AS id, t1.popup_noti_status AS status FROM user_donviquanly t1 LEFT JOIN organizations t2 ON t1.donviquanly_id = t2.id WHERE t1.user_id = ? ORDER BY t2.org_name;",[req.user.id]);
-
         try{ 
             res.render('layouts/profile',{
-                access_menu: req.user.access_tab,
-                dvql: dvql,
                 user_id: JSON.stringify(req.user.id),
                 role: req.user.role,
                 full_name: req.user.name,
@@ -27,6 +23,7 @@ const profile_controller = {
                 username: req.user.user_name,
                 mail: req.user.email,
                 menu_option: req.user.menu_option,
+                map_type: req.user.map_type,
                 t: req.__ 
             })
         }catch(error){
@@ -171,53 +168,30 @@ const profile_controller = {
               });
         }
     },
-    post_menu_option: async (req,res) => {
-        try{
-            let menu_option = req.body.menu_option;
-            let result = await access_db("UPDATE users SET menu_option = ? WHERE id = ?;",[menu_option,req.user.id]);
-            if(result.affectedRows > 0){
-                return res.json({ 
+    post_map_type: async (req, res) => {
+        try {
+            let map_type = req.body.map_type;
+            let result = await access_db("UPDATE users SET map_type = ? WHERE id = ?;", [map_type, req.user.id]);
+            if (result.affectedRows > 0) {
+                return res.json({
                     success: true,
-                    message: 'Cài đặt thành công' 
-                  });
-            }else{
-                return res.json({ 
+                    message: 'Cài đặt thành công'
+                });
+            } else {
+                return res.json({
                     success: false,
-                    message: 'Cài đặt thất bại' 
-                  });
+                    message: 'Cài đặt thất bại'
+                });
             }
-        }catch(error){
+        } catch (error) {
             console.error('API profile error:', error);
-            res.status(500).json({ 
+            res.status(500).json({
                 success: false,
-                message: 'Lỗi server' 
-              });
+                message: 'Lỗi server'
+            });
         }
     },
-    post_change_noti_popup_status: async (req,res) => {
-        try{
-            let dvql_id = req.body.dvql_id;
-            let status = req.body.status;
-            let result = await access_db("UPDATE user_donviquanly SET popup_noti_status = ? WHERE donviquanly_id =  ? AND user_id = ?;",[status, dvql_id, req.user.id]);
-            if(result.affectedRows > 0){
-                return res.json({ 
-                    success: true,
-                    message: 'Cài đặt thành công' 
-                  });
-            }else{
-                return res.json({ 
-                    success: false,
-                    message: 'Cài đặt thất bại' 
-                  });
-            }
-        }catch(error){
-            console.error('API profile error:', error);
-            res.status(500).json({ 
-                success: false,
-                message: 'Lỗi server' 
-              });
-        }
-    },
+
         // get_general_status: (req,res) => {
     //     try{
 

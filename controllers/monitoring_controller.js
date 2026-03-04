@@ -210,7 +210,6 @@ const overview_controller = {
                 }
             }
             let result = await access_db("SELECT m.meter_type, m.data_type,(vm.last_ValOfNum - vm.last_ValOfNum_24h) as 'san_luong_tu_0h',(vm.tank_base_bottom * vm.last_measure_sensor) as 'dung_tich_be_hien_tai', vm.* FROM org_managers as mpm LEFT JOIN meters as m ON m.meter_serial = mpm.MeterCode LEFT JOIN view_totaleq as vm ON vm.MeterCode = mpm.MeterCode WHERE mpm.org_id = ?", [req.session.factory_id]);
-            console.log(result)
             res.json({
                 data: result
             })
@@ -303,7 +302,6 @@ const overview_controller = {
             if (result.length > 0) {
                 result.forEach(element => {
                     if (element.data_type == 1) {
-                        //console.log(tieu_chuan_nuoc_tho.ph_min);
                         nuoc_tho.push({
                             name: element.name,
                             last_data_time: element.last_data_time,

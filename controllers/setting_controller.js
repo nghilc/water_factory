@@ -1,4 +1,4 @@
-const {access_db, query} = require("../config/mysql_config");
+const { access_db, query } = require("../config/mysql_config");
 function isNumber(value) {
     return !isNaN(value) && !isNaN(parseFloat(value));
 }
@@ -85,252 +85,47 @@ function return_alert_alias(x){
 const setting_controller = {
     show_setting: async (req,res) => {
         try{ 
-            let danhsachtram = [];
-            // danhsachtram = await access_db("SELECT t1.org_code AS org_code, t1.org_name AS name, t1.id AS id, t2.org_name AS donviquanly, t2.id AS donviquanly_id FROM organizations t1 LEFT JOIN organizations t2 ON t1.parent_id = t2.id INNER JOIN user_donviquanly t3 ON t1.id = t3.donviquanly_id OR t1.parent_id = t3.donviquanly_id WHERE t3.user_id = ?;",[req.user.id])
-            danhsachtram = await access_db("SELECT t1.org_code AS org_code, t1.org_name AS name, t1.id AS id, t2.org_name AS donviquanly, t2.id AS donviquanly_id  FROM org_mapping as t LEFT JOIN organizations t1 ON t.org_id = t1.id LEFT JOIN organizations t2 ON t.parent_id = t2.id INNER JOIN user_donviquanly AS t3 ON t.org_id = t3.donviquanly_id OR t.parent_id = t3.donviquanly_id WHERE t3.user_id = ?;", [req.user.id])
-
-            let MeterCode = null;
-            let NodeCode = null;
-            let meter_list = [];
-            let parent_id = "all";
-            let parent_id_2 = "all";
-            let donvinguoidung_id = null;
-            let donviquanly_id = null;
-            // if(!(typeof req.query.donvinguoidung_id === "undefined" || typeof req.query.donvinguoidung_id === "undefined" || req.query.donvinguoidung_id === null || req.query.donvinguoidung_id === "null")){
-            //     donvinguoidung_id = req.query.donvinguoidung_id;
-            // }
-            // if(!(typeof req.query.donviquanly_id === "undefined" || typeof req.query.donviquanly_id === "undefined" || req.query.donviquanly_id === null || req.query.donviquanly_id === "null")){
-            //     donviquanly_id = req.query.donviquanly_id;
-            // }
-            // if(donvinguoidung_id != null && donvinguoidung_id != "null"){
-            //     parent_id = "dvnd"+donvinguoidung_id;
-            // }else{
-            //     if(donviquanly_id != null && donviquanly_id != "null"){
-            //         parent_id = "dvql"+donviquanly_id;
-            //     }
-            // }
-            // nếu truyền vào MeterCode, NodeCode, Thiết bị truyền vào được phân quyền cho user này thì lấy MeterCode, NodeCode đó
-            if(!(typeof req.query.MeterCode === "undefined" || typeof req.query.NodeCode === "undefined" || req.query.MeterCode === null || req.query.NodeCode === null || req.query.MeterCode === "null" || req.query.NodeCode === "null")){
-                let check_meter = await access_db("SELECT * FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode INNER JOIN user_donviquanly t3 ON t2.org_id = t3.donviquanly_id WHERE t1.MeterCode = ? AND t1.MeterCode = ? AND t3.user_id = ?;",[req.query.MeterCode,req.query.NodeCode,req.user.id]);
-                if(check_meter.length > 0){
-                    MeterCode = req.query.MeterCode;
-                    NodeCode = req.query.NodeCode;
-                    // if(donvinguoidung_id != null && donvinguoidung_id != "null"){
-                    //     meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_groups t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode WHERE t2.org_id = ? ORDER BY t1.name;",[donvinguoidung_id]);
-                    // }else{
-                    //     if(donviquanly_id != null && donviquanly_id != "null"){
-                    //         meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode WHERE t2.org_id = ? ORDER BY t1.name;",[donviquanly_id]);
-                    //     }else{
-                    //         meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode INNER JOIN user_donviquanly t3 ON t2.org_id = t3.donviquanly_id WHERE t3.user_id = ? ORDER BY t1.name;",[req.user.id])
-                    //     }
-                    // }
-                    if (req.cookies.tram_id && req.cookies.dv_type) {
-                        parent_id = req.cookies.dv_type + req.cookies.tram_id;
-                        let tram_id = req.cookies.tram_id;
-                        let dv_type = req.cookies.dv_type;
-
-                        if (dv_type == "dvql") {
-                            meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode WHERE t2.org_id = ? ORDER BY t1.name;", [tram_id])
-                        } else {
-                            meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_groups t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode WHERE t2.org_id = ? ORDER BY t1.name;", [tram_id])
-                        }
-                    } else {
-                        // lấy tất cả các thiết bị được phân quyền
-                        meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode INNER JOIN user_donviquanly t3 ON t2.org_id = t3.donviquanly_id WHERE t3.user_id = ? ORDER BY t1.name;", [req.user.id])
-
-                    }
-                }else{
-                    // lấy tất cả các thiết bị được phân quyền
-                    meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode INNER JOIN user_donviquanly t3 ON t2.org_id = t3.donviquanly_id WHERE t3.user_id = ? ORDER BY t1.name;",[req.user.id])
-                    if(meter_list.length > 0){
-                        MeterCode = meter_list[0].MeterCode;
-                        NodeCode = meter_list[0].NodeCode;
-                        
-                    }
-
-                }
-            }else{
-                // lấy tất cả các thiết bị được phân quyền
-                if(req.cookies.tram_id && req.cookies.dv_type){
-                    parent_id = req.cookies.dv_type + req.cookies.tram_id;
-                    let tram_id = req.cookies.tram_id;
-                    let dv_type = req.cookies.dv_type;
-
-                    if(dv_type == "dvql"){
-                        meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode WHERE t2.org_id = ? ORDER BY t1.name;",[tram_id])
-                    }else{
-                        meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_groups t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode WHERE t2.org_id = ? ORDER BY t1.name;",[tram_id])
-                    }                
-                }else{
-                // lấy tất cả các thiết bị được phân quyền
-                meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN org_managers t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode INNER JOIN user_donviquanly t3 ON t2.org_id = t3.donviquanly_id WHERE t3.user_id = ? ORDER BY t1.name;",[req.user.id])
-
-                }
-                if(meter_list.length > 0){
-                    MeterCode = meter_list[0].MeterCode;
-                    NodeCode = meter_list[0].NodeCode;
-                }
+            let danh_sach_thiet_bị = [];
+            let danh_sach_xi_nghiep_nha_may = [];
+            let meter_type = null;
+            let meter_alert = {
+                min_nhietdo: null,
+                max_nhietdo: null,
+                min_ph: null,
+                max_ph: null,
+                min_doduc: null,
+                max_doduc: null,
+                min_clodu: null,
+                max_clodu: null,
+                min_mucnuoc: null,
+                max_mucnuoc: null,
+                min_EC: null,
+                max_EC: null,
+                min_docung: null,
+                max_docung: null,
+                min_doman: null,
+                max_doman: null
             }
-            let meter_info = {
+            danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t5.meter_status AS status_meter FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ?;", [req.user.id]);
+
+            danh_sach_xi_nghiep_nha_may = await access_db("SELECT t1.org_id, t2.org_name AS name, t1.parent_id AS parent_id, t3.org_name AS parent_name FROM org_mapping t1 LEFT JOIN organizations t2 ON t1.org_id = t2.id LEFT JOIN organizations t3 ON t1.parent_id = t3.id INNER JOIN user_org t4 ON t1.org_id = t4.org_id OR t1.parent_id = t4.org_id WHERE t4 .user_id = ? ORDER BY t1.order_by;", [req.user.id]);
+
+            let meter_info =  {
                 name: null,
                 lat: null,
                 lng: null,
-                address: null,
-                donvi: null,
-                bar_to_met: null,
-                conver_factor: null,
-                compen_factor: null,
-                sync_tnmt_data: null,
-                multiplier: null,
-                first_index: null,
-                pin_threshold: null,
-                ac_quy_threshold: null,
-                X1: null,
-                X2: null,
-                UX: null,
-                Y1:null,
-                Y2: null,
-                UY: null,
-                Om: null,
-                compen_value: null,
-                conver_value: null,
-                tank_base_bottom: null,
-                threshold_pin: null,
-                threshold_battery: null,
-                collection_channel_device: null,
-                frequency: null,
-                ma_tram: null,
+                type: null,
                 serial_sim: null,
-                firmware_version: null,
-                network_status: null,
-                mode_power: null,
-                Qmax: null,
-                Qmin: null,
-                note: null,
-                min_exploitation_rate: null,
-                max_exploitation_rate: null,
-                daily_exploitation_limit: null,
-                min_threshold_terminal_index: null,
-                max_threshold_terminal_index: null,
-
-            };
-
-            let get_meter_info = await access_db("SELECT t3.*, t3.name AS meter_name, t1.org_id AS donviquanly_id FROM org_managers t1 LEFT JOIN totaleq t3 ON t1.MeterCode = t3.MeterCode AND t1.NodeCode = t3.NodeCode INNER JOIN user_donviquanly t4 ON t1.org_id = t4.donviquanly_id WHERE t1.MeterCode = ? AND t1.NodeCode = ? AND t4.user_id = ?;",[MeterCode, NodeCode, req.user.id]);
-            if(get_meter_info.length > 0){
-                meter_info.name = get_meter_info[0].meter_name;
-                meter_info.lat = get_meter_info[0].location_lat;
-                meter_info.lng = get_meter_info[0].location_long;
-                meter_info.address = get_meter_info[0].address;
-                // meter_info.donvi = get_meter_info[0].donvi;
-                meter_info.bar_to_met =  get_meter_info[0].bar_to_met
-                meter_info.conver_factor =  get_meter_info[0].conver_factor
-                meter_info.compen_factor =  get_meter_info[0].compen_factor
-                meter_info.sync_tnmt_data =  get_meter_info[0].sync_tnmt_data
-                meter_info.multiplier =  get_meter_info[0].multiplier
-                meter_info.first_index =  get_meter_info[0].first_index
-                meter_info.X1 =  get_meter_info[0].X1
-                meter_info.X2 =  get_meter_info[0].X2
-                meter_info.UX =  get_meter_info[0].UX
-                meter_info.Y1 =  get_meter_info[0].Y1
-                meter_info.Y2 =  get_meter_info[0].Y2
-                meter_info.UY =  get_meter_info[0].UY
-                meter_info.Om =  get_meter_info[0].Om
-                meter_info.compen_value =  get_meter_info[0].compen_value
-                meter_info.conver_value =  get_meter_info[0].conver_value
-                meter_info.tank_base_bottom = get_meter_info[0].tank_base_bottom
-
-                meter_info.threshold_pin =  get_meter_info[0].threshold_pin
-                meter_info.threshold_battery =  get_meter_info[0].threshold_battery
-                meter_info.collection_channel_device =  get_meter_info[0].collection_channel_device
-                meter_info.frequency =  get_meter_info[0].frequency
-                meter_info.ma_tram =  get_meter_info[0].ma_tram
-                meter_info.serial_sim =  get_meter_info[0].serial_sim
-                meter_info.firmware_version =  get_meter_info[0].firmware_version
-                meter_info.network_status =  get_meter_info[0].network_status
-                meter_info.mode_power =  get_meter_info[0].mode_power
-                meter_info.Qmax =  get_meter_info[0].Qmax
-                meter_info.Qmin =  get_meter_info[0].Qmin
-                meter_info.note =  get_meter_info[0].note
-                meter_info.min_exploitation_rate = get_meter_info[0].min_exploitation_rate
-                meter_info.max_exploitation_rate = get_meter_info[0].max_exploitation_rate
-                meter_info.daily_exploitation_limit = get_meter_info[0].daily_exploitation_limit
-                meter_info.min_threshold_terminal_index = get_meter_info[0].min_threshold_terminal_index
-                meter_info.max_threshold_terminal_index = get_meter_info[0].max_threshold_terminal_index
-
-                // if(get_meter_info[0].donvinguoidung_id == null){
-                //     parent_id_2 = "dvql"+get_meter_info[0].donviquanly_id
-                // }else{
-                //     parent_id_2 = "dvnd"+get_meter_info[0].donvinguoidung_id
-                // }
-
+                address: null
             }
-
-            // meter_list = await access_db("SELECT t1.* FROM totaleq t1 INNER JOIN tram_diemdo_relation t2 ON t1.MeterCode = t2.MeterCode AND t1.NodeCode = t2.NodeCode INNER JOIN group_user t3 ON t1.MeterCode = t3.MeterCode AND t1.NodeCode = t3.NodeCode WHERE t2.parent_id = ? AND t3.user_id = ?",[tram_selected_id, req.user.id]);
-            let field_config_type_auto = 1;
-            let data_field_config = { "ValOfNum": 1, "terminal_index": 1, "flowRate": 1, "pressure": 1, "measure_sensor": 1, "measure_static": 1, "measure_dynamic": 1, "measure_delta": 1, "ValueReverse": 1, "ValueForward": 1, "Voltage": 1, "voltage_ac_quy": 1, "PressureVol": 1, "VoltageOfMeter": 1, "Temp": 1 };
-            let data = await access_db("SELECT * FROM data_field_config WHERE MeterCode = ? AND NodeCode = ?;",[MeterCode, NodeCode]);
-            if(data.length > 0){
-                data_field_config = JSON.parse(data[0].config);
-                field_config_type_auto = data[0].type_auto;
-
-            }
-            if (data_field_config.hasOwnProperty("OP")) {
-                delete data["OP"];
-            }
-
-            let rows = await access_db("SELECT * FROM alert_config WHERE ideq = ? AND serial_sensor = ?;",[MeterCode,NodeCode]);
-            let grouped_alert_config =
-                { "ValOfNum": [], "terminal_index": [], "flowRate": [], "pressure": [], "measure_sensor": [], "measure_static": [], "measure_dynamic": [], "measure_delta": [], "ValueReverse": [], "Voltage": [], "voltage_ac_quy": [], "PressureVol": [], "water_output_day": [], "water_output_month": [], "Temp": [] }
-            rows.forEach(row => {
-                row.config_type = replace_obs(row.config_type);
-                if(!grouped_alert_config[row.config_type]){
-                    grouped_alert_config[row.config_type] = []
-                }
-                grouped_alert_config[row.config_type].push(row)
-            });
-
-
-            Object.keys(grouped_alert_config).forEach(field => {
-                while (grouped_alert_config[field].length < 6) {
-                    grouped_alert_config[field].push({ start_time: null, end_time: null, min_value: null, max_value: "" });
-                }
-            });
-            let get_meter_cycle = await query(`SELECT * FROM "meter_cycle" WHERE "meter_code" = $1 AND "node_code" = $2;`,[MeterCode, NodeCode]);
-            let meter_cycle = {
-                meter_code: null,
-                node_code: null,
-                cycle_min: null,
-                enabled: null,
-                ip_ftp: null, 
-                user_ftp: null,
-                pass_ftp: null,
-                field_ftp: "LUULUONG",
-                ma_cong_trinh: null,
-                ma_tram: null,
-                ma_tinh: null,
-                origin_min: null,
-                cycle_time: null
-            }
-            if(get_meter_cycle.length > 0){
-                meter_cycle = get_meter_cycle[0];
-            }
+     
+            let MeterCode = null;
             res.render('layouts/setting',{
-                access_menu: req.user.access_tab,
+                danh_sach_thiet_bị, danh_sach_xi_nghiep_nha_may, meter_info, MeterCode, meter_type, meter_alert,
                 user_id: JSON.stringify(req.user.id),
-                parent_id, meter_cycle,
                 role: req.user.role,
-                parent_role: req.user.parent_role,
-                field_config_type_auto,
-                grouped_alert_config,
-                meter_info,
-                meter_list,
                 full_name: req.user.name,
                 current_path: "/setting",
-                danhsachtram: danhsachtram,
-                MeterCode,
-                NodeCode,
-                data_field_config: data_field_config,
-                donvinguoidung_id, donviquanly_id,
                 t: req.__ 
             })
         }catch(error){
@@ -342,178 +137,130 @@ const setting_controller = {
         }
     },
 
+    get_danhsachthietbi: async (req,res) => {
+            try{
+                let org_id = req.query.org_id;
+                let danh_sach_thiet_bị = [];
+                let type = req.query.type;
+                if (type == "all") {
+                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ?;", [req.user.id]);
+
+                } else if (type == "xi_nghiep") {
+                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.parent_id = ?;", [req.user.id, org_id]);
+
+                } else {
+                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.org_id = ?;", [req.user.id, org_id]);
+
+                }
+
+                res.json({
+                    success: true,
+                    danh_sach_thiet_bị
+                })
+            }catch(error){
+                console.error('API setting error:', error);
+                res.status(500).json({ 
+                    success: false,
+                    message: 'Lỗi server' 
+                  });
+            }
+        },
+        // get_general_status: (req,res) => {
+        //     try{
+
+        //     }catch(error){
+        //         console.error('API setting error:', error);
+        //         res.status(500).json({ 
+        //             success: false,
+        //             message: 'Lỗi server' 
+        //           });
+        //     }
+        // },
+        // get_general_status: (req,res) => {
+        //     try{
+
+        //     }catch(error){
+        //         console.error('API setting error:', error);
+        //         res.status(500).json({ 
+        //             success: false,
+        //             message: 'Lỗi server' 
+        //           });
+        //     }
+        // },
     get_meter_info: async (req,res) => {
         try{
-            let danhsachtram = [];
-            // danhsachtram = await access_db("SELECT t1.org_code AS org_code, t1.org_name AS name, t1.id AS id, t2.org_name AS donviquanly, t2.id AS donviquanly_id FROM organizations t1 LEFT JOIN organizations t2 ON t1.parent_id = t2.id INNER JOIN user_donviquanly t3 ON t1.id = t3.donviquanly_id OR t1.parent_id = t3.donviquanly_id WHERE t3.user_id = ?;",[req.user.id])
-            danhsachtram = await access_db("SELECT t1.org_code AS org_code, t1.org_name AS name, t1.id AS id, t2.org_name AS donviquanly, t2.id AS donviquanly_id  FROM org_mapping as t LEFT JOIN organizations t1 ON t.org_id = t1.id LEFT JOIN organizations t2 ON t.parent_id = t2.id INNER JOIN user_donviquanly AS t3 ON t.org_id = t3.donviquanly_id OR t.parent_id = t3.donviquanly_id WHERE t3.user_id = ?;", [req.user.id])
-
-            let parent_id = "all";
-            let parent_id_2 = "all";
-            let donvinguoidung_id = null;
-            let donviquanly_id = null;
-
             let MeterCode = req.query.MeterCode;
-            let NodeCode = req.query.NodeCode;
-            let meter_info = {
+            let meter_type = null;
+            let meter_info =  {
                 name: null,
                 lat: null,
                 lng: null,
-                address: null,
-                donvi: null, 
-                bar_to_met: null,
-                conver_factor: null,
-                compen_factor: null,
-                sync_tnmt_data: null,
-                multiplier: null,
-                first_index: null,
-                pin_threshold: null,
-                ac_quy_threshold: null,
-                X1: null,
-                X2: null,
-                UX: null,
-                Y1:null,
-                Y2: null,
-                UY: null,
-                Om: null,
-                compen_value: null,
-                conver_value: null,
-                tank_base_bottom: null,
-                threshold_pin: null,
-                threshold_battery: null,
-                collection_channel_device: null,
-                frequency: null,
-                ma_tram: null,
+                meter_type: null,
                 serial_sim: null,
-                firmware_version: null,
-                network_status: null,
-                mode_power: null,
-                Qmax: null,
-                Qmin: null,
-                note: null,
-                min_exploitation_rate: null,
-                max_exploitation_rate: null,
-                daily_exploitation_limit: null,
-                min_threshold_terminal_index: null,
-                max_threshold_terminal_index: null,
-            
-            };
-            let get_meter_info = await access_db("SELECT t3.*, t1.org_id AS donviquanly_id, t3.name AS meter_name FROM org_managers t1 LEFT JOIN totaleq t3 ON t1.MeterCode = t3.MeterCode AND t1.NodeCode = t3.NodeCode INNER JOIN user_donviquanly t4 ON t1.org_id = t4.donviquanly_id WHERE t1.MeterCode = ? AND t1.NodeCode = ? AND t4.user_id = ?;",[MeterCode, NodeCode, req.user.id]);
-            if(get_meter_info.length > 0){
-                meter_info.name = get_meter_info[0].meter_name;
-                meter_info.lat = get_meter_info[0].location_lat;
-                meter_info.lng = get_meter_info[0].location_long;
-                meter_info.address = get_meter_info[0].address;
-                meter_info.donvi = get_meter_info[0].donvi;
-                meter_info.bar_to_met =  get_meter_info[0].bar_to_met
-                meter_info.conver_factor =  get_meter_info[0].conver_factor
-                meter_info.compen_factor =  get_meter_info[0].compen_factor
-                meter_info.sync_tnmt_data =  get_meter_info[0].sync_tnmt_data
-                meter_info.multiplier =  get_meter_info[0].multiplier
-                meter_info.first_index =  get_meter_info[0].first_index
-                meter_info.X1 =  get_meter_info[0].X1
-                meter_info.X2 =  get_meter_info[0].X2
-                meter_info.UX =  get_meter_info[0].UX
-                meter_info.Y1 =  get_meter_info[0].Y1
-                meter_info.Y2 =  get_meter_info[0].Y2
-                meter_info.UY =  get_meter_info[0].UY
-                meter_info.Om =  get_meter_info[0].Om
-                meter_info.compen_value =  get_meter_info[0].compen_value
-                meter_info.conver_value =  get_meter_info[0].conver_value
-                meter_info.tank_base_bottom = get_meter_info[0].tank_base_bottom
-                meter_info.threshold_pin =  get_meter_info[0].threshold_pin
-                meter_info.threshold_battery =  get_meter_info[0].threshold_battery
-                meter_info.collection_channel_device =  get_meter_info[0].collection_channel_device
-                meter_info.frequency =  get_meter_info[0].frequency
-                meter_info.ma_tram =  get_meter_info[0].ma_tram
-                meter_info.serial_sim =  get_meter_info[0].serial_sim
-                // donvinguoidung_id = get_meter_info[0].donvinguoidung_id
-                donviquanly_id = get_meter_info[0].donviquanly_id
-                meter_info.firmware_version =  get_meter_info[0].firmware_version
-                meter_info.network_status =  get_meter_info[0].network_status
-                meter_info.mode_power =  get_meter_info[0].mode_power
-                meter_info.Qmax =  get_meter_info[0].Qmax
-                meter_info.Qmin =  get_meter_info[0].Qmin
-                meter_info.note =  get_meter_info[0].note
-                meter_info.min_exploitation_rate = get_meter_info[0].min_exploitation_rate
-                meter_info.max_exploitation_rate = get_meter_info[0].max_exploitation_rate
-                meter_info.daily_exploitation_limit = get_meter_info[0].daily_exploitation_limit
-                meter_info.min_threshold_terminal_index = get_meter_info[0].min_threshold_terminal_index
-                meter_info.max_threshold_terminal_index = get_meter_info[0].max_threshold_terminal_index
-
             }
-
-        //   if(donvinguoidung_id != null && donvinguoidung_id != "null"){
-        //         parent_id = "dvnd"+donvinguoidung_id;
-        //     }else{
-        //         if(donviquanly_id != null && donviquanly_id != "null"){
-        //             parent_id = "dvql"+donviquanly_id;
-        //         }
-        //     }
- 
-
-            let field_config_type_auto = 1;
-            let data_field_config = { "ValOfNum": 1, "terminal_index": 1, "flowRate": 1, "pressure": 1, "measure_sensor": 1, "measure_static": 1, "measure_dynamic": 1, "measure_delta": 1, "ValueReverse": 1, "ValueForward": 1, "Voltage": 1, "voltage_ac_quy": 1, "PressureVol": 1, "VoltageOfMeter": 1, "Temp": 1 };
-            let data = await access_db("SELECT * FROM data_field_config WHERE MeterCode = ? AND NodeCode = ?;",[MeterCode, NodeCode]);
-            if(data.length > 0){
-                data_field_config = JSON.parse(data[0].config);
-                field_config_type_auto = data[0].type_auto;
+            let meter_alert = {
+                min_nhietdo: null,
+                max_nhietdo: null,
+                min_ph:  null,
+                max_ph: null,
+                min_doduc: null,
+                max_doduc: null,
+                min_clodu: null,
+                max_clodu: null,
+                min_mucnuoc: null,
+                max_mucnuoc: null,
+                min_EC: null,
+                max_EC: null,
+                min_docung: null,
+                max_docung: null,
+                min_doman: null,
+                max_doman: null
             }
+            let get_meter_info = await access_db("SELECT * FROM meters t1 LEFT JOIN view_totaleq t2 ON t1.meter_serial = t2.MeterCode WHERE t1.meter_serial = ?;",[MeterCode]);
+            if (get_meter_info.length > 0){
+                meter_info.name = get_meter_info[0].name;
+                meter_info.lat = get_meter_info[0].lat;
+                meter_info.lng = get_meter_info[0].lng;
+                meter_type = get_meter_info[0].meter_type;
 
-
-            let rows = await access_db("SELECT * FROM alert_config WHERE ideq = ? AND serial_sensor = ?;",[MeterCode,NodeCode]);
-            let grouped_alert_config = { "ValOfNum": [], "terminal_index": [], "flowRate": [], "pressure": [], "measure_sensor": [], "measure_static": [], "measure_dynamic": [], "measure_delta": [], "ValueReverse": [], "Voltage": [], "voltage_ac_quy": [], "PressureVol": [], "water_output_day": [], "water_output_month": [], "Temp": [] }
-            rows.forEach(row => {
-                row.config_type = replace_obs(row.config_type);
-                if(!grouped_alert_config[row.config_type]){
-                    grouped_alert_config[row.config_type] = []
+                switch (meter_type){
+                    case "MUCNUOC": 
+                        meter_info.meter_type = "Thiết bị đo mực nước";
+                        meter_alert.min_mucnuoc = get_meter_info[0].min_mucnuoc;
+                        meter_alert.max_mucnuoc = get_meter_info[0].max_mucnuoc;
+                        break;
+                    case "CSMT":
+                        meter_info.meter_type = "Thiết bị đo chỉ số môi trường";
+                        meter_alert.min_nhietdo = get_meter_info[0].min_nhietdo;
+                        meter_alert.max_nhietdo = get_meter_info[0].max_nhietdo;
+                        meter_alert.min_ph = get_meter_info[0].min_ph;
+                        meter_alert.max_ph = get_meter_info[0].max_ph;
+                        meter_alert.min_doduc = get_meter_info[0].min_doduc;
+                        meter_alert.max_doduc = get_meter_info[0].max_doduc;
+                        meter_alert.min_clodu = get_meter_info[0].min_clodu;
+                        meter_alert.max_clodu = get_meter_info[0].max_clodu;
+                        meter_alert.min_EC = get_meter_info[0].min_EC;
+                        meter_alert.max_EC = get_meter_info[0].max_EC;
+                        meter_alert.min_docung = get_meter_info[0].min_docung;
+                        meter_alert.max_docung = get_meter_info[0].max_docung;
+                        meter_alert.min_doman = get_meter_info[0].min_doman;
+                        meter_alert.max_doman = get_meter_info[0].max_doman;
+                        break;
+                    case "DONGHO":
+                        meter_info.meter_type = "Máy bơm";
+                        break;
+                    case "GENERATOR":
+                        meter_info.meter_type = "Máy phát điện";
+                        break;
                 }
-                grouped_alert_config[row.config_type].push(row)
-            });
-
-
-            Object.keys(grouped_alert_config).forEach(field => {
-                while (grouped_alert_config[field].length < 6) {
-                    grouped_alert_config[field].push({ start_time: null, end_time: null, min_value: null, max_value: "" });
-                }
-            });
-            let get_meter_cycle = await query(`SELECT * FROM "meter_cycle" WHERE "meter_code" = $1 AND "node_code" = $2;`, [MeterCode, NodeCode]);
-            let meter_cycle = {
-                meter_code: null,
-                node_code: null,
-                cycle_min: null,
-                enabled: null,
-                ip_ftp: null,
-                user_ftp: null,
-                pass_ftp: null,
-                field_ftp: "LUULUONG",
-                ma_cong_trinh: null,
-                ma_tram: null,
-                ma_tinh: null,
-                origin_min: null,
-                cycle_time: null
-            }
-            if (get_meter_cycle.length > 0) {
-                meter_cycle = get_meter_cycle[0];
             }
 
             res.render('partials/setting_info',{
-                access_menu: req.user.access_tab,
-                role: req.user.role, meter_cycle,
-                parent_role: req.user.parent_role,
-                parent_id,parent_id_2,
-                danhsachtram: danhsachtram,
-                field_config_type_auto,
-                grouped_alert_config,
-                meter_info,
-                MeterCode,
-                NodeCode,
-                data_field_config: data_field_config,
-                donvinguoidung_id, donviquanly_id,
+                role: req.user.role,
+                MeterCode, meter_info, meter_type, meter_alert,
                 t: req.__ 
             })
         }catch(error){
-            console.log(error)
             console.error(error.stack)
             console.error('API setting error:', error);
             res.status(500).json({ 
@@ -526,19 +273,9 @@ const setting_controller = {
     post_save_meter_info: async (req,res) => {
         try{
             let MeterCode = req.body.MeterCode;
-            let NodeCode = req.body.NodeCode;
-            let data_field_config = req.body.data_field_config;
+            let meter_type = req.body.meter_type;
             let location = req.body.location;
             let meter_name = req.body.meter_name;
-            let type_auto = req.body.type_auto;
-            let address = req.body.address;
-            let note = req.body.note;
-            let ma_tram = req.body.ma_tram;
-            let ma_tinh = req.body.ma_tinh;
-            let ma_cong_trinh = req.body.ma_cong_trinh;
-            // let tram_id = req.body.tram_id;
-            // let dv_type = req.body.dv_type;
-
             if(meter_name.trim() =="" || meter_name == null){
                 res.json({
                     success: false,
@@ -547,39 +284,23 @@ const setting_controller = {
                 return;
             }
 
-            let save_info = await access_db("UPDATE totaleq SET `name` = ?, location_lat=?, location_long=?, address=?, note=? WHERE MeterCode = ? AND NodeCode = ?;",[meter_name, location.lat, location.lng, address, note, MeterCode, NodeCode]);
-            let get_cycle_meter = await query(`SELECT * FROM "meter_cycle" WHERE "meter_code" = $1 AND "node_code" = $2;`,[MeterCode, NodeCode]);
-            if(get_cycle_meter.length > 0){
-                await query(`UPDATE "meter_cycle" SET "ma_cong_trinh" = $1, "ma_tinh" = $2, "ma_tram" = $3 WHERE "meter_code" = $4 AND "node_code" = $5;`,[ma_cong_trinh, ma_tinh, ma_tram, MeterCode, NodeCode])
-            }else{
-                await query(`INSERT INTO "meter_cycle" (meter_code, node_code, enabled, cycle_min, ma_cong_trinh, ma_tram, ma_tinh) VALUES ($1, $2, $3, $4, $5, $6, $7);`,[MeterCode, NodeCode, false, 0, ma_cong_trinh, ma_tram, ma_tinh]);
+            let save_info = await access_db("UPDATE meters SET lat = ?, lng=? WHERE meter_serial = ?",[location.lat, location.lng, MeterCode]);
+            let save_db;
+            switch(meter_type){
+                case "MUCNUOC":
+                    save_db = await access_db("UPDATE web_water_ver2.totaleq SET name = ?, location_lat = ?, location_long = ? WHERE MeterCode = ?;", [meter_name, location.lat, location.lng, MeterCode]);
+                    break;
+                case "CSMT":
+                    save_db = await access_db("UPDATE web_environment.totaleq SET name = ?, location_lat = ?, location_long = ? WHERE MeterCode = ?;", [meter_name, location.lat, location.lng, MeterCode]);
+                    break;
+                case "DONGHO": 
+                    save_db = await access_db("UPDATE web_environment.totaleq SET name = ?, location_lat = ?, location_long = ? WHERE MeterCode = ?;", [meter_name, location.lat, location.lng, MeterCode]);
+                    break;
+                case "GENERATOR":
+                    save_db = await access_db("UPDATE measurement_point SET point_name = ? WHERE point_code = ?;", [meter_name, MeterCode]);
+                    break;
             }
-            let check_field_config = await access_db("SELECT * FROM data_field_config WHERE MeterCode = ? AND NodeCode = ?;",[MeterCode,NodeCode]);
-            let insert_update_field = null; 
-            if(check_field_config.length > 0){
-                insert_update_field = await access_db("UPDATE data_field_config SET config = ?, updated_at = ?, type_auto=? WHERE MeterCode=? AND NodeCode = ?;",[JSON.stringify(data_field_config), new Date(), type_auto, MeterCode, NodeCode]);
-            }else{
-                insert_update_field = await access_db("INSERT INTO data_field_config (MeterCode, NodeCode, config, created_at, type_auto) VALUES(?,?,?,?,?);",[MeterCode, NodeCode, JSON.stringify(data_field_config), new Date(), type_auto])
-            }
-            
-            if(save_info.affectedRows > 0 && insert_update_field.affectedRows > 0){
-                let log = {
-                    location_lat: location.lat,
-                    location_lng: location.lng,
-                    meter_name: meter_name,
-                    address: address,
-                    note: note,
-                    ma_tram: ma_tram,
-                    data_field_config: ""
-                }
-                let arr_field = [];
-                for(const key in data_field_config){
-                    if(data_field_config[key] == 1){
-                        arr_field.push(shortToFullName(key))
-                    }
-                }
-                log.data_field_config = arr_field.join(",");
-                await access_db("INSERT INTO log_user (user, action, value, time, MeterCode, NodeCode, alias, type) VALUES (?,?,?,?,?,?,?,?);",[req.user.user_name, "Cài đặt thông tin điểm đo", JSON.stringify(log), new Date(), MeterCode, NodeCode, "cai-dat-thong-tin-diem-do", 1]);
+            if (save_info.affectedRows > 0 && save_db.affectedRows > 0){
                 res.json({
                     success: true,
                     message: "Lưu thông tin thành công"
@@ -601,6 +322,62 @@ const setting_controller = {
                 success: false,
                 message: 'Lỗi server' 
               });
+        }
+    },
+
+    save_meter_alert: async (req, res) => {
+        try {
+            let MeterCode = req.body.MeterCode;
+            let meter_type = req.body.meter_type;
+
+            let min_doduc = req.body.min_doduc;
+            let max_doduc = req.body.max_doduc;
+            let min_ph = req.body.min_ph;
+            let max_ph = req.body.max_ph;
+            let min_nhietdo = req.body.min_nhietdo;
+            let max_nhietdo = req.body.max_nhietdo;
+            let min_clodu = req.body.min_clodu;
+            let max_clodu = req.body.max_clodu;
+            let min_EC = req.body.min_EC;
+            let max_EC = req.body.max_EC;
+            let min_docung = req.body.min_docung;
+            let max_docung = req.body.max_docung;
+            let min_doman = req.body.min_doman;
+            let max_doman = req.body.max_doman;
+            let min_mucnuoc = req.body.min_mucnuoc;
+            let max_mucnuoc = req.body.max_mucnuoc;
+
+            let save_db;
+            switch (meter_type) {
+                case "MUCNUOC":
+                    save_db = await access_db("UPDATE meters SET min_mucnuoc =?, max_mucnuoc = ? WHERE meter_serial = ?;", [min_mucnuoc, max_mucnuoc, MeterCode]);
+                    break;
+                case "CSMT":
+                    save_db = await access_db("UPDATE meters SET min_doduc =?, max_doduc = ?, min_ph =?, max_ph = ?, min_nhietdo =?, max_nhietdo = ?, min_clodu =?, max_clodu = ?, min_EC =?, max_EC = ?, min_docung =?, max_docung = ?, min_doman =?, max_doman = ? WHERE meter_serial = ?;", [min_doduc, max_doduc, min_ph, max_ph, min_nhietdo, max_nhietdo, min_clodu, max_clodu, min_EC, max_EC, min_docung, max_docung, min_doman, max_doman, MeterCode]);
+                    break;
+            }
+            if (save_db.affectedRows > 0) {
+                res.json({
+                    success: true,
+                    message: "Lưu thông tin thành công"
+                })
+            } else {
+                res.json({
+                    success: false,
+                    message: "Lưu thông tin không thành công"
+                })
+            }
+            // res.json({
+            //     success: true,
+            //     message: "Lưu thông tin không thành công"
+            // })
+
+        } catch (error) {
+            console.error('API setting error:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Lỗi server'
+            });
         }
     },
 
@@ -670,7 +447,6 @@ const setting_controller = {
             let min_exploitation_rate = (req.body.min_exploitation_rate == '') ? null : req.body.min_exploitation_rate;
             let max_exploitation_rate = (req.body.max_exploitation_rate == '') ? null : req.body.max_exploitation_rate;
             let daily_exploitation_limit = (req.body.daily_exploitation_limit == '') ? null : req.body.daily_exploitation_limit;
-            console.log(MeterCode, NodeCode, daily_exploitation_limit, max_exploitation_rate, min_exploitation_rate)
 
             // let water_output_year_min = (req.body.water_output_year_min == '') ? null : req.body.water_output_year_min;
             // let water_output_year_max = (req.body.water_output_year_max == '') ? null : req.body.water_output_year_max;
@@ -722,7 +498,6 @@ const setting_controller = {
             let max_threshold_terminal_index = (req.body.max_threshold_terminal_index == '') ? null : req.body.max_threshold_terminal_index;
             // let water_output_year_min = (req.body.water_output_year_min == '') ? null : req.body.water_output_year_min;
             // let water_output_year_max = (req.body.water_output_year_max == '') ? null : req.body.water_output_year_max;
-            console.log(MeterCode, NodeCode, min_threshold_terminal_index, max_threshold_terminal_index)
             try {
    
                 await access_db("UPDATE totaleq SET  min_threshold_terminal_index = ?, max_threshold_terminal_index = ? WHERE MeterCode = ? AND NodeCode = ?;", [min_threshold_terminal_index, max_threshold_terminal_index, MeterCode, NodeCode]);
@@ -1012,7 +787,6 @@ const setting_controller = {
             let start_date = req.query.start_date;
             let end_date = req.query.end_date;
             let data = await access_db("SELECT * FROM log_user WHERE MeterCode = ? AND NodeCode = ? AND time <= ? AND time >= ? ORDER BY time DESC;",[MeterCode,NodeCode, end_date, start_date]);
-            // console.log(MeterCode, NodeCode, data)
             res.json({data});
         }catch(error){
             console.error('API setting error:', error);
@@ -1064,7 +838,6 @@ const setting_controller = {
                     message: "Bạn không có quyền truy cập api này"
                 })
             }
-            console.log(req.body.idkey)
             await access_db("DELETE FROM Operation WHERE id = ?;",[req.body.idkey]);
             await query(`DELETE FROM "Operation" WHERE "id" = $1;`,[req.body.idkey]);
 

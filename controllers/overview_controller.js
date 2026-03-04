@@ -64,7 +64,6 @@ const overview_controller = {
                 let org_id = req.query.org_id;
                 let danh_sach_thiet_bị = [];
                 let type = req.query.type;
-                console.log(org_id)
                 if (type == "all") {
                     danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t5.device_type = ?;", [req.user.id, "WMCO"]);
 
@@ -171,7 +170,6 @@ const overview_controller = {
             if (result.length > 0) {
                 result.forEach(element => {
                     if (element.data_type == 1) {
-                        //console.log(tieu_chuan_nuoc_tho.ph_min);
                         nuoc_tho.push({
                             name: element.name,
                             last_data_time: element.last_data_time,
@@ -553,7 +551,6 @@ const overview_controller = {
                 let NodeCode = req.body.NodeCode;
                 let tram_id = req.body.tram_id;
                 let dv_type = req.body.dv_type;
-                console.log(MeterCode)
                 if(dv_type == "dvql"){
                     let dvnd = await access_db("SELECT t1.id FROM organizations t1 INNER JOIN organizations t2 ON t1.parent_id = t2.id INNER JOIN user_donviquanly t3 ON t3.donviquanly_id = t2.id WHERE t3.user_id = ?;",[req.user.id]);
                     if(dvnd.length > 0){

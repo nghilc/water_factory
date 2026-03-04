@@ -347,7 +347,6 @@ function get_data_nha_may(val) {
 
       // nước sạch
       $("#nuoc_sach_container").empty();
-      console.log(nuoc_sach)
       if (nuoc_sach.length > 0) {
         let str = "";
         for (let i = 0; i < nuoc_sach.length; i++) {
@@ -1242,7 +1241,6 @@ function get_and_render_table_nuoc_tho() {
 }
 
 function nuoc_tho_render_table(raw_data) {
-  console.log(raw_data)
   $("#history_table_thead").empty();
   $("#history_table_thead").append(
     `<tr> 
@@ -1297,7 +1295,6 @@ function nuoc_tho_modifi_data(data) {
 
     x.push(y)
   }
-  console.log(x)
   return x;
 }
 

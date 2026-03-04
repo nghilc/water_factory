@@ -111,77 +111,35 @@ function change_password(){
     })
 }
 
-function save_menu_option_setting(){
-    let menu_option = $('input[name="menu_option"]:checked').val();
-    $.ajax({
-        url: "/profile/post/menu_option",
-        type: "POST",
-        data:{menu_option},
-        beforeSend: function () {
-            showLoading();  // Hiện overlay khi bắt đầu tải
-        },
-        success: function(res){
-            show_notification(res.message, (res.success) ? "success" : "error");
-        },
-        error: function(xhr, status, error){
-            if(xhr.status === 401){
-                alert(xhr.responseText);
-                window.location.href = "/login"
-            }else{
-                console.error("Lỗi:", error);
-            }
-        },  
-        complete: function () {
-           hideLoading()  // Ẩn overlay sau khi tải xong
-        }
-    })
-}
 
 
 $(document).ready(function(){
     $(".bootstrap_toggle").bootstrapToggle();
 })
 
-var ON_OFF_STATUS = 1;
 
-$(document).ready(function(){
-    $(".noti_setting_sw").on("change",function(){
-        let dvql_id = $(this).attr("dvql_id");
-        let status =  $(this).is(':checked') ? 1 : 0;
-        if(ON_OFF_STATUS){
-            if(confirm(`Bạn muốn đổi trạng thái nhận thông báo cảnh báo từ đơn vị quản lý này ?`)){
-                // chọn có
-                console.log(dvql_id, status)
-                $.ajax({
-                    url: "/profile/post/change_noti_popup_status",
-                    type: "POST",
-                    data:{dvql_id, status},
-                    beforeSend: function () {
-                        showLoading();  // Hiện overlay khi bắt đầu tải
-                    },
-                    success: function(res){
-                        show_notification(res.message, (res.success) ? "success" : "error");
-                    },
-                    error: function(xhr, status, error){
-                        if(xhr.status === 401){
-                            alert(xhr.responseText);
-                            window.location.href = "/login"
-                        }else{
-                            console.error("Lỗi:", error);
-                        }
-                    },  
-                    complete: function () {
-                       hideLoading()  // Ẩn overlay sau khi tải xong
-                    }
-                })
-            }else{
-                    // chọn không
-                    let isChecked = $(this).prop("checked");
-                    ON_OFF_STATUS = 0;
-                    $(this).bootstrapToggle(isChecked ? "off" : "on");
-                    ON_OFF_STATUS = 1;
+function save_map_setting() {
+    let map_type = $('input[name="map_type"]:checked').val();
+    $.ajax({
+        url: "/profile/post/map_type",
+        type: "POST",
+        data: { map_type },
+        beforeSend: function () {
+            showLoading();  // Hiện overlay khi bắt đầu tải
+        },
+        success: function (res) {
+            show_notification(res.message, (res.success) ? "success" : "error");
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status === 401) {
+                alert(xhr.responseText);
+                window.location.href = "/login"
+            } else {
+                console.error("Lỗi:", error);
             }
+        },
+        complete: function () {
+            hideLoading()  // Ẩn overlay sau khi tải xong
         }
-
     })
-})
+}

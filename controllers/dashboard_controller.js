@@ -53,7 +53,9 @@ const dashboard_controller = {
 
             res.json({
                 success: true,
-                danh_sach_thiet_bị
+                danh_sach_thiet_bị,
+                map_type: req.user.map_type
+
             })
         }catch (error){
             console.error('API dashboard error:', error);

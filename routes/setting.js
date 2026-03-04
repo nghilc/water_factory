@@ -3,9 +3,25 @@ const router = express.Router();
 const middlewares_auth = require('../middlewares/auth');
 const setting = require('../controllers/setting_controller');
 
-router.get('/', middlewares_auth.ensure_authenticated, middlewares_auth.access_menu(["8"]), setting.show_setting);
+router.get('/', middlewares_auth.ensure_authenticated, setting.show_setting);
 router.get('/get/meter_info', middlewares_auth.ensure_authenticated, setting.get_meter_info);
+
+
+router.get('/get/danhsachthietbi', middlewares_auth.ensure_authenticated, setting.get_danhsachthietbi);
+
+
+
+
+
+
+
+
+
+
 router.post('/post/save_meter_info', middlewares_auth.ensure_authenticated, middlewares_auth.is_admin, setting.post_save_meter_info);
+router.post('/post/save_meter_alert', middlewares_auth.ensure_authenticated, middlewares_auth.is_admin, setting.save_meter_alert);
+
+
 router.post('/post/save_alert_config', middlewares_auth.ensure_authenticated, middlewares_auth.is_admin, setting.post_save_alert_config);
 
 router.post('/post/save_alert_voltage', middlewares_auth.ensure_authenticated, middlewares_auth.is_admin, setting.save_alert_voltage);

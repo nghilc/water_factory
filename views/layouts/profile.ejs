@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Sao việt | Thông tin cá nhân</title>
+  <title>QUAWACO | Thông tin cá nhân</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -131,69 +131,29 @@
             </div>
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h5><strong>Cài đặt điều hướng</strong></h5>
+                    <h5><strong>Cài đặt hiển thị thiết bị trên bản đồ</strong></h5>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <div class="row mb-1 d-flex flex-wrap align-items-start container">
-                        <!-- Chú thích -->
-                        <div class="col-12 mb-3">
-                            <small class="text-muted">Thay đổi cài đặt này sẽ thay đổi điều hướng trang đầu tiên sau khi đăng nhập.</small>
-                        </div>
-            
                         <!-- Radio buttons -->
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input hover_class" type="radio" name="menu_option" id="option1" value="1" <%= menu_option == 1 ? 'checked' : '' %>>
-                                <label class="form-check-label hover_class" for="option1">Trang giám sát hệ thống (mặc định)</label>
+                                <input class="form-check-input hover_class" type="radio" name="map_type" id="map1" value="1"
+                                    <%=map_type==1 ? 'checked' : '' %>>
+                                <label class="form-check-label hover_class" for="map1">Ẩn thông tin điểm đo (mặc định)</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input hover_class" type="radio" name="menu_option" id="option2" value="2" <%= menu_option == 2 ? 'checked' : '' %>>
-                                <label class="form-check-label hover_class" for="option2">Trang giám sát tổng quan</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input hover_class" type="radio" name="menu_option" id="option3" value="3" <%= menu_option == 3 ? 'checked' : '' %>>
-                                <label class="form-check-label hover_class" for="option3">Trang giám sát trực tuyến</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input hover_class" type="radio" name="menu_option" id="option5" value="5" <%= menu_option == 5 ? 'checked' : '' %>>
-                                <label class="form-check-label hover_class" for="option5">Trang giám sát sản lượng</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input hover_class" type="radio" name="menu_option" id="option4" value="4" <%= menu_option == 4 ? 'checked' : '' %>>
-                                <label class="form-check-label hover_class" for="option4">Tự động lưu vị trí cuối</label>
+                                <input class="form-check-input hover_class" type="radio" name="map_type" id="map2" value="2"
+                                    <%=map_type==2 ? 'checked' : '' %>>
+                                <label class="form-check-label hover_class" for="map2">Hiển thị toàn bộ thông tin điểm đo</label>
                             </div>
                         </div>
             
-                        <!-- Nút lưu -->
                         <div class="col-12 mt-3">
-                            <button class="btn btn-primary" style="width: 100%;" onclick="save_menu_option_setting()">Lưu</button>
+                            <button class="btn btn-primary" style="width: 100%;" onclick="save_map_setting()">Lưu</button>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header d-flex align-items-center">
-                    <h5><strong>Cài đặt nhận thông báo cảnh báo</strong></h5>
-                </div>
-                <div class="card-body d-flex justify-content-center">
-                    <table id="notifi_setting" class="table table-bordered text-center table-striped" class="display">
-                        <thead style="background-color: #a8dbf0;">
-                            <th class="border_th_d" style="min-width: 7%">STT</th>
-                            <th class="border_th_d">Đơn vị quản lý</th>
-                            <th class="border_th_d">Trạng thái nhận thông báo</th>
-                        </thead>
-                        <tbody id="notifi_setting_body">
-                            <% for(let i=0; i < dvql.length; i++){ %>
-                                <tr>
-                                    <td><%=(i+1)%></td>
-                                    <td><%= dvql[i].org_name %></td>
-                                    <td>
-                                        <input type="checkbox" class="bootstrap_toggle noti_setting_sw" <%= ((dvql[i].status == 1) ? "checked" : "" ) %>  data-toggle="toggle" data-on="Bật" data-off="Tắt" data-onstyle="success" data-offstyle="secondary" data-width="50" dvql_id="<%= dvql[i].id %>" data-size="sm">
-                                    </td>
-                                </tr>
-                            <%}%>
-                        </tbody>
-                    </table>
+            
                 </div>
             </div>
           </section>
