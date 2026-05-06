@@ -103,9 +103,7 @@ function get_data_nha_may() {
         success: function (res) {
             let general = res.general;
             let nuoc_tho = res.nuoc_tho;
-            let tieu_chuan_nuoc_sach = res.tieu_chuan_nuoc_sach;
             let nuoc_sach = res.nuoc_sach;
-            let tieu_chuan_nuoc_tho = res.tieu_chuan_nuoc_tho;
 
             // nước thô
             $("#nuoc_tho_container").empty();
@@ -114,48 +112,48 @@ function get_data_nha_may() {
                 let str = "";
                 for (let i = 0; i < nuoc_tho.length; i++) {
                     str += `
-                <div class="col-12 mb-2">
-                <div class="water-quality-card" data-type="raw">
-                  <h5><span>${show_empty_if_null_text(nuoc_tho[i].name)}</span></h5>
-                  <div class="parameter-grid">
-                      <div class="parameter-item">
-                          <div class="parameter-name">Nhiệt độ</div>
-                          <div class="d-flex align-items-center">
-                              <div class="parameter-value" >${show_empty_if_null_text(nuoc_tho[i].nhiet_do)}</div>
-                              <div class="parameter-unit">°C</div>
+                    <div class="col-12 mb-2">
+                    <div class="water-quality-card" data-type="raw">
+                      <h5><span>${show_empty_if_null_text(nuoc_tho[i].name)}</span></h5><b class="ml-1">${nuoc_tho[i].last_data_time}</b>
+                      <div class="parameter-grid mt-3">
+                          <div class="parameter-item">
+                              <div class="parameter-name">Nhiệt độ</div>
+                              <div class="d-flex align-items-center">
+                                  <div class="parameter-value ${(nuoc_tho[i].tt_nhiet_do == 0) ? "text-danger" : ((nuoc_tho[i].tt_nhiet_do == 2) ? "text-warning" : "text-success")}" >${show_empty_if_null_text(nuoc_tho[i].nhiet_do)}</div>
+                                  <div class="parameter-unit">°C</div>
+                              </div>
+                          </div>
+                          <div class="parameter-item">
+                              <div class="parameter-name">Độ pH</div>
+                              <div class="d-flex align-items-center">
+                                  <div class="parameter-value raw-ph ${(nuoc_tho[i].tt_ph == 0) ? "text-danger" : ((nuoc_tho[i].tt_ph == 2) ? "text-warning" : "text-success")}" >${show_empty_if_null_text(nuoc_tho[i].ph)}</div>
+                              </div>
+                          </div>
+                          <div class="parameter-item">
+                              <div class="parameter-name">Độ đục</div>
+                              <div class="d-flex align-items-center">
+                                  <div class="parameter-value raw-turbidity ${(nuoc_tho[i].tt_do_duc == 0) ? "text-danger" : ((nuoc_tho[i].tt_do_duc == 2) ? "text-warning" : "text-success")}" >${nuoc_tho[i].do_duc ?? '-'}</div>
+                                  <div class="parameter-unit">NTU</div>
+                              </div>
+                              </div>
+                          <div class="parameter-item">
+                              <div class="parameter-name">Độ cứng</div>
+                              <div class="d-flex align-items-center">
+                                  <div class="parameter-value ${(nuoc_tho[i].tt_do_cung == 0) ? "text-danger" : ((nuoc_tho[i].tt_do_cung == 2) ? "text-warning" : "text-success")}" >${(nuoc_tho[i].do_cung ?? '-')}</div>
+                                  <div class="parameter-unit">mg/l</div>
+                              </div>
                           </div>
                       </div>
-                      <div class="parameter-item">
-                          <div class="parameter-name">Độ pH</div>
-                          <div class="d-flex align-items-center">
-                              <div class="parameter-value raw-ph" >${show_empty_if_null_text(nuoc_tho[i].ph)}</div>
-                          </div>
+                      <div class="view-details-btn xem_chi_tiet_du_lieu xem_chi_tiet_nuoc_tho" MeterCode="${nuoc_tho[i].meter_code}" meter_name="${nuoc_tho[i].name}">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                              stroke="currentColor" stroke-width="2">
+                              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                          </svg>
+                          Xem chi tiết
                       </div>
-                      <div class="parameter-item">
-                          <div class="parameter-name">Độ đục</div>
-                          <div class="d-flex align-items-center">
-                              <div class="parameter-value raw-turbidity" >${nuoc_tho[i].do_duc ?? '-'}</div>
-                              <div class="parameter-unit">NTU</div>
-                          </div>
-                          </div>
-                      <div class="parameter-item">
-                          <div class="parameter-name">Độ cứng</div>
-                          <div class="d-flex align-items-center">
-                              <div class="parameter-value" >${(nuoc_tho[i].do_cung ?? '-')}</div>
-                              <div class="parameter-unit">mg/l</div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="view-details-btn xem_chi_tiet_du_lieu xem_chi_tiet_nuoc_tho" MeterCode="${nuoc_tho[i].meter_code}" meter_name="${nuoc_tho[i].name}">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2">
-                          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                      </svg>
-                      Xem chi tiết
-                  </div>
-                </div>
-                </div>
+                    </div>
+                    </div>
                 `
                 }
                 $("#nuoc_tho_container").append(str);
@@ -193,7 +191,6 @@ function get_data_nha_may() {
                           </div>
                       </div>
                   </div>
-                  
                 </div>
                 </div>
                 `
@@ -238,69 +235,68 @@ function get_data_nha_may() {
                 let str = "";
                 for (let i = 0; i < nuoc_sach.length; i++) {
                     str += `
-                <div class="col-12 mb-2">
-                <div class="water-quality-card" data-type="clean">
-                  <h5><span>${show_empty_if_null_text(nuoc_sach[i].name)}</span></h5>
-                  <div class="parameter-grid">
-                    <div class="parameter-item">
-                      <div class="parameter-name">Nhiệt độ</div>
-                      <div class="d-flex align-items-center">
-                        <div class="parameter-value clean-temp">${show_empty_if_null_text(nuoc_sach[i].nhiet_do)}</div>
-                        <div class="parameter-unit">°C</div>
+                    <div class="col-12 mb-2">
+                    <div class="water-quality-card" data-type="clean">
+                      <h5><span>${show_empty_if_null_text(nuoc_sach[i].name)}</span></h5><b class="ml-1">${nuoc_sach[i].last_data_time}</b>
+                      <div class="parameter-grid">
+                        <div class="parameter-item">
+                          <div class="parameter-name">Nhiệt độ</div>
+                          <div class="d-flex align-items-center">
+                            <div class="parameter-value clean-temp ${(nuoc_sach[i].tt_nhiet_do == 0) ? "text-danger" : ((nuoc_sach[i].tt_nhiet_do == 2) ? "text-warning" : "text-success")}">${show_empty_if_null_text(nuoc_sach[i].nhiet_do)}</div>
+                            <div class="parameter-unit">°C</div>
+                          </div>
+           
+                          </div>
+                        <div class="parameter-item">
+                          <div class="parameter-name">Độ pH</div>
+                          <div class="d-flex align-items-center">
+                            <div class="parameter-value clean-ph ${(nuoc_sach[i].tt_ph == 0) ? "text-danger" : ((nuoc_sach[i].tt_ph == 2) ? "text-warning" : "text-success")}">${show_empty_if_null_text(nuoc_sach[i].ph)}</div>
+                          </div>
+          
+                          </div>
+                        <div class="parameter-item">
+                          <div class="parameter-name">Clo dư</div>
+                          <div class="d-flex align-items-center">
+                            <div class="parameter-value clean-chlorine ${(nuoc_sach[i].tt_clo_du == 0) ? "text-danger" : ((nuoc_sach[i].tt_clo_du == 2) ? "text-warning" : "text-success")}">${show_empty_if_null_text(nuoc_sach[i].clo_du)}</div>
+                            <div class="parameter-unit">mg/l</div>
+                          </div>
+                           
+                        </div>
+                        <div class="parameter-item">
+                          <div class="parameter-name">Độ đục</div>
+                          <div class="d-flex align-items-center">
+                            <div class="parameter-value clean-turbidity ${(nuoc_sach[i].tt_do_duc == 0) ? "text-danger" : ((nuoc_sach[i].tt_do_duc == 2) ? "text-warning" : "text-success")}">${nuoc_sach[i].do_duc ?? '-'}</div>
+                            <div class="parameter-unit">NTU</div>
+                          </div>
+                         
+                        </div>
+                        <div class="parameter-item">
+                          <div class="parameter-name">Độ mặn</div>
+                          <div class="d-flex align-items-center">
+                            <div class="parameter-value ${(nuoc_sach[i].tt_do_man == 0) ? "text-danger" : ((nuoc_sach[i].tt_do_man == 2) ? "text-warning" : "text-success")}">${nuoc_sach.do_man ?? '-'}</div>
+                            <div class="parameter-unit">%</div>
+                          </div>
+                       
+                        </div>
+                        <div class="parameter-item">
+                          <div class="parameter-name">EC</div>
+                          <div class="d-flex align-items-center">
+                            <div class="parameter-value clean-ec ${(nuoc_sach[i].tt_EC == 0) ? "text-danger" : ((nuoc_sach[i].tt_EC == 2) ? "text-warning" : "text-success")}">${nuoc_sach[i].EC ?? '-'}</div>
+                            <div class="parameter-unit">uS/cm</div>
+                          </div>
+                            
+                        </div>
                       </div>
-                      ${(nuoc_sach[i].nhiet_do == null) ? "" : ((nuoc_sach[i].tt_nhiet_do == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}
+                      <div class="view-details-btn xem_chi_tiet_du_lieu xem_chi_tiet_nuoc_sach" MeterCode="${nuoc_sach[i].meter_code}" meter_name="${nuoc_sach[i].name}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2">
+                          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Xem chi tiết
                       </div>
-                    <div class="parameter-item">
-                      <div class="parameter-name">Độ pH</div>
-                      <div class="d-flex align-items-center">
-                        <div class="parameter-value clean-ph">${show_empty_if_null_text(nuoc_sach[i].ph)}</div>
-                      </div>
-                      ${(nuoc_sach[i].ph == null) ? "" : ((nuoc_sach[i].tt_ph == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
-                      </div>
-      
-                    <div class="parameter-item">
-                      <div class="parameter-name">Clo dư</div>
-                      <div class="d-flex align-items-center">
-                        <div class="parameter-value clean-chlorine">${show_empty_if_null_text(nuoc_sach[i].clo_du)}</div>
-                        <div class="parameter-unit">mg/l</div>
-                      </div>
-                      ${(nuoc_sach[i].clo_du == null) ? "" : ((nuoc_sach[i].tt_clo_du == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
-                      </div>
-                    <div class="parameter-item">
-                      <div class="parameter-name">Độ đục</div>
-                      <div class="d-flex align-items-center">
-                        <div class="parameter-value clean-turbidity">${nuoc_sach[i].do_duc ?? '-'}</div>
-                        <div class="parameter-unit">NTU</div>
-                      </div>
-                      ${(nuoc_sach[i].do_duc == null) ? "" : ((nuoc_sach[i].tt_do_duc == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
-                      </div>
-                    <div class="parameter-item">
-                      <div class="parameter-name">Độ mặn</div>
-                      <div class="d-flex align-items-center">
-                        <div class="parameter-value">${nuoc_sach.do_man ?? '-'}</div>
-                        <div class="parameter-unit">%</div>
-                      </div>
-                      ${(nuoc_sach[i].do_man == null) ? "" : ((nuoc_sach[i].tt_do_man == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
-                      </div>
-                    <div class="parameter-item">
-                      <div class="parameter-name">EC</div>
-                      <div class="d-flex align-items-center">
-                        <div class="parameter-value clean-ec">${nuoc_sach[i].EC ?? '-'}</div>
-                        <div class="parameter-unit">uS/cm</div>
-                      </div>
-                      ${(nuoc_sach[i].EC == null) ? "" : ((nuoc_sach[i].tt_EC == 1) ? '<span class="parameter-status status-good">Bình thường</span>' : '<span class="parameter-status status-warning">Không đạt</span>')}                
                       </div>
                   </div>
-                  <div class="view-details-btn xem_chi_tiet_du_lieu xem_chi_tiet_nuoc_sach" MeterCode="${nuoc_sach[i].meter_code}" meter_name="${nuoc_sach[i].name}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="2">
-                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    Xem chi tiết
-                  </div>
-                  </div>
-              </div>
                 `
                 }
                 $("#nuoc_sach_container").append(str);
@@ -389,17 +385,17 @@ function get_data_nha_may() {
             // $("#nuoc_sach_EC").html(nuoc_sach.EC ?? '-');
 
 
-            $("#tc_nuoc_tho_do_duc").html(tieu_chuan_nuoc_tho.do_duc);
-            $("#tc_nuoc_tho_ph_min").html(tieu_chuan_nuoc_tho.ph_min);
-            $("#tc_nuoc_tho_ph_max").html(tieu_chuan_nuoc_tho.ph_max);
-            $("#tc_nuoc_tho_nhiet_do").html(tieu_chuan_nuoc_tho.nhiet_do);
+            // $("#tc_nuoc_tho_do_duc").html(tieu_chuan_nuoc_tho.do_duc);
+            // $("#tc_nuoc_tho_ph_min").html(tieu_chuan_nuoc_tho.ph_min);
+            // $("#tc_nuoc_tho_ph_max").html(tieu_chuan_nuoc_tho.ph_max);
+            // $("#tc_nuoc_tho_nhiet_do").html(tieu_chuan_nuoc_tho.nhiet_do);
 
-            $("#tc_nuoc_sach_do_duc").html(tieu_chuan_nuoc_sach.do_duc);
-            $("#tc_nuoc_sach_ph_min").html(tieu_chuan_nuoc_sach.ph_min);
-            $("#tc_nuoc_sach_ph_max").html(tieu_chuan_nuoc_sach.ph_max);
-            $("#tc_nuoc_sach_clo_du_min").html(tieu_chuan_nuoc_sach.clo_du_min);
-            $("#tc_nuoc_sach_clo_du_max").html(tieu_chuan_nuoc_sach.clo_du_max);
-            $("#tc_nuoc_sach_EC").html(tieu_chuan_nuoc_sach.EC);
+            // $("#tc_nuoc_sach_do_duc").html(tieu_chuan_nuoc_sach.do_duc);
+            // $("#tc_nuoc_sach_ph_min").html(tieu_chuan_nuoc_sach.ph_min);
+            // $("#tc_nuoc_sach_ph_max").html(tieu_chuan_nuoc_sach.ph_max);
+            // $("#tc_nuoc_sach_clo_du_min").html(tieu_chuan_nuoc_sach.clo_du_min);
+            // $("#tc_nuoc_sach_clo_du_max").html(tieu_chuan_nuoc_sach.clo_du_max);
+            // $("#tc_nuoc_sach_EC").html(tieu_chuan_nuoc_sach.EC);
         },
         error: function (xhr, status, error) {
             if (xhr.status === 401) {
@@ -488,6 +484,11 @@ function get_and_render_chart_nuoc_tho() {
 var CHART = null;
 function nuoc_tho_render_chart(raw_data) {
     let data = [];
+    let do_duc_status = 0;
+    let ph_status = 0;
+    let nhiet_do_status = 0;
+    let do_cung_status = 0;
+
     for (let i = 0; i < raw_data.length; i++) {
         let x = {
             time: new Date(raw_data[i].MeterTime),
@@ -495,6 +496,18 @@ function nuoc_tho_render_chart(raw_data) {
             ph: stringtonum(raw_data[i].PH),
             nhiet_do: stringtonum(raw_data[i].Temp),
             do_cung: null
+        }
+        if (x.do_duc != null) {
+            do_duc_status = 1;
+        }
+        if (x.ph != null) {
+            ph_status = 1;
+        }
+        if (x.nhiet_do != null) {
+            nhiet_do_status = 1;
+        }
+        if (x.do_cung != null) {
+            do_cung_status = 1;
         }
         data.push(x);
     }
@@ -534,137 +547,176 @@ function nuoc_tho_render_chart(raw_data) {
     CHART.legend = new am4charts.Legend();
     CHART.legend.labels.template.fill = am4core.color("#383838ff");
 
-    var NTU = CHART.yAxes.push(new am4charts.ValueAxis());
-    NTU.tooltip.disabled = false;
-    NTU.renderer.ticks.template.disabled = true;
-    NTU.renderer.axisFills.template.disabled = true;
-    // NTU.renderer.line.stroke = am4core.color("#ffffffff");
-    NTU.renderer.line.strokeOpacity = 0.5;
-    NTU.renderer.line.strokeWidth = 1;
-    NTU.title.text = "NTU"
-    NTU.renderer.opposite = false;
-    NTU.extraMin = 0.1;
-    NTU.extraMax = 0.1;
-    // NTU.renderer.labels.template.fill = am4core.color("#ffffff");
-    // NTU.title.fill = am4core.color("#ffffffff");
+    if (do_duc_status) {
+
+        var NTU = CHART.yAxes.push(new am4charts.ValueAxis());
+        NTU.tooltip.disabled = false;
+        NTU.renderer.ticks.template.disabled = true;
+        NTU.renderer.axisFills.template.disabled = true;
+        // NTU.renderer.line.stroke = am4core.color("#ffffffff");
+        NTU.renderer.line.strokeOpacity = 0.5;
+        NTU.renderer.line.strokeWidth = 1;
+        NTU.title.text = "Độ đục (NTU)"
+        NTU.renderer.opposite = false;
+        NTU.extraMin = 0.1;
+        NTU.extraMax = 0.1;
+
+        NTU.renderer.line.stroke = am4core.color("#1584b0"); // vàng
+        NTU.renderer.line.strokeOpacity = 1;
+        NTU.renderer.labels.template.fill = am4core.color("#1584b0");
+        NTU.title.fill = am4core.color("#1584b0");
+        // NTU.renderer.labels.template.fill = am4core.color("#ffffff");
+        // NTU.title.fill = am4core.color("#ffffffff");
+    }
+
+    if (nhiet_do_status) {
+        var C = CHART.yAxes.push(new am4charts.ValueAxis());
+        C.tooltip.disabled = false;
+        C.renderer.ticks.template.disabled = true;
+        C.renderer.axisFills.template.disabled = true;
+        // C.renderer.line.stroke = am4core.color("#ffffffff");
+        C.renderer.line.strokeOpacity = 0.5;
+        C.renderer.line.strokeWidth = 1;
+        C.title.text = "Nhiệt độ (°C)"
+        C.renderer.opposite = false;
+        C.extraMin = 0.1;
+        C.extraMax = 0.1;
+
+        C.renderer.line.stroke = am4core.color("#E76F51"); // vàng
+        C.renderer.line.strokeOpacity = 1;
+        C.renderer.labels.template.fill = am4core.color("#E76F51");
+        C.title.fill = am4core.color("#E76F51");
+        // C.renderer.labels.template.fill = am4core.color("#ffffff");
+        // C.title.fill = am4core.color("#ffffffff");
+    }
+
+    if (do_cung_status) {
+        var mgl = CHART.yAxes.push(new am4charts.ValueAxis());
+        mgl.tooltip.disabled = false;
+        mgl.renderer.ticks.template.disabled = true;
+        mgl.renderer.axisFills.template.disabled = true;
+        // mgl.renderer.line.stroke = am4core.color("#ffffffff");
+        mgl.renderer.line.strokeOpacity = 0.5;
+        mgl.renderer.line.strokeWidth = 1;
+        mgl.title.text = "Độ cứng (mg/l)"
+        mgl.renderer.opposite = true;
+        mgl.extraMin = 0.1;
+        mgl.extraMax = 0.1;
+
+        mgl.renderer.line.stroke = am4core.color("#E9C46A"); // vàng
+        mgl.renderer.line.strokeOpacity = 1;
+        mgl.renderer.labels.template.fill = am4core.color("#E9C46A");
+        mgl.title.fill = am4core.color("#E9C46A");
+        // mgl.renderer.labels.template.fill = am4core.color("#ffffff");
+        // mgl.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var C = CHART.yAxes.push(new am4charts.ValueAxis());
-    C.tooltip.disabled = false;
-    C.renderer.ticks.template.disabled = true;
-    C.renderer.axisFills.template.disabled = true;
-    // C.renderer.line.stroke = am4core.color("#ffffffff");
-    C.renderer.line.strokeOpacity = 0.5;
-    C.renderer.line.strokeWidth = 1;
-    C.title.text = "°C"
-    C.renderer.opposite = false;
-    C.extraMin = 0.1;
-    C.extraMax = 0.1;
-    // C.renderer.labels.template.fill = am4core.color("#ffffff");
-    // C.title.fill = am4core.color("#ffffffff");
+    if (ph_status) {
+        var ph = CHART.yAxes.push(new am4charts.ValueAxis());
+        ph.tooltip.disabled = false;
+        ph.renderer.ticks.template.disabled = true;
+        ph.renderer.axisFills.template.disabled = true;
+        // ph.renderer.line.stroke = am4core.color("#ffffffff");
+        ph.renderer.line.strokeOpacity = 0.5;
+        ph.renderer.line.strokeWidth = 1;
+        ph.title.text = "Độ PH"
+        ph.renderer.opposite = true;
+        ph.extraMin = 0.1;
+        ph.extraMax = 0.1;
 
-    var mgl = CHART.yAxes.push(new am4charts.ValueAxis());
-    mgl.tooltip.disabled = false;
-    mgl.renderer.ticks.template.disabled = true;
-    mgl.renderer.axisFills.template.disabled = true;
-    // mgl.renderer.line.stroke = am4core.color("#ffffffff");
-    mgl.renderer.line.strokeOpacity = 0.5;
-    mgl.renderer.line.strokeWidth = 1;
-    mgl.title.text = "mg/l"
-    mgl.renderer.opposite = true;
-    mgl.extraMin = 0.1;
-    mgl.extraMax = 0.1;
-    // mgl.renderer.labels.template.fill = am4core.color("#ffffff");
-    // mgl.title.fill = am4core.color("#ffffffff");
-
-    var ph = CHART.yAxes.push(new am4charts.ValueAxis());
-    ph.tooltip.disabled = false;
-    ph.renderer.ticks.template.disabled = true;
-    ph.renderer.axisFills.template.disabled = true;
-    // ph.renderer.line.stroke = am4core.color("#ffffffff");
-    ph.renderer.line.strokeOpacity = 0.5;
-    ph.renderer.line.strokeWidth = 1;
-    ph.title.text = ""
-    ph.renderer.opposite = true;
-    ph.extraMin = 0.1;
-    ph.extraMax = 0.1;
-    // ph.renderer.labels.template.fill = am4core.color("#ffffff");
-    // ph.title.fill = am4core.color("#ffffffff");
-
-    var series;
-    series = CHART.series.push(new am4charts.LineSeries());
-    series.yAxis = ph;
-
-    series.dataFields.valueY = "ph";
-    series.dataFields.dateX = "time";
-    series.title = "Ph";
-    series.strokeWidth = 3;
-    series.tensionX = 1;
-    series.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series.tooltipText = "Độ pH" + ": {valueY} ";
-    series.name = "Độ pH"
-    series.tooltip.pointerOrientation = "horizontal";
-    series.fill = am4core.color("#00FFD5");
-    series.stroke = am4core.color("#00FFD5");
-    series.fillOpacity = 0;
-
-    var series_2;
-    series_2 = CHART.series.push(new am4charts.LineSeries());
-    series_2.yAxis = NTU;
-
-    series_2.dataFields.valueY = "do_duc";
-    series_2.dataFields.dateX = "time";
-    series_2.title = "Độ đục";
-    series_2.strokeWidth = 3;
-    series_2.tensionX = 1;
-    series_2.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_2.tooltipText = "Độ đục" + ": {valueY} " + "(NTU)";
-    series_2.name = "Độ đục"
-    series_2.tooltip.pointerOrientation = "horizontal";
-    series_2.fill = am4core.color("#1584b0");
-    series_2.stroke = am4core.color("#00BFFF");
-    series_2.fillOpacity = 0;
+        ph.renderer.line.stroke = am4core.color("#2A9D8F"); // vàng
+        ph.renderer.line.strokeOpacity = 1;
+        ph.renderer.labels.template.fill = am4core.color("#2A9D8F");
+        ph.title.fill = am4core.color("#2A9D8F");
+        // ph.renderer.labels.template.fill = am4core.color("#ffffff");
+        // ph.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var series_3;
-    series_3 = CHART.series.push(new am4charts.LineSeries());
-    series_3.yAxis = C;
+    if (ph_status) {
+        var series;
+        series = CHART.series.push(new am4charts.LineSeries());
+        series.yAxis = ph;
+        series.dataFields.valueY = "ph";
+        series.dataFields.dateX = "time";
+        series.title = "Ph";
+        series.strokeWidth = 3;
+        series.tensionX = 1;
+        series.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series.tooltipText = "Độ pH" + ": {valueY} ";
+        series.name = "Độ pH"
+        series.tooltip.pointerOrientation = "horizontal";
+        series.fill = am4core.color("#2A9D8F");
+        series.stroke = am4core.color("#2A9D8F");
+        series.fillOpacity = 0;
 
-    series_3.dataFields.valueY = "nhiet_do";
-    series_3.dataFields.dateX = "time";
-    series_3.title = "Nhiệt độ";
-    series_3.strokeWidth = 3;
-    series_3.tensionX = 1;
-    series_3.showOnInit = true;
-    series_3.tooltipText = "Nhiệt độ" + ": {valueY} " + "(°C)";
-    series_3.name = "Nhiệt độ"
-    series_3.tooltip.pointerOrientation = "horizontal";
-    series_3.fill = am4core.color("#FF4D00");
-    series_3.stroke = am4core.color("#FF4D00");
-    series_3.fillOpacity = 0;
+    }
+
+    if (do_duc_status) {
+        var series_2;
+        series_2 = CHART.series.push(new am4charts.LineSeries());
+        series_2.yAxis = NTU;
+
+        series_2.dataFields.valueY = "do_duc";
+        series_2.dataFields.dateX = "time";
+        series_2.title = "Độ đục";
+        series_2.strokeWidth = 3;
+        series_2.tensionX = 1;
+        series_2.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_2.tooltipText = "Độ đục" + ": {valueY} " + "(NTU)";
+        series_2.name = "Độ đục (NTU)"
+        series_2.tooltip.pointerOrientation = "horizontal";
+        series_2.fill = am4core.color("#457B9D");
+        series_2.stroke = am4core.color("#457B9D");
+        series_2.fillOpacity = 0;
+
+    }
 
 
-    var series_4;
-    series_4 = CHART.series.push(new am4charts.LineSeries());
-    series_4.yAxis = mgl;
+    if (nhiet_do_status) {
+        var series_3;
+        series_3 = CHART.series.push(new am4charts.LineSeries());
+        series_3.yAxis = C;
 
-    series_4.dataFields.valueY = "do_cung";
-    series_4.dataFields.dateX = "time";
-    series_4.title = "Độ cứng";
-    series_4.strokeWidth = 3;
-    series_4.tensionX = 1;
-    series_4.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_4.tooltipText = "Độ cứng" + ": {valueY} " + "(mg/l)";
-    series_4.name = "Độ cứng"
-    series_4.tooltip.pointerOrientation = "horizontal";
-    series_4.tooltip.label.fill = am4core.color("#090909ff");   // màu chữ
-    // series_4.tooltip.background.fill = am4core.color("#FFD700"); // màu nền
-    series_4.fill = am4core.color("#FFD700");
-    series_4.stroke = am4core.color("#FFD700");
-    series_4.fillOpacity = 0;
+        series_3.dataFields.valueY = "nhiet_do";
+        series_3.dataFields.dateX = "time";
+        series_3.title = "Nhiệt độ";
+        series_3.strokeWidth = 3;
+        series_3.tensionX = 1;
+        series_3.showOnInit = true;
+        series_3.tooltipText = "Nhiệt độ" + ": {valueY} " + "(°C)";
+        series_3.name = "Nhiệt độ (°C)"
+        series_3.tooltip.pointerOrientation = "horizontal";
+        series_3.fill = am4core.color("#E76F51");
+        series_3.stroke = am4core.color("#E76F51");
+        series_3.fillOpacity = 0;
+    }
+
+
+    if (do_cung_status) {
+        var series_4;
+        series_4 = CHART.series.push(new am4charts.LineSeries());
+        series_4.yAxis = mgl;
+
+        series_4.dataFields.valueY = "do_cung";
+        series_4.dataFields.dateX = "time";
+        series_4.title = "Độ cứng";
+        series_4.strokeWidth = 3;
+        series_4.tensionX = 1;
+        series_4.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_4.tooltipText = "Độ cứng" + ": {valueY} " + "(mg/l)";
+        series_4.name = "Độ cứng (mg/l)"
+        series_4.tooltip.pointerOrientation = "horizontal";
+        series_4.tooltip.label.fill = am4core.color("#090909ff");   // màu chữ
+        // series_4.tooltip.background.fill = am4core.color("#FFD700"); // màu nền
+        series_4.fill = am4core.color("#E9C46A");
+        series_4.stroke = am4core.color("#E9C46A");
+        series_4.fillOpacity = 0;
+    }
 }
 
 
@@ -698,6 +750,13 @@ function get_and_render_chart_nuoc_sach() {
 
 function nuoc_sach_render_chart(raw_data) {
     let data = [];
+    let nhiet_do_status = 0;
+    let ph_status = 0;
+    let do_man_status = 0;
+    let clo_du_status = 0;
+    let do_duc_status = 0;
+    let EC_status = 0;
+
     for (let i = 0; i < raw_data.length; i++) {
         let x = {
             time: new Date(raw_data[i].MeterTime),
@@ -708,6 +767,24 @@ function nuoc_sach_render_chart(raw_data) {
             do_duc: stringtonum(raw_data[i].DoDuc),
             EC: stringtonum(raw_data[i].EC)
 
+        }
+        if (x.nhiet_do != null) {
+            nhiet_do_status = 1;
+        }
+        if (x.ph != null) {
+            ph_status = 1;
+        }
+        if (x.do_man != null) {
+            do_man_status = 1;
+        }
+        if (x.clo_du != null) {
+            clo_du_status = 1;
+        }
+        if (x.do_duc != null) {
+            do_duc_status = 1;
+        }
+        if (x.EC != null) {
+            EC_status = 1;
         }
         data.push(x);
     }
@@ -751,204 +828,262 @@ function nuoc_sach_render_chart(raw_data) {
     CHART.legend = new am4charts.Legend();
     CHART.legend.labels.template.fill = am4core.color("#383838ff");
 
-    var NTU = CHART.yAxes.push(new am4charts.ValueAxis());
-    NTU.tooltip.disabled = false;
-    NTU.renderer.ticks.template.disabled = true;
-    NTU.renderer.axisFills.template.disabled = true;
-    // NTU.renderer.line.stroke = am4core.color("#ffffffff");
-    NTU.renderer.line.strokeOpacity = 0.5;
-    NTU.renderer.line.strokeWidth = 1;
-    NTU.title.text = "NTU"
-    NTU.renderer.opposite = false;
-    NTU.extraMin = 0.1;
-    NTU.extraMax = 0.1;
-    // NTU.renderer.labels.template.fill = am4core.color("#ffffffff");
-    // NTU.title.fill = am4core.color("#ffffffff");
+
+    if (do_duc_status) {
+        var NTU = CHART.yAxes.push(new am4charts.ValueAxis());
+        NTU.tooltip.disabled = false;
+        NTU.renderer.ticks.template.disabled = true;
+        NTU.renderer.axisFills.template.disabled = true;
+        // NTU.renderer.line.stroke = am4core.color("#ffffffff");
+        NTU.renderer.line.strokeOpacity = 0.5;
+        NTU.renderer.line.strokeWidth = 1;
+        NTU.title.text = "Độ đục (NTU)"
+        NTU.renderer.opposite = false;
+        NTU.extraMin = 0.1;
+        NTU.extraMax = 0.1;
+
+        NTU.renderer.line.stroke = am4core.color("#457B9D"); // vàng
+        NTU.renderer.line.strokeOpacity = 1;
+        NTU.renderer.labels.template.fill = am4core.color("#457B9D");
+        NTU.title.fill = am4core.color("#457B9D");
+
+        // NTU.renderer.labels.template.fill = am4core.color("#ffffffff");
+        // NTU.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var C = CHART.yAxes.push(new am4charts.ValueAxis());
-    C.tooltip.disabled = false;
-    C.renderer.ticks.template.disabled = true;
-    C.renderer.axisFills.template.disabled = true;
-    // C.renderer.line.stroke = am4core.color("#ffffffff");
-    C.renderer.line.strokeOpacity = 0.5;
-    C.renderer.line.strokeWidth = 1;
-    C.title.text = "°C"
-    C.renderer.opposite = false;
-    C.extraMin = 0.1;
-    C.extraMax = 0.1;
-    // C.renderer.labels.template.fill = am4core.color("#ffffff");
-    // C.title.fill = am4core.color("#ffffffff");
+    if (nhiet_do_status) {
+        var C = CHART.yAxes.push(new am4charts.ValueAxis());
+        C.tooltip.disabled = false;
+        C.renderer.ticks.template.disabled = true;
+        C.renderer.axisFills.template.disabled = true;
+        // C.renderer.line.stroke = am4core.color("#ffffffff");
+        C.renderer.line.strokeOpacity = 0.5;
+        C.renderer.line.strokeWidth = 1;
+        C.title.text = "Nhiệt độ (°C)"
+        C.renderer.opposite = false;
+        C.extraMin = 0.1;
+        C.extraMax = 0.1;
+
+        C.renderer.line.stroke = am4core.color("#E76F51"); // vàng
+        C.renderer.line.strokeOpacity = 1;
+        C.renderer.labels.template.fill = am4core.color("#E76F51");
+        C.title.fill = am4core.color("#E76F51");
+        // C.renderer.labels.template.fill = am4core.color("#ffffff");
+        // C.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var mgl = CHART.yAxes.push(new am4charts.ValueAxis());
-    mgl.tooltip.disabled = false;
-    mgl.renderer.ticks.template.disabled = true;
-    mgl.renderer.axisFills.template.disabled = true;
-    // mgl.renderer.line.stroke = am4core.color("#ffffffff");
-    mgl.renderer.line.strokeOpacity = 0.5;
-    mgl.renderer.line.strokeWidth = 1;
-    mgl.title.text = "mg/l"
-    mgl.renderer.opposite = true;
-    mgl.extraMin = 0.1;
-    mgl.extraMax = 0.1;
-    // mgl.renderer.labels.template.fill = am4core.color("#ffffff");
-    // mgl.title.fill = am4core.color("#ffffffff");
+    if (clo_du_status) {
+        var mgl = CHART.yAxes.push(new am4charts.ValueAxis());
+        mgl.tooltip.disabled = false;
+        mgl.renderer.ticks.template.disabled = true;
+        mgl.renderer.axisFills.template.disabled = true;
+        // mgl.renderer.line.stroke = am4core.color("#ffffffff");
+        mgl.renderer.line.strokeOpacity = 0.5;
+        mgl.renderer.line.strokeWidth = 1;
+        mgl.title.text = "Clo dư (mg/l)"
+        mgl.renderer.opposite = true;
+        mgl.extraMin = 0.1;
+        mgl.extraMax = 0.1;
+
+        mgl.renderer.line.stroke = am4core.color("#E9C46A"); // vàng
+        mgl.renderer.line.strokeOpacity = 1;
+        mgl.renderer.labels.template.fill = am4core.color("#E9C46A");
+        mgl.title.fill = am4core.color("#E9C46A");
+        // mgl.renderer.labels.template.fill = am4core.color("#ffffff");
+        // mgl.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var ph = CHART.yAxes.push(new am4charts.ValueAxis());
-    ph.tooltip.disabled = false;
-    ph.renderer.ticks.template.disabled = true;
-    ph.renderer.axisFills.template.disabled = true;
-    // ph.renderer.line.stroke = am4core.color("#ffffffff");
-    ph.renderer.line.strokeOpacity = 0.5;
-    ph.renderer.line.strokeWidth = 1;
-    ph.title.text = ""
-    ph.renderer.opposite = true;
-    ph.extraMin = 0.1;
-    ph.extraMax = 0.1;
-    // ph.renderer.labels.template.fill = am4core.color("#ffffff");
-    // ph.title.fill = am4core.color("#ffffffff");
+    if (ph_status) {
+        var ph = CHART.yAxes.push(new am4charts.ValueAxis());
+        ph.tooltip.disabled = false;
+        ph.renderer.ticks.template.disabled = true;
+        ph.renderer.axisFills.template.disabled = true;
+        // ph.renderer.line.stroke = am4core.color("#ffffffff");
+        ph.renderer.line.strokeOpacity = 0.5;
+        ph.renderer.line.strokeWidth = 1;
+        ph.title.text = "Độ PH"
+        ph.renderer.opposite = true;
+        ph.extraMin = 0.1;
+        ph.extraMax = 0.1;
+
+        ph.renderer.line.stroke = am4core.color("#2A9D8F"); // vàng
+        ph.renderer.line.strokeOpacity = 1;
+        ph.renderer.labels.template.fill = am4core.color("#2A9D8F");
+        ph.title.fill = am4core.color("#2A9D8F");
+        // ph.renderer.labels.template.fill = am4core.color("#ffffff");
+        // ph.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var per = CHART.yAxes.push(new am4charts.ValueAxis());
-    per.tooltip.disabled = false;
-    per.renderer.ticks.template.disabled = true;
-    per.renderer.axisFills.template.disabled = true;
-    // per.renderer.line.stroke = am4core.color("#ffffffff");
-    per.renderer.line.strokeOpacity = 0.5;
-    per.renderer.line.strokeWidth = 1;
-    per.title.text = "%"
-    per.renderer.opposite = true;
-    per.extraMin = 0.1;
-    per.extraMax = 0.1;
-    // per.renderer.labels.template.fill = am4core.color("#ffffff");
-    // per.title.fill = am4core.color("#ffffffff");
+    if (do_man_status) {
+        var per = CHART.yAxes.push(new am4charts.ValueAxis());
+        per.tooltip.disabled = false;
+        per.renderer.ticks.template.disabled = true;
+        per.renderer.axisFills.template.disabled = true;
+        // per.renderer.line.stroke = am4core.color("#ffffffff");
+        per.renderer.line.strokeOpacity = 0.5;
+        per.renderer.line.strokeWidth = 1;
+        per.title.text = "Độ mặn (%)"
+        per.renderer.opposite = true;
+        per.extraMin = 0.1;
+        per.extraMax = 0.1;
+
+        per.renderer.line.stroke = am4core.color("#D16D8A"); // vàng
+        per.renderer.line.strokeOpacity = 1;
+        per.renderer.labels.template.fill = am4core.color("#D16D8A");
+        per.title.fill = am4core.color("#D16D8A");
+        // per.renderer.labels.template.fill = am4core.color("#ffffff");
+        // per.title.fill = am4core.color("#ffffffff");
+    }
 
 
 
-    var uscm = CHART.yAxes.push(new am4charts.ValueAxis());
-    uscm.tooltip.disabled = false;
-    uscm.renderer.ticks.template.disabled = true;
-    uscm.renderer.axisFills.template.disabled = true;
-    // uscm.renderer.line.stroke = am4core.color("#ffffffff");
-    uscm.renderer.line.strokeOpacity = 0.5;
-    uscm.renderer.line.strokeWidth = 1;
-    uscm.title.text = "uS/cm"
-    uscm.renderer.opposite = true;
-    uscm.extraMin = 0.1;
-    uscm.extraMax = 0.1;
-    // uscm.renderer.labels.template.fill = am4core.color("#ffffff");
-    // uscm.title.fill = am4core.color("#ffffffff");
+    if (EC_status) {
+        var uscm = CHART.yAxes.push(new am4charts.ValueAxis());
+        uscm.tooltip.disabled = false;
+        uscm.renderer.ticks.template.disabled = true;
+        uscm.renderer.axisFills.template.disabled = true;
+        // uscm.renderer.line.stroke = am4core.color("#ffffffff");
+        uscm.renderer.line.strokeOpacity = 0.5;
+        uscm.renderer.line.strokeWidth = 1;
+        uscm.title.text = "EC (uS/cm)"
+        uscm.renderer.opposite = true;
+        uscm.extraMin = 0.1;
+        uscm.extraMax = 0.1;
+
+        uscm.renderer.line.stroke = am4core.color("#6A994E"); // vàng
+        uscm.renderer.line.strokeOpacity = 1;
+        uscm.renderer.labels.template.fill = am4core.color("#6A994E");
+        uscm.title.fill = am4core.color("#6A994E");
+        // uscm.renderer.labels.template.fill = am4core.color("#ffffff");
+        // uscm.title.fill = am4core.color("#ffffffff");
+    }
 
 
-    var series;
-    series = CHART.series.push(new am4charts.LineSeries());
-    series.yAxis = ph;
 
-    series.dataFields.valueY = "ph";
-    series.dataFields.dateX = "time";
-    series.title = "Ph";
-    series.strokeWidth = 3;
-    series.tensionX = 1;
-    series.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series.tooltipText = "Độ pH" + ": {valueY} ";
-    series.name = "Độ pH"
-    series.tooltip.pointerOrientation = "horizontal";
-    series.fill = am4core.color("#00FFD5");
-    series.stroke = am4core.color("#00FFD5");
-    series.fillOpacity = 0;
+    if (ph_status) {
+        var series;
+        series = CHART.series.push(new am4charts.LineSeries());
+        series.yAxis = ph;
 
-    var series_2;
-    series_2 = CHART.series.push(new am4charts.LineSeries());
-    series_2.yAxis = NTU;
+        series.dataFields.valueY = "ph";
+        series.dataFields.dateX = "time";
+        series.title = "Ph";
+        series.strokeWidth = 3;
+        series.tensionX = 1;
+        series.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series.tooltipText = "Độ pH" + ": {valueY} ";
+        series.name = "Độ pH"
+        series.tooltip.pointerOrientation = "horizontal";
+        series.fill = am4core.color("#2A9D8F");
+        series.stroke = am4core.color("#2A9D8F");
+        series.fillOpacity = 0;
+    }
 
-    series_2.dataFields.valueY = "do_duc";
-    series_2.dataFields.dateX = "time";
-    series_2.title = "Độ đục";
-    series_2.strokeWidth = 3;
-    series_2.tensionX = 1;
-    series_2.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_2.tooltipText = "Độ đục" + ": {valueY} " + "(NTU)";
-    series_2.name = "Độ đục"
-    series_2.tooltip.pointerOrientation = "horizontal";
-    series_2.fill = am4core.color("#00BFFF");
-    series_2.stroke = am4core.color("#00BFFF");
-    series_2.fillOpacity = 0;
+    if (do_duc_status) {
+        var series_2;
+        series_2 = CHART.series.push(new am4charts.LineSeries());
+        series_2.yAxis = NTU;
 
-    var series_3;
-    series_3 = CHART.series.push(new am4charts.LineSeries());
-    series_3.yAxis = C;
+        series_2.dataFields.valueY = "do_duc";
+        series_2.dataFields.dateX = "time";
+        series_2.title = "Độ đục";
+        series_2.strokeWidth = 3;
+        series_2.tensionX = 1;
+        series_2.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_2.tooltipText = "Độ đục" + ": {valueY} " + "(NTU)";
+        series_2.name = "Độ đục (NTU)"
+        series_2.tooltip.pointerOrientation = "horizontal";
+        series_2.fill = am4core.color("#457B9D");
+        series_2.stroke = am4core.color("#457B9D");
+        series_2.fillOpacity = 0;
+    }
 
-    series_3.dataFields.valueY = "nhiet_do";
-    series_3.dataFields.dateX = "time";
-    series_3.title = "Nhiệt độ";
-    series_3.strokeWidth = 3;
-    series_3.tensionX = 1;
-    series_3.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_3.tooltipText = "Nhiệt độ" + ": {valueY} " + "(°C)";
-    series_3.name = "Nhiệt độ"
-    series_3.tooltip.pointerOrientation = "horizontal";
-    series_3.fill = am4core.color("#FF4D00");
-    series_3.stroke = am4core.color("#FF4D00");
-    series_3.fillOpacity = 0;
+    if (nhiet_do_status) {
+        var series_3;
+        series_3 = CHART.series.push(new am4charts.LineSeries());
+        series_3.yAxis = C;
 
-    var series_4;
-    series_4 = CHART.series.push(new am4charts.LineSeries());
-    series_4.yAxis = mgl;
+        series_3.dataFields.valueY = "nhiet_do";
+        series_3.dataFields.dateX = "time";
+        series_3.title = "Nhiệt độ";
+        series_3.strokeWidth = 3;
+        series_3.tensionX = 1;
+        series_3.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_3.tooltipText = "Nhiệt độ" + ": {valueY} " + "(°C)";
+        series_3.name = "Nhiệt độ (°C)"
+        series_3.tooltip.pointerOrientation = "horizontal";
+        series_3.fill = am4core.color("#E76F51");
+        series_3.stroke = am4core.color("#E76F51");
+        series_3.fillOpacity = 0;
+    }
 
-    series_4.dataFields.valueY = "clo_du";
-    series_4.dataFields.dateX = "time";
-    series_4.title = "Clo dư";
-    series_4.strokeWidth = 3;
-    series_4.tensionX = 1;
-    series_4.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_4.tooltipText = "Clo dư" + ": {valueY} " + "(mg/l)";
-    series_4.name = "Clo dư"
-    series_4.tooltip.pointerOrientation = "horizontal";
-    series_4.fill = am4core.color("#FFD700");
-    series_4.stroke = am4core.color("#FFD700");
-    series_4.fillOpacity = 0;
 
-    var series_5;
-    series_5 = CHART.series.push(new am4charts.LineSeries());
-    series_5.yAxis = per;
+    if (clo_du_status) {
+        var series_4;
+        series_4 = CHART.series.push(new am4charts.LineSeries());
+        series_4.yAxis = mgl;
 
-    series_5.dataFields.valueY = "do_man";
-    series_5.dataFields.dateX = "time";
-    series_5.title = "Độ mặn";
-    series_5.strokeWidth = 3;
-    series_5.tensionX = 1;
-    series_5.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_5.tooltipText = "Độ mặn" + ": {valueY} " + "(%)";
-    series_5.name = "Độ mặn"
-    series_5.tooltip.pointerOrientation = "horizontal";
-    series_5.fill = am4core.color("#FF80AB");
-    series_5.stroke = am4core.color("#FF80AB");
-    series_5.fillOpacity = 0;
+        series_4.dataFields.valueY = "clo_du";
+        series_4.dataFields.dateX = "time";
+        series_4.title = "Clo dư";
+        series_4.strokeWidth = 3;
+        series_4.tensionX = 1;
+        series_4.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_4.tooltipText = "Clo dư" + ": {valueY} " + "(mg/l)";
+        series_4.name = "Clo dư (mg/l)"
+        series_4.tooltip.pointerOrientation = "horizontal";
+        series_4.fill = am4core.color("#E9C46A");
+        series_4.stroke = am4core.color("#E9C46A");
+        series_4.fillOpacity = 0;
+    }
 
-    var series_6;
-    series_6 = CHART.series.push(new am4charts.LineSeries());
-    series_6.yAxis = uscm;
+    if (do_man_status) {
+        var series_5;
+        series_5 = CHART.series.push(new am4charts.LineSeries());
+        series_5.yAxis = per;
 
-    series_6.dataFields.valueY = "EC";
-    series_6.dataFields.dateX = "time";
-    series_6.title = "EC";
-    series_6.strokeWidth = 3;
-    series_6.tensionX = 1;
-    series_6.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_6.tooltipText = "EC" + ": {valueY} " + "(uS/cm)";
-    series_6.name = "EC"
-    series_6.tooltip.pointerOrientation = "horizontal";
-    series_6.fill = am4core.color("#00FF00");
-    series_6.stroke = am4core.color("#00FF00");
-    series_6.fillOpacity = 0;
+        series_5.dataFields.valueY = "do_man";
+        series_5.dataFields.dateX = "time";
+        series_5.title = "Độ mặn";
+        series_5.strokeWidth = 3;
+        series_5.tensionX = 1;
+        series_5.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_5.tooltipText = "Độ mặn" + ": {valueY} " + "(%)";
+        series_5.name = "Độ mặn (%)"
+        series_5.tooltip.pointerOrientation = "horizontal";
+        series_5.fill = am4core.color("#D16D8A");
+        series_5.stroke = am4core.color("#D16D8A");
+        series_5.fillOpacity = 0;
+    }
+
+    if (EC_status) {
+        var series_6;
+        series_6 = CHART.series.push(new am4charts.LineSeries());
+        series_6.yAxis = uscm;
+
+        series_6.dataFields.valueY = "EC";
+        series_6.dataFields.dateX = "time";
+        series_6.title = "EC";
+        series_6.strokeWidth = 3;
+        series_6.tensionX = 1;
+        series_6.showOnInit = true;
+        // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+        series_6.tooltipText = "EC" + ": {valueY} " + "(uS/cm)";
+        series_6.name = "EC (uS/cm)"
+        series_6.tooltip.pointerOrientation = "horizontal";
+        series_6.fill = am4core.color("#6A994E");
+        series_6.stroke = am4core.color("#6A994E");
+        series_6.fillOpacity = 0;
+  }
 }
 
 
@@ -1058,10 +1193,10 @@ function nuoc_tho_render_table(raw_data) {
         searching: false,
         columns: [
             { data: "time", className: "text-center-data-table align-middle" },
-            { data: "nhiet_do", className: "text-right-data-table align-middle" },
-            { data: "do_duc", className: "text-right-data-table align-middle" },
-            { data: "ph", className: "text-right-data-table align-middle" },
-            { data: "do_cung", className: "text-right-data-table align-middle" }
+            { data: "nhiet_do", className: "text-center-data-table align-middle" },
+            { data: "do_duc", className: "text-center-data-table align-middle" },
+            { data: "ph", className: "text-center-data-table align-middle" },
+            { data: "do_cung", className: "text-center-data-table align-middle" }
 
         ],
         data: nuoc_tho_modifi_data(raw_data),
@@ -1144,12 +1279,12 @@ function nuoc_sach_render_table(raw_data) {
         searching: false,
         columns: [
             { data: "time", className: "text-center-data-table align-middle" },
-            { data: "nhiet_do", className: "text-right-data-table align-middle" },
-            { data: "do_duc", className: "text-right-data-table align-middle" },
-            { data: "ph", className: "text-right-data-table align-middle" },
-            { data: "do_man", className: "text-right-data-table align-middle" },
-            { data: "clo_du", className: "text-right-data-table align-middle" },
-            { data: "EC", className: "text-right-data-table align-middle" },
+            { data: "nhiet_do", className: "text-center-data-table align-middle" },
+            { data: "do_duc", className: "text-center-data-table align-middle" },
+            { data: "ph", className: "text-center-data-table align-middle" },
+            { data: "do_man", className: "text-center-data-table align-middle" },
+            { data: "clo_du", className: "text-center-data-table align-middle" },
+            { data: "EC", className: "text-center-data-table align-middle" },
 
         ],
         data: nuoc_sach_modifi_data(raw_data),

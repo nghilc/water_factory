@@ -70,7 +70,7 @@ const middlewares_auth = {
 
         //     }
         // return res.redirect(redirectUrl);
-            return res.redirect('/dashboard');
+            return res.redirect('/home');
         }catch(error){
             console.error('Auth middleware error:', error);
             res.status(500).json({ 

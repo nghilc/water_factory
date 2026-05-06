@@ -5,7 +5,7 @@
             <div class="page-title">
                 <h2>🔌 <span id="meter_name">-</span></h2>
                 <div class="generator-status">
-                    <span class="generator-status-text status-running">ĐANG DỪNG</span>
+                    <span class="generator-status-text status-running">CHƯA LẮP THIẾT BỊ MÁY PHÁT ĐIỆN</span>
                 </div>
             </div>
         </div>
@@ -14,46 +14,59 @@
         <div class="stats-grid">
             <div class="stat-card-large">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon-large">⚡</div>
-                    <div class="stat-label-large">CÔNG SUẤT</div>
+                    <div class="stat-icon-large"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="50" height="50" fill="none">
+                        <rect x="20" y="36" width="84" height="56" rx="8" stroke="#16a34a" stroke-width="6" fill="#dcfce7" />
+                        <rect x="104" y="52" width="10" height="24" rx="3" fill="#16a34a" />
+                        <path d="M62 44 L48 68 H60 L54 84 L80 58 H66 L74 44 Z" fill="#16a34a" /></svg>
+                    </div>
+                    <div class="stat-label-large">ĐIỆN ÁP ẮC QUY</div>
                 </div>
-                <div class="stat-value-large" id="general_P"></div>
-                <div class="stat-unit" id="general_P_u"></div>
-                <div class="stat-subvalue">0% tải</div>
+                <div class="stat-value-large">-</div>
+                <div class="stat-unit font-weight-bold" id="">(V)</div>
+    
             </div>
             <div class="stat-card-large">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon-large">🌡️</div>
-                    <div class="stat-label-large">NHIỆT ĐỘ</div>
+                    <div class="stat-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="50" height="50" fill="none">
+                            <rect x="24" y="24" width="80" height="88" rx="10" stroke="#3b2610" stroke-width="6" fill="none" />
+                            <path
+                                d="M30 76 C40 70, 50 82, 60 76 C70 70, 80 82, 98 74 V102 C98 105.314 95.314 108 92 108 H36 C32.686 108 30 105.314 30 102 Z"
+                                fill="#3b2610" />
+                            <path d="M64 40 C64 40, 52 54, 52 64 C52 70.627 57.373 76 64 76 C70.627 76 76 70.627 76 64 C76 54 64 40 64 40 Z"
+                                fill="#3b2610" />                    
+                            </svg>
+                    </div>
+                    <div class="stat-label-large">MỨC DẦU</div>
                 </div>
-                <div class="stat-value-large" id="general_temp">-</div>
-                <div class="stat-unit" id="general_temp_u">°C</div>
-                <div class="stat-subvalue">Nước làm mát</div>
+                <div class="stat-value-large" id="">-</div>
+                <div class="stat-unit font-weight-bold" id="">(L)</div>
+                <div class="stat-subvalue">Mức dầu trong thùng hiện tại</div>
             </div>
             <div class="stat-card-large">
                 <div class="d-flex align-items-center">
                     <div class="stat-icon-large">⏱️</div>
-                    <div class="stat-label-large">THỜI GIAN</div>
+                    <div class="stat-label-large">TỔNG THỜI GIAN CHẠY</div>
                 </div>
-                <div class="stat-value-large" style="font-size: 18px; color: #424242;" id="general_time"></div>
+                <div class="stat-value-large" style="color: #424242;" id="">-</div>
                 <!-- <div class="stat-value-large" id="general_time_CT"></div> -->
-                <!-- <div class="stat-unit">giờ</div> -->
-                <div class="stat-subvalue">Dữ liệu thời gian thực</div>
+                <div class="stat-unit font-weight-bold">(H)</div>
+                <!-- <div class="stat-subvalue">Dữ liệu thời gian thực</div> -->
             </div>
             <div class="stat-card-large">
                 <div class="d-flex align-items-center">
                     <div class="stat-icon-large">🛠️</div>
                     <div class="stat-label-large">BẢO TRÌ</div>
                 </div>
-                <div class="stat-value-large" id="general_Ma_T_v">-</div>
-                <div class="stat-unit" id="general_Ma_T_u"></div>
-                <div class="stat-subvalue">Còn lại</div>
+                <div class="stat-value-large" id="">-</div>
+                <div class="stat-unit font-weight-bold" id="">(H)</div>
+                <!-- <div class="stat-subvalue">Còn lại</div> -->
             </div>
         </div>
 
         <div class="generator-grid">
             <!-- Điện áp lưới -->
-            <div class="generator-section">
+            <!-- <div class="generator-section">
                 <div class="section-title"># ĐIỆN ÁP LƯỚI</div>
                 <table class="table table-bordered">
                     <thead>
@@ -88,7 +101,6 @@
                                 <span class="value grid-voltage-b" id="V_B2_v">-</span>
                                 <span class="unit-cell" id="V_B2_u">(V)</span>
                             </td>
-                            <!-- <td class="value-cell">-</td> -->
                             <td>BC</td>
                             <td class="value-cell">
                                 <span class="value" id="V_BC2_v">-</span>
@@ -101,7 +113,6 @@
                                 <span class="value grid-voltage-c" id="V_C2_v">-</span>
                                 <span class="unit-cell" id="V_C2_u">(V)</span>
                             </td>
-                            <!-- <td class="value-cell">-</td> -->
                             <td>CA</td>
                             <td class="value-cell">
                                 <span class="value" id="V_CA2_v">-</span>
@@ -112,16 +123,15 @@
                             <td>Tổng</td>
                             <td class="value-cell">-</td>
                             <td class="value-cell">-</td>
-                            <!-- <td>-</td> -->
                             <td class="value-cell">-</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
 
             <!-- Điện áp đầu ra -->
-            <div class="generator-section">
-                <div class="section-title"># ĐIỆN ÁP ĐẦU RA</div>
+            <div class="generator-section section-full">
+                <div class="section-title"># THÔNG SỐ MÁY PHÁT</div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -130,6 +140,9 @@
                             <th>Dòng điện</th>
                             <th>Hệ số góc</th>
                             <th>Công suất P</th>
+                            <th>Công suất Q</th>
+                            <th>Công suất S</th>
+                            <th>Tần số dây</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,6 +158,16 @@
                             </td>
                             <td class="value-cell">-</td>
                             <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell" rowspan="4">
+                                <span class="value output-current-a">
+                                    -
+                                </span>
+                                <span class="unit-cell">
+                                    (Hz)
+                                </span>
+                            </td>
                         </tr>
                         <tr>
                             <td>B</td>
@@ -158,6 +181,8 @@
                             </td>
                             <td class="value-cell">-</td>
                             <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
                         </tr>
                         <tr>
                             <td>C</td>
@@ -169,6 +194,8 @@
                                 <span class="value" id="I_C_v">-</span>
                                 <span class="unit-cell" id="I_C_u">(A)</span>
                             </td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
                             <td class="value-cell">-</td>
                             <td class="value-cell">-</td>
                         </tr>
@@ -187,6 +214,8 @@
                                 <span class="value" id="A_Inst_T_v">-</span>
                                 <span class="unit-cell" id="A_Inst_T_u">(kW)</span>
                             </td>
+                            <td class="value-cell">-</td>
+                            <td class="value-cell">-</td>
                         </tr>
                     </tbody>
                 </table>
@@ -224,7 +253,7 @@
             </div>
 
             <!-- Thông tin chung -->
-            <div class="generator-section section-full">
+            <!-- <div class="generator-section section-full">
                 <div class="section-title"># THÔNG TIN CHUNG</div>
                 <div class="info-grid">
                     <div class="info-card">
@@ -250,28 +279,27 @@
                     <div class="info-card">
                         <div class="info-label">Thời gian chạy từ lúc KD</div>
                         <div class="info-value" id="Run_T_v">-</div>
-                        <div class="info-unit" id="Run_T_u">giờ</div>
+                        <div class="info-unit" id="Run_T_u">(H)</div>
                     </div>
                     <div class="info-card">
                         <div class="info-label">Thời gian chạy tổng</div>
                         <div class="info-value" id="Run_TT_v">-</div>
-                        <div class="info-unit" id="Run_TT_u">giờ</div>
+                        <div class="info-unit" id="Run_TT_u">(H)</div>
                     </div>
                     <div class="info-card">
                         <div class="info-label">Thời gian bảo trì</div>
                         <div class="info-value" id="Ma_T_v">-</div>
-                        <div class="info-unit" id="Ma_T_u">giờ</div>
+                        <div class="info-unit" id="Ma_T_u">(H)</div>
                     </div>
                     <div class="info-card">
                         <div class="info-label">Thời điểm bảo trì</div>
                         <div class="info-value" id="Ma_D">-</div>
-                        <!-- <div class="info-unit">dd-mm-yyyy</div> -->
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Trạng thái đầu vào -->
-            <div class="generator-section">
+            <!-- <div class="generator-section">
                 <div class="section-title"># TRẠNG THÁI ĐẦU VÀO</div>
                 <div class="io-grid" id="sta_in_container">
                     <div class="io-card">
@@ -317,10 +345,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Trạng thái đầu ra -->
-            <div class="generator-section">
+            <!-- <div class="generator-section">
                 <div class="section-title"># TRẠNG THÁI ĐẦU RA</div>
                 <div class="io-grid" id="sta_out_container">
                     <div class="io-card">
@@ -366,7 +394,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Cảnh báo -->
             <div class="generator-section section-full">
@@ -396,15 +424,19 @@
     </div>
     <%}%>
         <% for(let i=0; i < may_phat_dien.length; i++){ %>
-            <div class="generator-page">
+            <div class="generator-page mb-3">
                 <!-- Header trang -->
                 <div class="page-header">
                     <div class="page-title">
                         <h2>🔌<span>
                                 <%=may_phat_dien[i].name%>
                             </span></h2>
-                        <div class="generator-status">
-                            <span class="generator-status-text status-running">ĐANG DỪNG</span>
+                        <div class="">
+                            <% if(may_phat_dien[i].point_status == 0){%>
+                                <span class="generator-status-text status-stopped">Mất kết nối</span>
+                            <%}else{%>
+                                <span class="generator-status-text status-running">Đang kết nối</span>
+                            <%}%>
                         </div>
                     </div>
                 </div>
@@ -413,42 +445,55 @@
                 <div class="stats-grid">
                     <div class="stat-card-large">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon-large">⚡</div>
-                            <div class="stat-label-large">CÔNG SUẤT</div>
+                            <div class="stat-icon-large">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="50" height="50" fill="none">
+                                    <rect x="20" y="36" width="84" height="56" rx="8" stroke="#16a34a" stroke-width="6" fill="#dcfce7" />
+                                    <rect x="104" y="52" width="10" height="24" rx="3" fill="#16a34a" />
+                                    <path d="M62 44 L48 68 H60 L54 84 L80 58 H66 L74 44 Z" fill="#16a34a" /></svg>
+                            </div>
+                            <div class="stat-label-large">ĐIỆN ÁP ẮC QUY</div>
                         </div>
                         <div class="stat-value-large">
-                            <%= ((may_phat_dien[i].A_Inst_T_v !=null) ? may_phat_dien[i].A_Inst_T_v : '-' ) %>
+                            <%= ((may_phat_dien[i].V_Bat_v !=null) ? may_phat_dien[i].V_Bat_v : '-' ) %>
                         </div>
-                        <div class="stat-unit">
-                            <%=(may_phat_dien[i].A_Inst_T_u !=null) ? may_phat_dien[i].A_Inst_T_u : "-" %>
+                        <div class="stat-unit font-weight-bold">
+                            (<%=(may_phat_dien[i].V_Bat_u !=null) ? may_phat_dien[i].V_Bat_u : "-" %>)
                         </div>
                         <!-- <div class="stat-subvalue">0% tải</div> -->
                     </div>
                     <div class="stat-card-large">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon-large">🌡️</div>
-                            <div class="stat-label-large">NHIỆT ĐỘ</div>
+                            <div class="stat-icon-large">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="50" height="50" fill="none">
+                                    <rect x="24" y="24" width="80" height="88" rx="10" stroke="#3b2610" stroke-width="6" fill="none" />
+                                    <path
+                                        d="M30 76 C40 70, 50 82, 60 76 C70 70, 80 82, 98 74 V102 C98 105.314 95.314 108 92 108 H36 C32.686 108 30 105.314 30 102 Z"
+                                        fill="#3b2610" />
+                                    <path d="M64 40 C64 40, 52 54, 52 64 C52 70.627 57.373 76 64 76 C70.627 76 76 70.627 76 64 C76 54 64 40 64 40 Z"
+                                        fill="#3b2610" />  
+                                    </svg>
+                            </div>
+                            <div class="stat-label-large">MỨC DẦU</div>
                         </div>
                         <div class="stat-value-large">
-                            <%=(may_phat_dien[i].Tem_W_v !=null) ? may_phat_dien[i].Tem_W_v : "-" %>
+                            -
                         </div>
-                        <div class="stat-unit">
-                            <%=(may_phat_dien[i].Tem_W_u !=null) ? may_phat_dien[i].Tem_W_u : "-" %>
+                        <div class="stat-unit font-weight-bold">
+                            (L)
                         </div>
-                        <div class="stat-subvalue">Nước làm mát</div>
+                        <div class="stat-subvalue">Mức dầu trong thùng hiện tại</div>
                     </div>
                     <div class="stat-card-large">
                         <div class="d-flex align-items-center">
                             <div class="stat-icon-large">⏱️</div>
-                            <div class="stat-label-large">THỜI GIAN</div>
+                            <div class="stat-label-large">TỔNG THỜI GIAN CHẠY</div>
                         </div>
-                        <div class="stat-value-large" style="font-size: 18px; color: #424242;">
-                            <%=(may_phat_dien[i].last_data_time !=null) ? new
-                                Date(may_phat_dien[i].last_data_time).toLocaleString('en-GB') : "-" %>
+                        <div class="stat-value-large" style=" color: #424242;">
+                            <%=(may_phat_dien[i].Run_TT_v != null) ? may_phat_dien[i].Run_TT_v : "-" %>
                         </div>
                         <!-- <div class="stat-value-large" id="general_time_CT"></div> -->
-                        <!-- <div class="stat-unit">giờ</div> -->
-                        <div class="stat-subvalue">Dữ liệu thời gian thực</div>
+                        <div class="stat-unit font-weight-bold">(<%=(may_phat_dien[i].Run_TT_u != null) ? may_phat_dien[i].Run_TT_u : "-" %>)</div>
+                        <!-- <div class="stat-subvalue">Dữ liệu thời gian thực</div> -->
                     </div>
                     <div class="stat-card-large">
                         <div class="d-flex align-items-center">
@@ -458,16 +503,16 @@
                         <div class="stat-value-large">
                             <%=(may_phat_dien[i].Ma_T_v !=null) ? may_phat_dien[i].Ma_T_v : "-" %>
                         </div>
-                        <div class="stat-unit">
-                            <%=(may_phat_dien[i].Ma_T_u !=null) ? may_phat_dien[i].Ma_T_u : "-" %>
+                        <div class="stat-unit font-weight-bold">
+                            (<%=(may_phat_dien[i].Ma_T_u !=null) ? may_phat_dien[i].Ma_T_u : "-" %>)
                         </div>
-                        <div class="stat-subvalue">Còn lại</div>
+                        <!-- <div class="stat-subvalue">Còn lại</div> -->
                     </div>
                 </div>
 
                 <div class="generator-grid">
                     <!-- Điện áp lưới -->
-                    <div class="generator-section">
+                    <!-- <div class="generator-section">
                         <div class="section-title"># ĐIỆN ÁP LƯỚI</div>
                         <table class="table table-bordered">
                             <thead>
@@ -522,7 +567,6 @@
                                                 : "" %>
                                         </span>
                                     </td>
-                                    <!-- <td class="value-cell">-</td> -->
                                     <td>BC</td>
                                     <td class="value-cell">
                                         <span class="value">
@@ -545,7 +589,6 @@
                                                 : "" %>
                                         </span>
                                     </td>
-                                    <!-- <td class="value-cell">-</td> -->
                                     <td>CA</td>
                                     <td class="value-cell">
                                         <span class="value">
@@ -561,7 +604,6 @@
                                     <td>Tổng</td>
                                     <td class="value-cell">-</td>
                                     <td class="value-cell">-</td>
-                                    <!-- <td>-</td> -->
                                     <td class="value-cell">-</td>
                                 </tr>
                             </tbody>
@@ -576,12 +618,14 @@
                             </svg>
                             Xem chi tiết
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Điện áp đầu ra -->
-                    <div class="generator-section">
-                        <div class="section-title"># ĐIỆN ÁP ĐẦU RA</div>
-                        <table class="table table-bordered">
+                    <div class="generator-section section-full">
+                        <div class="section-title"># THÔNG SỐ MÁY PHÁT</div>
+                        <span>HT: <%= new Date(may_phat_dien[i].server_time).toLocaleString('en-GB') %></span><br>
+                        <span>CT: <%= new Date(may_phat_dien[i].meter_time).toLocaleString('en-GB') %></span>
+                        <table class="table table-bordered mt-1">
                             <thead>
                                 <tr>
                                     <th>Pha</th>
@@ -729,7 +773,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="view-details-btn dien_ap_ra_pha_btn" metercode="<%=may_phat_dien[i].MeterCode%>"
+                        <div class="view-details-btn dien_ap_ra_pha_btn" metercode="<%=may_phat_dien[i].MeterCode_ %>"
                             meter_name="<%=may_phat_dien[i].name%>">
                             <input type="hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -785,7 +829,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="view-details-btn dien_ap_ra_day_btn" metercode="<%=may_phat_dien[i].MeterCode%>"
+                        <div class="view-details-btn dien_ap_ra_day_btn" metercode="<%=may_phat_dien[i].MeterCode_ %>"
                             meter_name="<%=may_phat_dien[i].name%>">
                             <input type="hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -798,7 +842,7 @@
                     </div>
 
                     <!-- Thông tin chung -->
-                    <div class="generator-section section-full">
+                    <!-- <div class="generator-section section-full">
                         <div class="section-title"># THÔNG TIN CHUNG</div>
                         <div class="info-grid">
                             <div class="info-card">
@@ -870,10 +914,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Trạng thái đầu vào -->
-                    <div class="generator-section">
+                    <!-- <div class="generator-section">
                         <div class="section-title"># TRẠNG THÁI ĐẦU VÀO</div>
                         <div class="io-grid">
                             <% if (may_phat_dien[i].Sta_In) { let sta_in=JSON.parse(may_phat_dien[i].Sta_In); for (let
@@ -892,10 +936,10 @@
                                 <% } } %>
  
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Trạng thái đầu ra -->
-                    <div class="generator-section">
+                    <!-- <div class="generator-section">
                         <div class="section-title"># TRẠNG THÁI ĐẦU RA</div>
                         <div class="io-grid">
                             <% if (may_phat_dien[i].Sta_Out) { let sta_out=JSON.parse(may_phat_dien[i].Sta_Out); for
@@ -913,7 +957,7 @@
                                 </div>
                                 <% } } %>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Cảnh báo -->
                     <div class="generator-section section-full">
@@ -931,7 +975,7 @@
                 </div>
 
                 <!-- Panel điều khiển -->
-                <div class="control-panel">
+                <div class="control-panel pb-3" style="border-bottom: gray 1px solid;">
                     <button class="btn btn-success" data-action="start" disabled>KHỞI ĐỘNG</button>
                     <button class="btn btn-danger" data-action="stop" disabled>DỪNG</button>
                     <button class="btn btn-primary" data-action="auto" disabled>CHẾ ĐỘ AUTO</button>
@@ -983,7 +1027,7 @@
                               
                                     </tbody>
                                 </table>
-                                </div>
+                            </div>
       
        
                         </div>
@@ -1030,7 +1074,7 @@
                     }
 
                     .stat-unit {
-                        font-size: 11px;
+                        font-size: 15px;
                         opacity: 0.7;
                     }
 
@@ -1051,11 +1095,15 @@
                     .status-running {
                         background: rgba(76, 175, 80, 0.2);
                         color: #4CAF50;
+                        border-radius: 20px;
+                        padding: 2px 4px;
                     }
 
                     .status-stopped {
                         background: rgba(244, 67, 54, 0.2);
                         color: #f44336;
+                        border-radius: 20px;
+                        padding: 2px 4px;
                     }
 
                     .generator-grid {

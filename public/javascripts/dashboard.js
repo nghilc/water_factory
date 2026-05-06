@@ -78,26 +78,53 @@ function render_status(meter_list) {
     $("#dash_board_total").html(meter_list.length);
     $("#dashboard_lost_connect").html(off);
     $("#dashboard_good").html(onl);
-    $("#dashboard_exceeded").html(warning);
+    // $("#dashboard_exceeded").html(warning);
 
 }
 
+let WARING = 0;
 
 function render_table_meter_list(meter_list) {
+    WARING = 0;
     $("#danhsachtram_body").empty();
     let x = "";
     for (let i = 0; i < meter_list.length; i++) {
-        x += '<tr class="' + (i == 0 ? 'selected-row' : "") + '" MeterCode="' + meter_list[i].MeterCode + '" NodeCode="' + meter_list[i].NodeCode + '" meter_name="' + meter_list[i].meter_name + '" meter_status="' + meter_list[i].status_meter + '" location_lat="' + meter_list[i].lat + '" location_long="' + meter_list[i].lng + '" type="' + meter_list[i].meter_type + '"><td class="text-left">' + meter_list[i].meter_name + '</td>';
+
+        if (meter_list[i].status_meter == 1 && meter_list[i].last_Temp != null && ((meter_list[i].max_nhietdo != null && meter_list[i].last_Temp > meter_list[i].max_nhietdo) || (meter_list[i].min_nhietdo != null && meter_list[i].last_Temp < meter_list[i].min_nhietdo))) {
+            meter_list[i].status_meter = 2
+        }
+        if (meter_list[i].status_meter == 1 && meter_list[i].last_PH != null && ((meter_list[i].max_ph != null && meter_list[i].last_PH > meter_list[i].max_ph) || (meter_list[i].min_ph != null && meter_list[i].last_PH < meter_list[i].min_ph))) {
+            meter_list[i].status_meter = 2
+        }
+        if (meter_list[i].status_meter == 1 && meter_list[i].last_DoDuc != null && ((meter_list[i].max_doduc != null && meter_list[i].last_DoDuc > meter_list[i].max_doduc) || (meter_list[i].min_doduc != null && meter_list[i].last_DoDuc < meter_list[i].min_doduc))) {
+            meter_list[i].status_meter = 2
+        }
+        if (meter_list[i].status_meter == 1 && meter_list[i].last_CloDu != null && ((meter_list[i].max_clodu != null && meter_list[i].last_CloDu > meter_list[i].max_clodu) || (meter_list[i].min_clodu != null && meter_list[i].last_CloDu < meter_list[i].min_clodu))) {
+            meter_list[i].status_meter = 2
+        }
+        if (meter_list[i].status_meter == 1 && meter_list[i].last_DoManPer != null && ((meter_list[i].max_doman != null && meter_list[i].last_DoManPer > meter_list[i].max_doman) || (meter_list[i].min_doman != null && meter_list[i].last_DoManPer < meter_list[i].min_doman))) {
+            meter_list[i].status_meter = 2
+        }
+
+        if (meter_list[i].status_meter == 1 && meter_list[i].last_measure_sensor != null && ((meter_list[i].max_mucnuoc != null && meter_list[i].last_measure_sensor > meter_list[i].max_mucnuoc) || (meter_list[i].min_mucnuoc != null && meter_list[i].last_measure_sensor < meter_list[i].min_mucnuoc))) {
+            meter_list[i].status_meter = 2
+        }
+
+
+        x += '<tr class="' + (i == 0 ? 'selected-row' : "") + '" MeterCode="' + meter_list[i].MeterCode_ + '" NodeCode="' + meter_list[i].NodeCode_ + '" meter_name="' + meter_list[i].meter_name + '" meter_status="' + meter_list[i].status_meter + '" location_lat="' + meter_list[i].lat + '" location_long="' + meter_list[i].lng + '" type="' + meter_list[i].meter_type + '">';
         if (meter_list[i].status_meter == 2) {
-            x += '<td class="text-center" meter_status="' + meter_list[i].status_meter + '"><span><i class="fa fa-circle text-warning"></i></span></td>';
+            WARING += 1;
+            x += '<td class="text-left blink-soft-yellow">' + meter_list[i].meter_name + '</td><td class="text-center" meter_status="' + meter_list[i].status_meter + '"><span><i class="fa fa-circle text-warning"></i></span></td>';
         } else if (meter_list[i].status_meter == 1) {
-            x += '<td class="text-center" meter_status="' + meter_list[i].status_meter + '"><span><i class="fa fa-circle text-success"></i></span></td>';
+            x += '<td class="text-left">' + meter_list[i].meter_name + '</td><td class="text-center" meter_status="' + meter_list[i].status_meter + '"><span><i class="fa fa-circle text-success"></i></span></td>';
         } else {
-            x += '<td class="text-center" meter_status="' + meter_list[i].status_meter + '"><span><i class="fa fa-circle text-danger"></i></span></td>';
+            x += '<td class="text-left blink-soft-red">' + meter_list[i].meter_name + '</td><td class="text-center" meter_status="' + meter_list[i].status_meter + '"><span><i class="fa fa-circle text-danger"></i></span></td>';
         }
         x += '</tr>';
     }
     $("#danhsachtram_body").append(x);
+    $("#dashboard_exceeded").html(WARING);
+
 }
 
 
@@ -390,7 +417,7 @@ function init_map(data, map_type) {
 
     }).setView(new L.LatLng(center.lat, center.lng), ZOOM);
 
-    let typeMap = localStorage.getItem('type_map') || 'street';
+    let typeMap = 'satellite';
     // L.tileLayer('https://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}').addTo(Lmap);
 
     // Chế độ Đường phố (Street Map)
@@ -619,6 +646,13 @@ function init_map(data, map_type) {
         popupAnchor: [0, -80],
     })
 
+    const yellowicon = new L.icon({
+        iconUrl: '/images/yellowicon-removebg-preview.png',
+        iconSize: [80, 80],
+        iconAnchor: [40, 80],
+        popupAnchor: [0, -80],
+    })
+
     const icon = new L.icon({
         iconUrl: svgicon,
         iconSize: [20, 40],
@@ -657,19 +691,24 @@ function init_map(data, map_type) {
                 let content = "";
                 switch (data[i].meter_type) {
                     case "MUCNUOC":
-                        content = `<div>
+                        content = `<a class="cursor-pointer" href='/monitoring?MeterCode=${data[i].MeterCode}'>
                         <div class="popup-device">
                             <div class="popup-header">${(data[i].name)}</div>
                             <table class="popup-table">
                                 <tr><td>Dữ liệu gần nhất</td><td>${(new Date(data[i].last_data_time).toLocaleString('en-GB'))}</td></tr>
                                 <tr><td>Mực nước hiện tại</td><td>${show_if_null(data[i].last_measure_sensor)} (${(data[i].last_unit)})</td></tr>
-                                <tr><td>Mực nước động</td><td>${show_if_null(data[i].last_measure_dynamic)} (${(data[i].last_unit)})</td></tr>
+                                <tr><td>Mực nước Min:</td><td>${show_if_null(data[i].min_mucnuoc)} (m)</td></tr>
+                                <tr><td>Mực nước Max (tràn):</td><td>${show_if_null(data[i].max_mucnuoc)} (m)</td></tr>
                             </table>
                         </div>
-                    </div>`;
+                    </a>`;
+                        if (data[i].status_meter == 1 && data[i].last_measure_sensor != null && ((data[i].max_mucnuoc != null && data[i].last_measure_sensor > data[i].max_mucnuoc) || (data[i].min_mucnuoc != null && data[i].last_measure_sensor < data[i].min_mucnuoc))){
+                            data[i].status_meter = 2
+                        }
+                        console.log(data[i].name, data[i].status_meter, data[i].last_measure_sensor, data[i].max_mucnuoc, data[i].min_mucnuoc)
                         break;
                     case "CSMT":
-                        content = `<div>
+                        content = `<a class="cursor-pointer" href='/monitoring?MeterCode=${data[i].MeterCode}'>
                         <div class="popup-device">
                             <div class="popup-header">${(data[i].name)}</div>
                             <table class="popup-table">
@@ -682,10 +721,27 @@ function init_map(data, map_type) {
                                 <tr><td>Độ mặn</td><td>${show_if_null(data[i].last_DoManPer)} (%)</td></tr>
                             </table>
                         </div>
-                    </div>`;
+                    </a>`;
+                        if (data[i].status_meter == 1 && data[i].last_Temp != null && ((data[i].max_nhietdo != null && data[i].last_Temp > data[i].max_nhietdo) || (data[i].min_nhietdo != null && data[i].last_Temp < data[i].min_nhietdo))) {
+                            data[i].status_meter = 2
+                        }
+                        if (data[i].status_meter == 1 && data[i].last_PH != null && ((data[i].max_ph != null && data[i].last_PH > data[i].max_ph) || (data[i].min_ph != null && data[i].last_PH < data[i].min_ph))) {
+                            data[i].status_meter = 2
+                        }
+                        if (data[i].status_meter == 1 && data[i].last_DoDuc != null && ((data[i].max_doduc != null && data[i].last_DoDuc > data[i].max_doduc) || (data[i].min_doduc != null && data[i].last_DoDuc < data[i].min_doduc))) {
+                            data[i].status_meter = 2
+                        }
+                        if (data[i].status_meter == 1 && data[i].last_CloDu != null && ((data[i].max_clodu != null && data[i].last_CloDu > data[i].max_clodu) || (data[i].min_clodu != null && data[i].last_CloDu < data[i].min_clodu))) {
+                            data[i].status_meter = 2
+                        }
+                        if (data[i].status_meter == 1 && data[i].last_DoManPer != null && ((data[i].max_doman != null && data[i].last_DoManPer > data[i].max_doman) || (data[i].min_doman != null && data[i].last_DoManPer < data[i].min_doman))) {
+                            data[i].status_meter = 2
+                        }
+                  
+
                         break;
                     case "DONGHO":
-                        content = `<div>
+                        content = `<a class="cursor-pointer" href='/monitoring?MeterCode=${data[i].MeterCode}'>
                         <div class="popup-device">
                             <div class="popup-header">${(data[i].name)}</div>
                             <table class="popup-table">
@@ -699,12 +755,12 @@ function init_map(data, map_type) {
                                
                             </table>
                         </div>
-                    </div>`;
+                    </a>`;
                         break;
                     case "GENERATOR":
-                        content = `<div>
+                        content = `<a class="cursor-pointer" href='/monitoring?MeterCode=${data[i].MeterCode_}'>
                         <div class="popup-device">
-                            <div class="popup-header">${(data[i].name)}</div>
+                            <div class="popup-header">${(data[i].meter_name)}</div>
                             <table class="popup-table">
                                 <tr><td>Tốc độ</td><td>${show_if_null(data[i].Speed_v) + "&nbsp;" + return_unit_html(data[i].Speed_u)}</td></tr>
                                 <tr><td>Điện áp ắc quy</td><td>${show_if_null(data[i].V_Bat_v) + "&nbsp;" + return_unit_html(data[i].V_Bat_u)}</td></tr>
@@ -712,7 +768,7 @@ function init_map(data, map_type) {
                                 <tr><td>Áp suất dầu</td><td>${show_if_null(data[i].P_Oil_v) + "&nbsp;" + return_unit_html(data[i].P_Oil_u)}</td></tr>
                             </table>
                         </div>
-                    </div>`;
+                    </a>`;
                         break;
                 }
                 const popup2 = new L.Popup({
@@ -723,14 +779,17 @@ function init_map(data, map_type) {
                 }).setContent(content);
 
                 // L.marker([data[i].location_lat, data[i].location_long],{icon: icon}).addTo(Lmap).bindPopup(popup2).openPopup();
-                var marker = L.marker([Number(data[i].lat), Number(data[i].lng)], { icon: (data[i].status_meter == 1) ? blueicon : ((data[i].status_meter == 2) ? blueicon : redicon) }).bindPopup(
+                var marker = L.marker([Number(data[i].lat), Number(data[i].lng)], { icon: (data[i].status_meter == 1) ? blueicon : ((data[i].status_meter == 2) ? yellowicon : redicon) }).bindPopup(
                     popup2
                     //     content, {
                     //     autoPan: true, 
                     //     autoPanPadding: [50, 50] 
                     // }
                 )
-                OBJ_MARKERS[data[i].MeterCode] = marker;
+
+
+
+                OBJ_MARKERS[data[i].MeterCode_] = marker;
                 arr_marker.push({
                     marker: marker,
                     status: data[i].status_meter
@@ -743,6 +802,12 @@ function init_map(data, map_type) {
                     marker.addTo(Lmap).openPopup();
                 }
 
+                if (data[i].status_meter == 1) {
+                    setTimeout(() => {
+                        const el = marker.getElement();
+                        if (el) el.classList.add('blink-img');
+                    }, 100);
+                }
 
                 myPoints.push(new Array(data[i].lat, data[i].lng));
             }
@@ -756,10 +821,13 @@ function init_map(data, map_type) {
         // var lcent =  Lmap.fitBounds(myBounds).getCenter(); 
 
         // Lmap.setView(myPoints[0], ZOOM);
-        if (myPoints.length > 0) {
-            var centroid = calculateCentroid(myPoints);
-            Lmap.setView(centroid, ZOOM);
-        }
+        // if (myPoints.length > 0) {
+        //     var centroid = calculateCentroid(myPoints);
+        //     console.log(centroid)
+        //     Lmap.setView(centroid, 9);
+        // }
+        Lmap.setView([21.136966043478257, 107.2230660869565], 9.5);
+
     }
 
 
@@ -805,11 +873,11 @@ function calculateCentroid(points) {
 let load_local = 0;
 
 $(document).ready(function () {
-    if (localStorage.getItem('org_id')) {
-        $('#filter_danhsachtram')
-            .selectpicker('val', localStorage.getItem('org_id'))
-            .trigger('change');
-    }
+    // if (localStorage.getItem('org_id')) {
+    //     $('#filter_danhsachtram')
+    //         .selectpicker('val', localStorage.getItem('org_id'))
+    //         .trigger('change');
+    // }
 })
 
 // $(document).ready(function () {

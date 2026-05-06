@@ -15,6 +15,7 @@ const api_router = require('./api_router')
 const dma_router = require('./dma')
 const terminal_indexa_router = require('./terminal_index')
 
+const home_router = require('./home')
 
 
 
@@ -35,6 +36,7 @@ function route(app){
     app.use('/',api_router); 
     app.use('/DMA', dma_router); 
     app.use('/terminal_index', terminal_indexa_router); 
+    app.use('/home', home_router); 
 
 
 }

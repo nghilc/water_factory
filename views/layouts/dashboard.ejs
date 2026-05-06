@@ -172,14 +172,14 @@
         </thead>
         <tbody id="danhsachtram_body">
           <% for(let i=0; i < danh_sach_thiet_bị.length; i++){ %>
-            <tr MeterCode="<%= danh_sach_thiet_bị[i].MeterCode%>" NodeCode="<%= danh_sach_thiet_bị[i].NodeCode %>"
+            <tr MeterCode="<%= danh_sach_thiet_bị[i].MeterCode_ %>" NodeCode="<%= danh_sach_thiet_bị[i].NodeCode_ %>"
               class="" meter_name="<%= danh_sach_thiet_bị[i].meter_name %>" row_id="<%= (i+1)%>"
               meter_status="<%= danh_sach_thiet_bị[i].status_meter%>" location_lat="<% danh_sach_thiet_bị[i].lat %>" location_long="<% danh_sach_thiet_bị[i].lng %>" type="<% danh_sach_thiet_bị[i].meter_type %>">
               <!-- <td class="text-center"><%= i+1 %></td> -->
               <td class="text-left <%= ((danh_sach_thiet_bị[i].is_pipe) ? 'text-primary' : '') %>">
                 <%= danh_sach_thiet_bị[i].meter_name %>
               </td>
-              <% if(danh_sach_thiet_bị[i].status_meter==2){ %>
+              <% if(danh_sach_thiet_bị[i].status_meter == 2){ %>
                 <td class="text-center" meter_status="<%= danh_sach_thiet_bị[i].status_meter%>"><span><i
                       class="fa fa-circle text-warning"></i></span></td>
                 <%}else if(danh_sach_thiet_bị[i].status_meter==1){ %>

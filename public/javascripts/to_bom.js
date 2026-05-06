@@ -459,8 +459,8 @@ function render_table(raw_data) {
                 searching: false,
                 columns: [
                     { data: "time", className: "text-center-data-table align-middle" },
-                    { data: "flowRate", className: "text-right-data-table align-middle" },
-                    { data: "pressure", className: "text-right-data-table align-middle" },
+                    { data: "flowRate", className: "text-center-data-table align-middle" },
+                    { data: "pressure", className: "text-center-data-table align-middle" },
                 ],
                 data: modifi_data(raw_data),
             });

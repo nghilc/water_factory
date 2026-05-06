@@ -73,6 +73,15 @@ function get_general_instant() {
             );
             if (nuoctho.length > 0) {
                 for (let i = 0; i < nuoctho.length; i++) {
+                    if (nuoctho[i].status == 1){
+                        if (nuoctho[i].last_measure_sensor != null && nuoctho[i].min_mucnuoc != null && nuoctho[i].last_measure_sensor < nuoctho[i].min_mucnuoc){
+                            nuoctho[i].status = 2;
+                        }
+
+                        if (nuoctho[i].last_measure_sensor != null && nuoctho[i].max_mucnuoc != null && nuoctho[i].last_measure_sensor > nuoctho[i].max_mucnuoc) {
+                            nuoctho[i].status = 2;
+                        }
+                    }
                     nguon_nuoc_tho += ""
                         + '<div class="equipment-card normal">'
                         + '<div class="equipment-header">'
@@ -86,15 +95,15 @@ function get_general_instant() {
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Mực nước hiện tại</span>'
-                        + '<span class="data-value">' + nuoctho[i].last_measure_sensor + ' ' + nuoctho[i].last_unit + '</span>'
+                        + `<span class="data-value ${(nuoctho[i].status == 0) ? "text-danger" : ((nuoctho[i].status == 2) ? "text-warning" : "text-success")}">` + show_if_null(nuoctho[i].last_measure_sensor) + ' ' + nuoctho[i].last_unit + '</span>'
                         + '</div>'
                         + '<div class="data-item">'
-                        + '<span class="data-label">Mực nước động</span>'
-                        + '<span class="data-value">' + nuoctho[i].last_measure_dynamic + ' ' + nuoctho[i].last_unit + '</span>'
+                        + '<span class="data-label">Mực nước Max (tràn)</span>'
+                        + '<span class="data-value">' + show_if_null(nuoctho[i].max_mucnuoc) + ' m</span>'
                         + '</div>'
                         + '<div class="data-item">'
-                        + '<span class="data-label">Dung tích</span>'
-                        + '<span class="data-value">- </span>'
+                        + '<span class="data-label">Mực nước Min</span>'
+                        + '<span class="data-value">' + show_if_null(nuoctho[i].min_mucnuoc) + ' m</span>'
                         + '</div>'
                         + ' </div>'
                         + '</div>'
@@ -112,15 +121,45 @@ function get_general_instant() {
             const csmt_tho = data.filter(device =>
                 device.meter_type === "CSMT" && device.data_type == 1
             );
+ 
+
             if (csmt_tho.length > 0) {
+                let tt_nhiet_do = 1;
+                let tt_ph = 1;
+                let tt_do_duc = 1;
                 for (let i = 0; i < csmt_tho.length; i++) {
-                    if (csmt_tho[i].last_Temp == null && csmt_tho[i].last_PH == null) {
-                        wmco_tho = null;
-                    } else {
-                        if (config_wmco_tho[0].nhiet_do_max >= csmt_tho[i].last_Temp && config_wmco_tho[0].ph_min <= csmt_tho[i].last_PH && config_wmco_tho[0].ph_max >= csmt_tho[i].last_PH) {
-                            wmco_tho = 1;
+                    if (csmt_tho[i].status == 1){
+                        if (csmt_tho[i].last_Temp != null && csmt_tho[i].min_nhietdo != null && csmt_tho[i].last_Temp < csmt_tho[i].min_nhietdo) {
+                            csmt_tho[i].status = 2;
+                            tt_nhiet_do = 2;
                         }
+                        if (csmt_tho[i].last_Temp != null && csmt_tho[i].max_nhietdo != null && csmt_tho[i].last_Temp > csmt_tho[i].max_nhietdo) {
+                            csmt_tho[i].status = 2;
+                            tt_nhiet_do = 2;
+                        }
+                        if (csmt_tho[i].last_PH != null && csmt_tho[i].min_ph != null && csmt_tho[i].last_PH < csmt_tho[i].min_ph) {
+                            csmt_tho[i].status = 2;
+                            tt_ph = 2;
+                        }
+                        if (csmt_tho[i].last_PH != null && csmt_tho[i].max_ph != null && csmt_tho[i].last_PH > csmt_tho[i].max_ph) {
+                            csmt_tho[i].status = 2;
+                            tt_ph = 2;
+                        }
+                        if (csmt_tho[i].last_DoDuc != null && csmt_tho[i].min_doduc != null && csmt_tho[i].last_DoDuc < csmt_tho[i].min_doduc) {
+                            csmt_tho[i].status = 2;
+                            tt_do_duc = 2;
+                        }
+                        if (csmt_tho[i].last_DoDuc != null && csmt_tho[i].max_doduc != null && csmt_tho[i].last_DoDuc > csmt_tho[i].max_doduc) {
+                            csmt_tho[i].status = 2;
+                            tt_do_duc = 2;
+                        }
+                        
+                    } else if (csmt_tho[i].status == 0){
+                         tt_nhiet_do = 0;
+                         tt_ph = 0;
+                         tt_do_duc = 0;
                     }
+
                     nguon_nuoc_tho += ""
                         + '<div class="equipment-card normal">'
                         + '<div class="equipment-header">'
@@ -134,15 +173,15 @@ function get_general_instant() {
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Nhiệt độ</span>'
-                        + '<span class="data-value ' + (config_wmco_tho[0].nhiet_do_max < csmt_tho[i].last_Temp ? "status-off" : "") + '">' + (csmt_tho[i].last_Temp ?? '-') + ' °C</span>'
+                        + `<span class="data-value ${(tt_nhiet_do == 0) ? "text-danger" : ((tt_nhiet_do == 2) ? "text-warning" : "text-success")}">` + (csmt_tho[i].last_Temp ?? '-') + ' °C</span>'
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Độ pH</span>'
-                        + '<span class="data-value ' + (config_wmco_tho[0].ph_min > csmt_tho[i].last_PH || config_wmco_tho[0].ph_max < csmt_tho[i].last_PH ? "status-off" : "") + '">' + (csmt_tho[i].last_PH ?? '-') + '</span>'
+                        + `<span class="data-value ${(tt_ph == 0) ? "text-danger" : ((tt_ph == 2) ? "text-warning" : "text-success")}">` + (csmt_tho[i].last_PH ?? '-') + '</span>'
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Độ đục</span>'
-                        + '<span class="data-value">' + (csmt_tho[i].last_DoDuc ?? '-') + ' NTU</span>'
+                        + `<span class="data-value ${(tt_do_duc == 0) ? "text-danger" : ((tt_do_duc == 2) ? "text-warning" : "text-success")}">` + (csmt_tho[i].last_DoDuc ?? '-') + ' NTU</span>'
                         + '</div>'
 
                         + ' </div>'
@@ -159,6 +198,15 @@ function get_general_instant() {
             );
             if (nuocsach.length > 0) {
                 for (let i = 0; i < nuocsach.length; i++) {
+                    if (nuocsach[i].status == 1) {
+                        if (nuocsach[i].last_measure_sensor != null && nuocsach[i].min_mucnuoc != null && nuocsach[i].last_measure_sensor < nuocsach[i].min_mucnuoc) {
+                            nuocsach[i].status = 2;
+                        }
+
+                        if (nuocsach[i].last_measure_sensor != null && nuocsach[i].max_mucnuoc != null && nuocsach[i].last_measure_sensor > nuocsach[i].max_mucnuoc) {
+                            nuocsach[i].status = 2;
+                        }
+                    }
                     be_chua_nuoc_sach += ""
                         + '<div class="equipment-card normal">'
                         + '<div class="equipment-header">'
@@ -172,15 +220,15 @@ function get_general_instant() {
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Mực nước hiện tại</span>'
-                        + '<span class="data-value">' + (nuocsach[i].last_measure_sensor ?? '-') + ' ' + nuocsach[i].last_unit + '</span>'
+                        + `<span class="data-value ${(nuocsach[i].status == 0) ? "text-danger" : ((nuocsach[i].status == 2) ? "text-warning" : "text-success")}"` + show_if_null(nuocsach[i].last_measure_sensor) + ' ' + nuocsach[i].last_unit + '</span>'
                         + '</div>'
                         + '<div class="data-item">'
-                        + '<span class="data-label">Mực nước động</span>'
-                        + '<span class="data-value">' + (nuocsach[i].last_measure_dynamic ?? '-') + ' ' + nuocsach[i].last_unit + '</span>'
+                        + '<span class="data-label">Ngưỡng trên</span>'
+                        + '<span class="data-value">' + nuocsach[i].max_mucnuoc + ' m</span>'
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Dung tích</span>'
-                        + '<span class="data-value">- %</span>'
+                        + '<span class="data-value">' + nuocsach[i].min_mucnuoc + ' m</span>'
                         + '</div>'
                         + ' </div>'
                         + '</div>'
@@ -195,18 +243,60 @@ function get_general_instant() {
                 device.meter_type === "CSMT" && device.data_type == 2
             );
             if (csmt_sach.length > 0) {
+                let tt_nhiet_do = 1;
+                let tt_ph = 1;
+                let tt_do_duc = 1;
+                let tt_clo_du = 1;
+                let tt_EC = 1;
+
                 for (let i = 0; i < csmt_sach.length; i++) {
-                    if (csmt_sach[i].last_Temp == null && csmt_sach[i].last_DoDuc == null && csmt_sach[i].last_PH == null && csmt_sach[i].last_CloDu == null) {
-                        wmco_sach = null;
-                    } else {
-                        if (config_wmco_sach[0].nhiet_do_max >= csmt_sach[i].last_Temp &&
-                            config_wmco_sach[0].do_duc_max >= csmt_sach[i].last_DoDuc &&
-                            config_wmco_sach[0].ph_min <= csmt_sach[i].last_PH && config_wmco_sach[0].ph_max >= csmt_sach[i].last_PH &&
-                            config_wmco_sach[0].clo_du_min <= csmt_sach[i].last_CloDu && config_wmco_sach[0].clo_du_max >= csmt_sach[i].last_CloDu) {
-                            wmco_sach = 1;
+         
+                    if (csmt_sach[i].status == 1) {
+                        if (csmt_sach[i].last_Temp != null && csmt_sach[i].min_nhietdo != null && csmt_sach[i].last_Temp < csmt_sach[i].min_nhietdo) {
+                            csmt_sach[i].status = 2;
+                            tt_nhiet_do = 2;
+                        }
+                        if (csmt_sach[i].last_Temp != null && csmt_sach[i].max_nhietdo != null && csmt_sach[i].last_Temp > csmt_sach[i].max_nhietdo) {
+                            csmt_sach[i].status = 2;
+                            tt_nhiet_do = 2;
+                        }
+        
+                        if (csmt_sach[i].last_PH != null && csmt_sach[i].min_ph != null && csmt_sach[i].last_PH < csmt_sach[i].min_ph) {
+                            csmt_sach[i].status = 2;
+                            tt_ph = 2;
+                        }
+                        if (csmt_sach[i].last_PH != null && csmt_sach[i].max_ph != null && csmt_sach[i].last_PH > csmt_sach[i].max_ph) {
+                            csmt_sach[i].status = 2;
+                            tt_ph = 2;
+                        }
+
+                        if (csmt_sach[i].last_DoDuc != null && csmt_sach[i].min_doduc != null && csmt_sach[i].last_DoDuc < csmt_sach[i].min_doduc) {
+                            csmt_sach[i].status = 2;
+                            tt_do_duc = 2;
+                        }
+                        if (csmt_sach[i].last_DoDuc != null && csmt_sach[i].max_doduc != null && csmt_sach[i].last_DoDuc > csmt_sach[i].max_doduc) {
+                            csmt_sach[i].status = 2;
+                            tt_do_duc = 2; 
+                        }
+
+                        if (csmt_sach[i].last_CloDu != null && csmt_sach[i].min_clodu != null && csmt_sach[i].last_CloDu < csmt_sach[i].min_clodu) {
+                            csmt_sach[i].status = 2;
+                            tt_clo_du = 2;
+                        }
+                        if (csmt_sach[i].last_clodu != null && csmt_sach[i].max_clodu != null && csmt_sach[i].last_CloDu > csmt_sach[i].max_nhietdo) {
+                            csmt_sach[i].status = 2;
+                            tt_clo_du = 2;
+                        }
+
+                        if (csmt_sach[i].last_EC != null && csmt_sach[i].min_EC != null && csmt_sach[i].last_EC < csmt_sach[i].min_EC) {
+                            csmt_sach[i].status = 2;
+                            tt_EC = 2;
+                        }
+                        if (csmt_sach[i].last_EC != null && csmt_sach[i].max_EC != null && csmt_sach[i].last_EC > csmt_sach[i].max_EC) {
+                            csmt_sach[i].status = 2;
+                            tt_EC = 2;
                         }
                     }
-
                     be_chua_nuoc_sach += ""
                         + '<div class="equipment-card normal">'
                         + '<div class="equipment-header">'
@@ -220,24 +310,24 @@ function get_general_instant() {
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Nhiệt độ</span>'
-                        + '<span class="data-value ' + (config_wmco_sach[0].nhiet_do_max < csmt_sach[i].last_Temp ? "status-off" : "") + '">' + (csmt_sach[i].last_Temp ?? '-') + ' °C</span>'
+                        + `<span class="data-value ${(tt_nhiet_do == 0) ? "text-danger" : ((tt_nhiet_do == 2) ? "text-warning" : "text-success")}">` + (csmt_sach[i].last_Temp ?? '-') + ' °C</span>'
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Độ pH</span>'
-                        + '<span class="data-value ' + (config_wmco_sach[0].ph_min > csmt_sach[i].last_PH || config_wmco_sach[0].ph_max < csmt_sach[i].last_PH ? "status-off" : "") + '">' + (csmt_sach[i].last_PH ?? '-') + '</span>'
+                        + `<span class="data-value ${(tt_ph == 0) ? "text-danger" : ((tt_ph == 2) ? "text-warning" : "text-success")}">` + (csmt_sach[i].last_PH ?? '-') + '</span>'
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">Độ đục</span>'
-                        + '<span class="data-value ' + (config_wmco_sach[0].do_duc_max < csmt_sach[i].last_DoDuc ? "status-off" : "") + '">' + (csmt_sach[i].last_DoDuc ?? '-') + ' NTU</span>'
+                        + `<span class="data-value ${(tt_do_duc == 0) ? "text-danger" : ((tt_do_duc == 2) ? "text-warning" : "text-success")}">` + (csmt_sach[i].last_DoDuc ?? '-') + ' NTU</span>'
                         + '</div>'
 
                         + '<div class="data-item">'
                         + '<span class="data-label">Clo dư</span>'
-                        + '<span class="data-value ' + (config_wmco_sach[0].clo_du_min > csmt_sach[i].last_CloDu || config_wmco_sach[0].clo_du_max < csmt_sach[i].last_CloDu ? "status-off" : "") + '">' + (csmt_sach[i].last_CloDu ?? '-') + ' mg/l</span>'
+                        + `<span class="data-value ${(tt_clo_du == 0) ? "text-danger" : ((tt_clo_du == 2) ? "text-warning" : "text-success")}">` + (csmt_sach[i].last_CloDu ?? '-') + ' mg/l</span>'
                         + '</div>'
                         + '<div class="data-item">'
                         + '<span class="data-label">EC</span>'
-                        + '<span class="data-value">' + (csmt_sach[i].last_EC ?? '-') + ' uS/cm</span>'
+                        + `<span class="data-value ${(tt_EC == 0) ? "text-danger" : ((tt_EC == 2) ? "text-warning" : "text-success")}">` + (csmt_sach[i].last_EC ?? '-') + ' uS/cm</span>'
                         + '</div>'
                         + ' </div>'
                         + '</div>'
@@ -330,20 +420,21 @@ function get_general_instant() {
 
             $("#generator-grid2").empty();
             $("#generator-grid2").append(maybom_nuocsach);
-            if (wmco_tho == 1) {
-                $('.wmco_tho').html("Đạt").removeClass('warning-value').addClass('stat-value');
-            } else if (wmco_tho == 0) {
-                $('.wmco_tho').html("Không Đạt").removeClass('stat-value').addClass('warning-value');
-            } else {
-                $('.wmco_tho').html("-").removeClass('stat-value').removeClass('warning-value');
-            }
-            if (wmco_sach == 1) {
-                $('.wmco_sach').html("Đạt").removeClass('warning-value').addClass('stat-value');
-            } else if (wmco_sach == 0) {
-                $('.wmco_sach').html("Không Đạt").removeClass('stat-value').addClass('warning-value');
-            } else {
-                $('.wmco_sach').html("-").removeClass('stat-value').removeClass('warning-value');
-            }
+            // if (wmco_tho == 1) {
+            //     $('.wmco_tho').html("-").removeClass('warning-value').addClass('stat-value');
+            // } else if (wmco_tho == 0) {
+            //     $('.wmco_tho').html("-").removeClass('stat-value').addClass('warning-value');
+            // } else {
+            //     $('.wmco_tho').html("-").removeClass('stat-value').removeClass('warning-value');
+            // }
+
+            // if (wmco_sach == 1) {
+            //     $('.wmco_sach').html("-").removeClass('warning-value').addClass('stat-value');
+            // } else if (wmco_sach == 0) {
+            //     $('.wmco_sach').html("-").removeClass('stat-value').addClass('warning-value');
+            // } else {
+            //     $('.wmco_sach').html("-").removeClass('stat-value').removeClass('warning-value');
+            // }
             const pumpData24h = data.filter(device =>
                 device.meter_type === "DONGHO"
             );
@@ -355,57 +446,331 @@ function get_general_instant() {
 
             render_water_level_realtime_chart(mucnuocDevices)
 
-            const may_phat_dien = data.filter(device =>
-                device.meter_type === "GENERATOR"
-            );
-            if (may_phat_dien.length > 0) {
-                $("#generator_note").html("")
-                let data = may_phat_dien[0];
-                $("#ten_may_phat_dien").html(data.name);
-                $("#V_A2_v").html(show_if_null_number(data.V_A2_v))
-                $("#V_A2_u").html(return_unit_html(data.V_A2_u))
+            const may_phat_dien = res.may_phat_dien;
+            $("#may_phat_dien_container").empty();
 
-                $("#Freq2_v").html(show_if_null_number(data.Freq2_v))
-                $("#Freq2_u").html(return_unit_html(data.Freq2_u))
+            if (may_phat_dien.length == 0) {
+                $("#may_phat_dien_container").append(`
+                    <div class="generator-panel">
+                        <div class="generator-header">
+                            <h5>🔌 <span id="ten_may_phat_dien"></span></h5>
+                            <span class="status-indicator status-normal"></span>
+                            <span class="generator-status-text status-running" id="generator_note">CHƯA LẮP THIẾT BỊ ĐO</span>
+                        </div>
+            
+                        <div class="generator-grid">
+                            <!-- Điện áp lưới -->
+                            <div class="generator-section">
+                                <div class="section-title">ĐIỆN ÁP LƯỚI</div>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Pha</th>
+                                        <th>Điện áp</th>
+                                        <th>Tần số</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Pha A</td>
+                                        <td class="value-cell">
+                                            <span class="value grid-voltage-a" id="V_A2_v">-</span>
+                                            <span class="unit-cell" id="V_A2_u">(V)</span>
+                                        </td>
+                                        <td class="value-cell" rowspan="3">
+                                            <span class="value" id="Freq2_v">-</span>
+                                            <span class="unit-cell" id="Freq2_u">(Hz)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pha B</td>
+                                        <td class="value-cell">
+                                            <span class="value grid-voltage-b" id="V_B2_v">-</span>
+                                            <span class="unit-cell" id="V_B2_u">(V)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pha C</td>
+                                        <td class="value-cell">
+                                            <span class="value grid-voltage-c" id="V_C2_v">-</span>
+                                            <span class="unit-cell" id="V_C2_u">(V)</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+            
+                            <div class="generator-section">
+                                <div class="section-title">ĐIỆN ÁP ĐẦU RA</div>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Pha</th>
+                                        <th>Điện áp</th>
+                                        <th>Dòng điện</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Pha A</td>
+                                        <td class="value-cell">
+                                            <span class="value output-voltage-a" id="V_A_v">-</span>
+                                            <span class="unit-cell" id="V_A_u">(V)</span>
+                                        </td>
+                                        <td class="value-cell">
+                                            <span class="value output-current-a" id="I_A_v">-</span>
+                                            <span class="unit-cell" id="I_A_u">(A)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pha B</td>
+                                        <td class="value-cell">
+                                            <span class="value" id="V_B_v">-</span>
+                                            <span class="unit-cell" id="V_B_u">(V)</span>
+                                        </td>
+                                        <td class="value-cell">
+                                            <span class="value" id="I_B_v">-</span>
+                                            <span class="unit-cell" id="I_B_u">(A)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pha C</td>
+                                        <td class="value-cell">
+                                            <span class="value" id="V_C_v">-</span>
+                                            <span class="unit-cell" id="V_C_u">(V)</span>
+                                        </td>
+                                        <td class="value-cell">
+                                            <span class="value" id="I_C_v">-</span>
+                                            <span class="unit-cell" id="I_C_u">(A)</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+            
+                            <div class="generator-section">
+                                <div class="section-title">THÔNG TIN CHUNG</div>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <span class="info-label">Tốc độ</span>
+                                        <span class="info-value generator-speed" id="Speed_v">- (rpm)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Điện áp ắc quy</span>
+                                        <span class="info-value battery-voltage" id="V_Bat_v">- (V)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Nhiệt độ nước</span>
+                                        <span class="info-value water-temp" id="Tem_W_v">- (°C)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Áp suất dầu</span>
+                                        <span class="info-value oil-pressure" id="P_Oil_v">- (PSI)</span>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="generator-section">
+                                <div class="section-title">TRẠNG THÁI ĐẦU VÀO</div>
+                                <div class="status-grid-small" id="sta_in_container">
+                                    <div class="status-item status-off">MCE: -</div>
+                                    <div class="status-item status-off">AUX.1: -</div>
+                                    <div class="status-item status-off">AUX.2: -</div>
+                                    <div class="status-item status-off">AUX.3: -</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="alerts-panel">
+                        <h5 class="generator-header">⚠️ CẢNH BÁO HIỆN TẠI</h5>
+                    </div>
+                    `);
 
-                $("#V_B2_v").html(show_if_null_number(data.V_B2_v))
-                $("#V_B2_u").html(return_unit_html(data.V_B2_u))
+                // $("#generator_note").html("")
+                // let data = may_phat_dien[0];
+                // $("#ten_may_phat_dien").html(data.name);
+                // $("#V_A2_v").html(show_if_null_number(data.V_A2_v))
+                // $("#V_A2_u").html(return_unit_html(data.V_A2_u))
 
-                $("#V_C2_v").html(show_if_null_number(data.V_C2_v))
-                $("#V_C2_u").html(return_unit_html(data.V_C2_u))
+                // $("#Freq2_v").html(show_if_null_number(data.Freq2_v))
+                // $("#Freq2_u").html(return_unit_html(data.Freq2_u))
 
-                $("#V_A_v").html(show_if_null_number(data.V_A_v))
-                $("#V_A_u").html(return_unit_html(data.V_A_u))
+                // $("#V_B2_v").html(show_if_null_number(data.V_B2_v))
+                // $("#V_B2_u").html(return_unit_html(data.V_B2_u))
 
-                $("#I_A_v").html(show_if_null_number(data.I_A_v))
-                $("#I_A_u").html(return_unit_html(data.I_A_u))
+                // $("#V_C2_v").html(show_if_null_number(data.V_C2_v))
+                // $("#V_C2_u").html(return_unit_html(data.V_C2_u))
 
-                $("#V_B_v").html(show_if_null_number(data.V_B_v))
-                $("#V_B_u").html(return_unit_html(data.V_B_u))
+                // $("#V_A_v").html(show_if_null_number(data.V_A_v))
+                // $("#V_A_u").html(return_unit_html(data.V_A_u))
 
-                $("#I_B_v").html(show_if_null_number(data.I_B_v))
-                $("#I_B_u").html(return_unit_html(data.I_B_u))
+                // $("#I_A_v").html(show_if_null_number(data.I_A_v))
+                // $("#I_A_u").html(return_unit_html(data.I_A_u))
+
+                // $("#V_B_v").html(show_if_null_number(data.V_B_v))
+                // $("#V_B_u").html(return_unit_html(data.V_B_u))
+
+                // $("#I_B_v").html(show_if_null_number(data.I_B_v))
+                // $("#I_B_u").html(return_unit_html(data.I_B_u))
 
 
-                $("#V_C_v").html(show_if_null_number(data.V_C_v))
-                $("#V_C_u").html(return_unit_html(data.V_C_u))
+                // $("#V_C_v").html(show_if_null_number(data.V_C_v))
+                // $("#V_C_u").html(return_unit_html(data.V_C_u))
 
-                $("#I_C_v").html(show_if_null_number(data.I_C_v))
-                $("#I_C_u").html(return_unit_html(data.I_C_u))
+                // $("#I_C_v").html(show_if_null_number(data.I_C_v))
+                // $("#I_C_u").html(return_unit_html(data.I_C_u))
 
-                $("#Speed_v").html(show_if_null(data.Speed_v) + "&nbsp;" + return_unit_html(data.Speed_u))
-                $("#V_Bat_v").html(show_if_null(data.V_Bat_v) + "&nbsp;" + return_unit_html(data.V_Bat_u))
-                $("#Tem_W_v").html(show_if_null(data.Tem_W_v) + "&nbsp;" + return_unit_html(data.Tem_W_u))
-                $("#P_Oil_v").html(show_if_null(data.P_Oil_v) + "&nbsp;" + return_unit_html(data.P_Oil_u))
+                // $("#Speed_v").html(show_if_null(data.Speed_v) + "&nbsp;" + return_unit_html(data.Speed_u))
+                // $("#V_Bat_v").html(show_if_null(data.V_Bat_v) + "&nbsp;" + return_unit_html(data.V_Bat_u))
+                // $("#Tem_W_v").html(show_if_null(data.Tem_W_v) + "&nbsp;" + return_unit_html(data.Tem_W_u))
+                // $("#P_Oil_v").html(show_if_null(data.P_Oil_v) + "&nbsp;" + return_unit_html(data.P_Oil_u))
 
-                $("#sta_in_container").empty();
-                if (data.Sta_In) {
-                    let sta_in = JSON.parse(data.Sta_In);
-                    let str_sta_in = "";
-                    for (let key in sta_in) {
-                        str_sta_in += `<div class="status-item status-${sta_in[key]}">${key}: ${(sta_in[key] == "on") ? "BẬT" : "TẮT"}</div>`
-                    }
-                    $("#sta_in_container").append(str_sta_in);
+                // $("#sta_in_container").empty();
+                // if (data.Sta_In) {
+                //     let sta_in = JSON.parse(data.Sta_In);
+                //     let str_sta_in = "";
+                //     for (let key in sta_in) {
+                //         str_sta_in += `<div class="status-item status-${sta_in[key]}">${key}: ${(sta_in[key] == "on") ? "BẬT" : "TẮT"}</div>`
+                //     }
+                //     $("#sta_in_container").append(str_sta_in);
+                // }
+            }else{
+                for(let i=0; i<may_phat_dien.length; i++){
+                    $("#may_phat_dien_container").append(`
+                        <div class="generator-panel">
+                            <div class="generator-header">
+                                <h5>🔌 <span>${may_phat_dien[i].name}</span></h5>
+                                ${(may_phat_dien[i].point_status == 0) ? '<span class="generator-status-text status-stopped">Mất kết nối</span>' : '<span class="generator-status-text status-running">Đang kết nối</span>'}
+                            </div>
+                            <span>HT: ${ new Date(may_phat_dien[i].server_time).toLocaleString('en-GB')}</span> - 
+                            <span>CT: ${new Date(may_phat_dien[i].meter_time).toLocaleString('en-GB') }</span>
+                            <div class="generator-grid mt-2">
+ 
+                                <div class="generator-section">
+                                    <div class="section-title">ĐIỆN ÁP LƯỚI</div>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Pha</th>
+                                            <th>Điện áp</th>
+                                            <th>Tần số</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Pha A</td>
+                                            <td class="value-cell">
+                                                <span class="value grid-voltage-a">${(may_phat_dien[i].V_A2_v != null) ? may_phat_dien[i].V_A2_v : "-"}</span>
+                                                <span class="unit-cell">${(may_phat_dien[i].V_A2_u != null) ? '(' + may_phat_dien[i].V_A2_u + ')' : ""}</span>
+                                            </td>
+                                            <td class="value-cell" rowspan="3">
+                                                <span class="value" >${(may_phat_dien[i].Freq2_v != null) ? may_phat_dien[i].Freq2_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].Freq2_u != null) ? '(' + may_phat_dien[i].Freq2_u + ')' : ""}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pha B</td>
+                                            <td class="value-cell">
+                                                <span class="value grid-voltage-b">${(may_phat_dien[i].V_B2_v != null) ? may_phat_dien[i].V_B2_v : "-" }</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].V_B2_u != null) ? '(' + may_phat_dien[i].V_B2_u + ')' : ""}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pha C</td>
+                                            <td class="value-cell">
+                                                <span class="value grid-voltage-c" >${(may_phat_dien[i].V_C2_v != null) ? may_phat_dien[i].V_C2_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].V_C2_u != null) ? '(' + may_phat_dien[i].V_C2_u + ')' : ""}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                
+                                <div class="generator-section">
+                                    <div class="section-title">ĐIỆN ÁP ĐẦU RA</div>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Pha</th>
+                                            <th>Điện áp</th>
+                                            <th>Dòng điện</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Pha A</td>
+                                            <td class="value-cell">
+                                                <span class="value output-voltage-a" >${(may_phat_dien[i].V_A_v != null) ? may_phat_dien[i].V_A_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].V_A_u != null) ? '(' + may_phat_dien[i].V_A_u + ')' : ""}</span>
+                                            </td>
+                                            <td class="value-cell">
+                                                <span class="value output-current-a" >${(may_phat_dien[i].I_A_v != null) ? may_phat_dien[i].I_A_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].I_A_u != null) ? '(' + may_phat_dien[i].I_A_u + ')' : ""}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pha B</td>
+                                            <td class="value-cell">
+                                                <span class="value" >${(may_phat_dien[i].V_B_v != null) ? may_phat_dien[i].V_B_v : "-"}</span>
+                                                <span class="unit-cell" id="V_B_u">${(may_phat_dien[i].V_B_u != null) ? '(' + may_phat_dien[i].V_B_u + ')' : ""}</span>
+                                            </td>
+                                            <td class="value-cell">
+                                                <span class="value" >${(may_phat_dien[i].I_B_v != null) ? may_phat_dien[i].I_B_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].I_B_u != null) ? '(' + may_phat_dien[i].I_B_u + ')' : ""}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pha C</td>
+                                            <td class="value-cell">
+                                                <span class="value" >${(may_phat_dien[i].V_C_v != null) ? may_phat_dien[i].V_C_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].V_C_u != null) ? '(' + may_phat_dien[i].V_C_u + ')' : ""}</span>
+                                            </td>
+                                            <td class="value-cell">
+                                                <span class="value" >${(may_phat_dien[i].I_C_v != null) ? may_phat_dien[i].I_C_v : "-"}</span>
+                                                <span class="unit-cell" >${(may_phat_dien[i].I_C_u != null) ? '(' + may_phat_dien[i].I_C_u + ')' : ""}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                
+                                <div class="generator-section">
+                                    <div class="section-title">THÔNG TIN CHUNG</div>
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">Tốc độ</span>
+                                            <span class="info-value generator-speed" >${(may_phat_dien[i].Speed_v != null) ? may_phat_dien[i].Speed_v : '-'} (${(may_phat_dien[i].Speed_u != null) ? may_phat_dien[i].Speed_u : '-'})</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Điện áp ắc quy</span>
+                                            <span class="info-value battery-voltage" >${(may_phat_dien[i].V_Bat_v != null) ? may_phat_dien[i].V_Bat_v : '-'} (${(may_phat_dien[i].V_Bat_u != null) ? may_phat_dien[i].V_Bat_u : '-'})</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Nhiệt độ nước</span>
+                                            <span class="info-value water-temp" id="Tem_W_v">${(may_phat_dien[i].Tem_W_v != null) ? may_phat_dien[i].Tem_W_v : '-'} (${(may_phat_dien[i].Tem_W_u != null) ? may_phat_dien[i].Tem_W_u : '-'})</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Áp suất dầu</span>
+                                            <span class="info-value oil-pressure" id="P_Oil_v">${(may_phat_dien[i].P_Oil_v != null) ? may_phat_dien[i].P_Oil_v : '-'} (${(may_phat_dien[i].P_Oil_u != null) ? may_phat_dien[i].P_Oil_u : '-'})</span>
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class="generator-section">
+                                    <div class="section-title">TRẠNG THÁI ĐẦU VÀO</div>
+                                    <div class="status-grid-small" id="sta_in_container">
+                                        ${may_phat_dien[i].Sta_In && (JSON.parse(may_phat_dien[i].Sta_In).EMER =="on") ? '<div class="status-item status-on">EMER: BẬT</div>' : '<div class="status-item status-off">EMER: TẮT</div>'}
+                                        ${may_phat_dien[i].Sta_In && JSON.parse(may_phat_dien[i].Sta_In)["AUX.1"] && (JSON.parse(may_phat_dien[i].Sta_In)["AUX.1"] == "on") ? '<div class="status-item status-on">AUX.1: BẬT</div>' : '<div class="status-item status-off">AUX.1: TẮT</div>'}
+                                        ${may_phat_dien[i].Sta_In && JSON.parse(may_phat_dien[i].Sta_In)["AUX.2"] && (JSON.parse(may_phat_dien[i].Sta_In)["AUX.2"] == "on") ? '<div class="status-item status-on">AUX.2: BẬT</div>' : '<div class="status-item status-off">AUX.2: TẮT</div>'}
+                                        ${may_phat_dien[i].Sta_In && JSON.parse(may_phat_dien[i].Sta_In)["AUX.3"] && (JSON.parse(may_phat_dien[i].Sta_In)["AUX.3"] == "on") ? '<div class="status-item status-on">AUX.3: BẬT</div>' : '<div class="status-item status-off">AUX.3: TẮT</div>'}
+                                        ${may_phat_dien[i].Sta_In && JSON.parse(may_phat_dien[i].Sta_In)["AUX.4"] && (JSON.parse(may_phat_dien[i].Sta_In)["AUX.4"] == "on") ? '<div class="status-item status-on">AUX.4: BẬT</div>' : '<div class="status-item status-off">AUX.4: TẮT</div>'}
+                                        ${may_phat_dien[i].Sta_In && JSON.parse(may_phat_dien[i].Sta_In)["AUX.5"] && (JSON.parse(may_phat_dien[i].Sta_In)["AUX.5"] == "on") ? '<div class="status-item status-on">AUX.5: BẬT</div>' : '<div class="status-item status-off">AUX.5: TẮT</div>'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="alerts-panel">
+                            <h5 class="generator-header">⚠️ CẢNH BÁO HIỆN TẠI</h5>
+                            ${
+                            (may_phat_dien[i].Alarm != "") ? `<div class="alert-item alert-high">
+                                <div class="alert-icon">🔴</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Alarm</div>
+                                    <div class="alert-desc">${may_phat_dien[i].Alarm}</div>
+                                    <div class="alert-time">-</div>
+                                </div>
+                            </div>  ` : "Không có cảnh báo"
+                            }
+            
+                  
+                        </div>
+                        `)
                 }
             }
         },
@@ -536,13 +901,14 @@ function render_water_level_realtime_chart(originalData) {
     axisM.renderer.labels.template.fontSize = 10;
 
 
-    var axisCM = CHART_REAL_TIME.yAxes.push(new am4charts.ValueAxis());
-    axisCM.title.text = "Mực nước (cm)";
-    axisCM.title.fontSize = 10;
-    // axisCM.title.fill = am4core.color("#fff");
-    axisCM.renderer.opposite = true;
-    // axisCM.renderer.labels.template.fill = am4core.color("#fff");
-    axisCM.renderer.labels.template.fontSize = 10;
+    // var axisCM = CHART_REAL_TIME.yAxes.push(new am4charts.ValueAxis());
+    // axisCM.title.text = "Mực nước (cm)";
+    // axisCM.title.fontSize = 10;
+    // // axisCM.title.fill = am4core.color("#fff");
+    // axisCM.renderer.opposite = true;
+    // // axisCM.renderer.labels.template.fill = am4core.color("#fff");
+    // axisCM.renderer.labels.template.fontSize = 10;
+
     // Đồng bộ min/max 2 trục theo hệ số 100 để tick khớp
     // var maxM = computeUnifiedMaxM(chartData) * 1.1;
     // axisM.strictMinMax = true; axisM.min = 0; axisM.max = maxM;
@@ -575,11 +941,12 @@ function render_water_level_realtime_chart(originalData) {
     // sM_static.columns.template.tooltipText =
     //     "{categoryX}\n{valueM} m (hiện tại)";
 
-    var sM_dynamic = CHART_REAL_TIME.series.push(new am4charts.ColumnSeries());
-    sM_dynamic.name = "Mực nước động";
-    sM_dynamic.dataFields.valueY = "valueDynamicM";
-    sM_dynamic.yAxis = axisM;
-    baseColumnStyle(sM_dynamic);
+    // var sM_dynamic = CHART_REAL_TIME.series.push(new am4charts.ColumnSeries());
+    // sM_dynamic.name = "Mực nước động";
+    // sM_dynamic.dataFields.valueY = "valueDynamicM";
+    // sM_dynamic.yAxis = axisM;
+    // baseColumnStyle(sM_dynamic);
+
     // sM_dynamic.columns.template.fill = am4core.color("#ffffff");   // trắng
     // sM_dynamic.columns.template.stroke = am4core.color("#cfd7e6");   // viền nhẹ
     // sM_dynamic.columns.template.tooltipText =
@@ -589,7 +956,7 @@ function render_water_level_realtime_chart(originalData) {
     var sCM_static = CHART_REAL_TIME.series.push(new am4charts.ColumnSeries());
     sCM_static.name = "Mực nước hiện tại";
     sCM_static.dataFields.valueY = "valueCM";
-    sCM_static.yAxis = axisCM;
+    // sCM_static.yAxis = axisCM;
     baseColumnStyle(sCM_static);
     // Ẩn khỏi legend để chỉ hiển thị 1 mục "Mực nước hiện tại"
     sCM_static.hiddenInLegend = true;
@@ -605,28 +972,33 @@ function render_water_level_realtime_chart(originalData) {
     // sCM_static.columns.template.tooltipText =
     //     "{categoryX}\n{valueCM} cm (hiện tại)";
 
-    var sCM_dynamic = CHART_REAL_TIME.series.push(new am4charts.ColumnSeries());
-    sCM_dynamic.name = "Mực nước động";
-    sCM_dynamic.dataFields.valueY = "valueDynamicCM";
-    sCM_dynamic.yAxis = axisCM;
-    baseColumnStyle(sCM_dynamic);
-    sCM_dynamic.hiddenInLegend = true;
+    // var sCM_dynamic = CHART_REAL_TIME.series.push(new am4charts.ColumnSeries());
+    // sCM_dynamic.name = "Mực nước động";
+    // sCM_dynamic.dataFields.valueY = "valueDynamicCM";
+    // sCM_dynamic.yAxis = axisCM;
+    // baseColumnStyle(sCM_dynamic);
+    // sCM_dynamic.hiddenInLegend = true;
+
+
     // sCM_dynamic.columns.template.fill = am4core.color("#ffffff");
     // sCM_dynamic.columns.template.stroke = am4core.color("#cfd7e6");
     //sCM_dynamic.columns.template.tooltipText =
     //     "{categoryX}\n{valueDynamicCM} cm (động)\nTổng: {valueYTotal} cm";
 
     // Nhãn tổng trên đỉnh cột (đơn vị đúng theo trạm)
-    var label = sM_dynamic.bullets.push(new am4charts.LabelBullet());
-    label.label.fontSize = 11;
-    label.label.dy = -10;
-    label.label.text = "{valueY} (m)";
+    // var label = sM_dynamic.bullets.push(new am4charts.LabelBullet());
+    // label.label.fontSize = 11;
+    // label.label.dy = -10;
+    // label.label.text = "{valueY} (m)";
+
     // label.label.fill = am4core.color("#fff");
 
-    var label2 = sCM_dynamic.bullets.push(new am4charts.LabelBullet());
-    label2.label.fontSize = 11;
-    label2.label.dy = -10;
-    label2.label.text = "{valueY} (cm)";
+    // var label2 = sCM_dynamic.bullets.push(new am4charts.LabelBullet());
+    // label2.label.fontSize = 11;
+    // label2.label.dy = -10;
+    // label2.label.text = "{valueY} (cm)";
+
+
     // label2.label.fill = am4core.color("#fff");
 
     CHART_REAL_TIME.maskBullets = false;

@@ -9,6 +9,7 @@ router.get('/get/meter_info', middlewares_auth.ensure_authenticated, setting.get
 
 router.get('/get/danhsachthietbi', middlewares_auth.ensure_authenticated, setting.get_danhsachthietbi);
 
+router.get('/get/log_user', middlewares_auth.ensure_authenticated, setting.get_log_user);
 
 
 

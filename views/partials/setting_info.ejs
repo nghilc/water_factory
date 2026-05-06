@@ -44,6 +44,7 @@
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-info mr-2 " id="setting_log" MeterCode="<%= MeterCode%>">Lịch sử cài đặt</button>
                     <button class="btn btn-success" id="save_info_meter" MeterCode="<%= MeterCode%>" meter_type="<%= meter_type%>">Lưu</button>
                 </div>
             </div>
@@ -191,11 +192,11 @@
                 <div class="col-md-4">
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label class="">Ngưỡng dưới</label>
+                            <label class="">Mực nước Min</label>
                             <input type="number" class="form-control" value="<%= meter_alert.min_mucnuoc%>" id="min_mucnuoc">
                         </div>
                         <div class="form-group col-6">
-                            <label class="">Ngưỡng trên</label>
+                            <label class="">Mực nước Max (tràn)</label>
                             <input type="number" class="form-control" value="<%= meter_alert.max_mucnuoc%>"  id="max_mucnuoc">
                         </div>
                     </div>

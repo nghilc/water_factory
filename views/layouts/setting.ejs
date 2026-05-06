@@ -115,6 +115,69 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="history_modal" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+  data-backdrop="static">
+    <div class="modal-dialog" role="document" style="max-width: 90%; height: 800px;">
+      <div class="modal-content">
+  
+        <!-- Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Lịch sử cài đặt</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+  
+        <!-- Body -->
+        <div class="modal-body">
+          <div class="row mb-1 d-flex flex-wrap align-items-end">
+            <div class="col-md-3 col-6">
+              <div class="form-group">
+                <label for="">Từ ngày:</label>
+                <input class="form-control" type="text" autocomplete="off" id="log_data_time_from">
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="form-group">
+                <label for="">Đến ngày:</label>
+                <input class="form-control" type="text" autocomplete="off" id="log_data_time_to">
+              </div>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-primary mr-2" style="margin-bottom: 16px" onclick="init_log_data()"> <i class="fa fa-search"
+                  aria-hidden="true"></i> Xem dữ liệu</button>
+         
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table" id="log_table">
+              <thead style="background-color: #a8dbf0;">
+                <tr>
+                  <th>STT</th>
+                  <th>Thời gian</th>
+                  <th>Hoạt động</th>
+                  <th>Chi tiết</th>
+                  <th>Người xử lý</th>
+                </tr>
+              </thead>
+              <tbody id="log_table_tbody">
+              
+              </tbody>
+            </table>
+          </div>
+  
+        </div>
+  
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+        </div>
+  
+      </div>
+    </div>
+    </div>
+  
   <div id="loading-overlay" style="display: none;">
     <div class="spinner-border text-primary" role="status"></div>
     <span>Đang tải dữ liệu...</span>

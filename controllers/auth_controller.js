@@ -79,7 +79,7 @@ const auth_controller = {
                     //             break;
 
                     //     }
-                    return res.redirect("/dashboard");
+                    return res.redirect("/home");
                   });
               })(req, res, next);
         }catch(error){

@@ -107,9 +107,15 @@ $(document).ready(function () {
 })
 
 $(document).ready(function(){
-  if (localStorage.getItem('org_id')){
+  if (org_id_){
     $('#filter_tram')
-      .selectpicker('val', localStorage.getItem('org_id'))
+      .selectpicker('val', org_id_)
       .trigger('change');
+  }else{
+    if (localStorage.getItem('org_id')) {
+      $('#filter_tram')
+        .selectpicker('val', localStorage.getItem('org_id'))
+        .trigger('change');
+    }
   }
 })

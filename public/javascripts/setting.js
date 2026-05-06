@@ -23,7 +23,7 @@ $(document).ready(function(){
             let x;
             $("#filter_meter").empty();
             for (let i = 0; i < danh_sach_thiet_bị.length; i++) {
-                x += "<option MeterCode ='" + danh_sach_thiet_bị[i].MeterCode + "' data-tokens ='" + danh_sach_thiet_bị[i].MeterCode + "'>" + danh_sach_thiet_bị[i].meter_name + "</option>";
+                x += "<option MeterCode ='" + danh_sach_thiet_bị[i].MeterCode_ + "' data-tokens ='" + danh_sach_thiet_bị[i].MeterCode_ + "' device_type='" + danh_sach_thiet_bị[i].device_type +"'>" + danh_sach_thiet_bị[i].meter_name + "</option>";
             }
             $("#filter_meter").append(x);
             $('#filter_meter').selectpicker('refresh');
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 let x;
                 $("#filter_meter").empty();
                 for (let i = 0; i < danh_sach_thiet_bị.length; i++) {
-                    x += "<option MeterCode ='" + danh_sach_thiet_bị[i].MeterCode + "' data-tokens ='" + danh_sach_thiet_bị[i].MeterCode + "'>" + danh_sach_thiet_bị[i].meter_name + "</option>";
+                    x += "<option MeterCode ='" + danh_sach_thiet_bị[i].MeterCode_ + "' data-tokens ='" + danh_sach_thiet_bị[i].MeterCode_ + "' device_type='" + danh_sach_thiet_bị[i].device_type +"'>" + danh_sach_thiet_bị[i].meter_name + "</option>";
                 }
                 $("#filter_meter").append(x);
                 $('#filter_meter').selectpicker('refresh');
@@ -229,16 +229,34 @@ $(document).ready(function () {
 
 
 
+function return_log_user_detail(x) {
+    if (x == "" || x == null) return "-";
+    try {
+        let data = x.split("||");
+        let str = ""
+        data.forEach(element => {
+            str += element + "<br>"
+        });
+        
+        return str;
+    } catch (e) {
+        return x;
+    }
+}
+
+
+
 
 
 
 
 function search_meter_setting(){
     let MeterCode = $("#filter_meter option:selected").attr("MeterCode");
+    let device_type = $("#filter_meter option:selected").attr("device_type");
     $.ajax({
         url: "/setting/get/meter_info",
         type: "GET",
-        data:{MeterCode},
+        data: { MeterCode, device_type },
         beforeSend: function () {
             showLoading();  // Hiện overlay khi bắt đầu tải
         },
@@ -303,7 +321,7 @@ $(document).ready(function(){
                 let meter_list = res.meter_list;
                 let x="";
                 for(let i=0;  i<meter_list.length; i++){
-                     x += "<option metercode ='"+meter_list[i].MeterCode+"' nodecode='"+ meter_list[i].NodeCode+"' data-tokens ='"+meter_list[i].MeterCode+"'>"+meter_list[i].name+"</option>";
+                    x += "<option metercode ='" + meter_list[i].MeterCode_ + "' nodecode='" + meter_list[i].NodeCode_ + "' data-tokens ='" + meter_list[i].MeterCode_ + "' device_type='" + danh_sach_thiet_bị[i].device_type +"'>"+meter_list[i].name+"</option>";
                 }
                 $("#filter_meter").append(x);
                 $('#filter_meter').selectpicker('refresh');
@@ -328,5 +346,149 @@ $(document).ready(function(){
     })
 })
 
+$(document).ready(function () {
+    $(function () {
+        $("#log_data_time_from").daterangepicker(
+            {
+                singleDatePicker: true,
+                showDropdowns: true,
+                showWeekNumbers: true,
+                // timePicker: true,
+                // timePickerIncrement: 1,
+                // timePicker24Hour: true,
+                opens: 'right',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'DD/MM/YYYY',
+                separator: ' to ',
+                locale: {
+                    applyLabel: 'Submit',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom Range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1,
+                    format: 'DD/MM/YYYY'
+                }
+            }
+        )
+        $("#log_data_time_from").data("daterangepicker").setStartDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
+        $("#log_data_time_from").data("daterangepicker").setEndDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
+
+        $("#log_data_time_to").daterangepicker(
+            {
+                singleDatePicker: true,
+                showDropdowns: true,
+                showWeekNumbers: true,
+                // timePicker: true,
+                // timePickerIncrement: 1,
+                // timePicker24Hour: true,
+                opens: 'right',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'DD/MM/YYYY',
+                separator: ' to ',
+                locale: {
+                    applyLabel: 'Submit',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom Range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1,
+                    format: 'DD/MM/YYYY'
+                }
+            }
+        )
+        $("#log_data_time_to").data("daterangepicker").setStartDate(moment().startOf('minute'));
+        $("#log_data_time_to").data("daterangepicker").setEndDate(moment().startOf('minute'));
+    })
+  })
 
 
+$(document).ready(function(){
+    $(document).on("click","#setting_log",function(){
+        $("#log_data_time_to").data("daterangepicker").setStartDate(moment().startOf('minute'));
+        $("#log_data_time_to").data("daterangepicker").setEndDate(moment().startOf('minute'));
+        $("#log_data_time_from").data("daterangepicker").setStartDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
+        $("#log_data_time_from").data("daterangepicker").setEndDate(moment().startOf('minute').subtract(moment.duration("24:00:00")));
+        $("#history_modal").modal("show");
+        init_log_data();
+    })
+})
+
+function init_log_data(){
+    let MeterCode = $("#setting_log").attr("MeterCode");
+    let start_date = $("#log_data_time_from").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 00:00:00";
+    let end_date = $("#log_data_time_to").data('daterangepicker').endDate.format("YYYY-MM-DD") + " 23:59:59";
+    $.ajax({
+        url: "/setting/get/log_user",
+        type: "GET",
+        data: { start_date, end_date, MeterCode },
+        beforeSend: function () {
+            showLoading();  // Hiện overlay khi bắt đầu tải
+        },
+        success: function (res) {
+            render_log_table(res.data)
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status === 401) {
+                alert(xhr.responseText);
+                window.location.href = "/login"
+            } else {
+                console.error("Lỗi:", error);
+            }
+        },
+        complete: function () {
+            hideLoading()  // Ẩn overlay sau khi tải xong
+        }
+    })
+}
+
+
+function render_log_table(data){
+    if ($.fn.DataTable.isDataTable('#log_table')) {
+        $('#log_table').DataTable().clear().destroy();
+      }
+    $('#log_table').DataTable({
+        language: translate_data_table(LANG),
+        "lengthMenu": [10, 30, 60],
+        "pageLength": 10,
+        // "columnDefs": [
+        //   { className: "dt-head-center", targets: [0, 1, 2, 3, 4, 5] },
+        //   { "orderable": false, "targets": [] },
+        //   { "orderable": true, "targets": [0, 1, 2, 3] }
+        // ],
+        order: [],
+        autoWidth: false, // Tránh lỗi về tính toán chiều rộng cột
+        paging: true,
+        searching: false,
+        columns: [
+            { data: "stt", className: "text-center-data-table align-middle" },
+            { data: "time", className: "text-center-data-table align-middle" },
+            { data: "action", className: "text-left-data-table align-middle" },
+            { data: "value", className: "text-left-data-table align-middle" },
+            { data: "created_by", className: "text-left-data-table align-middle" },
+        ],
+        data: log_modifi_data(data),
+      });
+}
+
+
+function log_modifi_data(data) {
+    let x = [];
+    for (let i=0;i < data.length; i++) {
+        let y = {
+            stt: (i+1),
+            time: new Date(data[i].time).toLocaleString('en-GB'),
+            action: data[i].action,
+            value: return_log_user_detail(data[i].value),
+            created_by: data[i].created_by,
+        }
+        x.push(y)
+    }
+    return x;
+  }

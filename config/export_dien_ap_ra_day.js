@@ -87,7 +87,7 @@ async function export_data(req, res) {
         let data = await access_db("SELECT * FROM operations WHERE meter_serial = ? AND server_time >= ? AND server_time <= ? ORDER BY server_time DESC", [MeterCode, start_date, end_date]);
 
 
-        let info = await access_db("SELECT name AS meter_name FROM view_totaleq WHERE MeterCode = ?; ", [MeterCode]);
+        let info = await access_db("SELECT t4.name AS meter_name FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode WHERE t2.dcu_code = ?;", [MeterCode]);
 
         if (info.length == 0) {
             return res.json({

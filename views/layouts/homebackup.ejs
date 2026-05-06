@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>QUAWACO | Giới thiệu - Nước sạch Quảng Ninh</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/plugins_2/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="/plugins_2/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/plugins_2/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/plugins_2/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins_2/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/plugins_2/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/plugins_2/summernote/summernote-bs4.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- leafmap -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+
+    <!-- Leaflet.markercluster -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" /> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/general_style.css">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/style_2.css">
+    <style>
+        body {
+            line-height: 1.3;
+        }
+
+        .container p {
+            font-size: 16px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('/images/ctynuocsachquangninh.jpg');
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            background-position: center 9%;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .card-custom {
+            border-left: 5px solid #007bff;
+        }
+
+        .highlight {
+            background: #f8f9fa;
+
+            border-radius: 10px;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <%- include('../partials/header') %>
+
+            <!-- Content Wrapper. Contains page content -->
+
+            <!-- Main content -->
+            <section class="hero">
+                <div class="container">
+                    <h1>CÔNG TY CỔ PHẦN NƯỚC SẠCH QUẢNG NINH</h1>
+                    <p>40 năm xây dựng và phát triển</p>
+                </div>
+            </section>
+            <div class="container-fluid">
+                <!-- Main row -->
+                <section class="col-lg-12 connectedSortable">
+                    <section class="py-3">
+                        <div class="container">
+                            <h3 class="text-center section-title">Tổng quan</h3>
+                            <div class="card card-body card-custom">
+                                <p><b>Tên đầy đủ:</b> Công ty Cổ phần nước sạch Quảng Ninh</p>
+                                <p><b>Tên giao dịch bằng tiếng Anh:</b> Quang Ninh Clean Water Joint Stock Company.</p>
+                                <p><b>Địa chỉ trụ sở chính:</b> 449 Nguyễn Văn Cừ, TP. Hạ Long, Quảng Ninh.</p>
+                                <p><b>Số điện thoại:</b> (0203) 3835733.</p>
+                                <p><b>Fax:</b> (0203) 3835796.</p>
+                                <p><b>Email:</b> ctcnqn@gmail.com</p>
+                                <p><b>Công ty có 14 đơn vị trực thuộc.</b></p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- Quá trình phát triển -->
+                <section class="bg-light py-3">
+                    <div class="container">
+                        <h3 class="text-center section-title">Quá trình hình thành</h3>
+
+                        <div class="highlight">
+                            <p>
+                                <b>Công ty Cổ phần nước sạch Quảng Ninh</b> được chuyển đổi từ Công ty TNHH 1 Thành viên
+                                kinh doanh nước
+                                sạch Quảng Ninh (tiền thân là Công ty Thi công và Cấp nước Quảng Ninh).
+                            </p>
+                            <p>
+                                <b>Công ty Cổ phần nước sạch Quảng Ninh</b> chính thức bắt đầu đi vào hoạt động kể từ
+                                ngày 01/01/2014 theo Luật doanh nghiệp và
+                                Luật Chứng khoán giấy chứng nhận đăng ký kinh doanh số 5700100104 do <b>Sở Kế hoạch đầu
+                                    tư tỉnh Quảng Ninh</b> cấp đăng ký ngày
+                                31/12/2013.
+                            </p>
+                            <p>
+                                <b>Ngành nghề kinh doanh:</b> Khai thác, sản xuất và kinh doanh nước sạch phục vụ sinh
+                                hoạt, du lịch, dịch vụ, sản xuất và các
+                                nhu cầu khác trên địa bàn tỉnh Quảng Ninh; Quản lý các dự án đầu tư phát triển cấp nước,
+                                các hệ thống cấp nước trên địa
+                                bàn tỉnh; Thiết kế, chế tạo, sản xuất kinh doanh, nhập khẩu máy móc, vật tư thiết bị
+                                công nghệ chuyên ngành cấp thoát
+                                nước và vệ sinh môi trường; Nghiên cứu xây dựng các phần mềm công nghệ thông tin, ứng
+                                dụng và chuyển giao công nghệ
+                                trong lĩnh vực cấp thoát nước và công nghệ phần mềm; Sản xuất và kinh doanh nước tinh
+                                lọc; Đầu tư, kinh doanh nhà ở và
+                                văn phòng làm việc. Kinh doanh bất động sản, khách sạn và các dịch vụ khác.
+                            </p>
+                            <p>
+                                Địa bàn hoạt động của Công ty về quản lý hệ thống cấp nước, cung ứng, kinh doanh nước
+                                sạch cho nhu cầu tiêu dùng và sản xuất
+                                là khu vực tỉnh Quảng Ninh.
+                            </p>
+                            <img src="/images/lanhdao1980.jpg" class="img-fluid d-block mx-auto"
+                                style="max-width: 500px;">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lịch sử -->
+                <section class="py-3">
+                    <div class="container">
+                        <h3 class="text-center section-title">Lịch sử phát triển</h3>
+                        <p>
+                            Ngày 01 tháng 10 năm 1976 <b>UBND Tỉnh Quảng Ninh</b> công bố quyết định số 484 TC/UB ngày
+                            3/8/1976, thành lập <b>Công ty Thi công
+                                và Cấp nước Quảng Ninh</b> trên cơ sở phê duyệt phương án tổ chức do Ty xây dựng Quảng
+                            Ninh lập ra tiền thân là sát nhập các
+                            xí nghiệp nước Hòn Gai, Cẩm Phả, Uông Bí, Ban kiến thiết Nước và các bộ phận xây lắp công
+                            trình nước của Công ty lắp máy
+                            điện và thi công cơ giới.
+                            Công ty được thành lập lại theo Nghị định số 388 HĐBT của Hội đồng Bộ trưởng tại Quyết định
+                            số 2570 QĐ/UB ngày 04 tháng
+                            12 năm 1992. Công ty được chuyển từ doanh nghiệp hoạt động kinh doanh sang doanh nghiệp nhà
+                            nước hoạt động công ích tại
+                            Quyết định 1066 QĐ/UB ngày 09/4/1997 của <b>UBND tỉnh Quảng Ninh</b>
+                        </p>
+                        <p>
+                            Ngày đầu thành lập, cơ sở vật chất của Công ty còn nghèo nàn và lạc hậu. Tổng công suất
+                            thiết kế các nguồn nước chỉ đạt
+                            5.000 m³/ngày-đêm, nguồn nước khai thác chủ yếu là nước giếng ngầm. Tổng số mạng lưới cấp
+                            nước cấp 1 - 2 trên 30 Km, và 25
+                            km ống phân phối cấp 3. Mức độ bao phủ cấp nước từ 10 đến 15%. Chất lượng nước không qua xử
+                            lý đặc biệt là không có hệ
+                            thống Đồng hồ đo đếm tính toán giữa cung cấp và tiêu thụ.
+                        </p>
+                        <p>
+                            Tổng số CBCNV thời kỳ đầu là 413 người trong đó có 05 kỹ sư, 09 kỹ thuật viên, 04 thợ bậc 6
+                            và 41 thợ bậc 4-5 còn lại là
+                            lao động phổ thông.
+                        </p>
+                        <p>
+                            Sản lượng nước máy: 4.484.000 m³; Doanh thu: 703.988.000đ; Xây lắp: 1.420.000đ; TSCĐ:
+                            13.966.000đ.
+                        </p>
+                        <p>
+                            Trải qua 40 năm xây dựng, phát triển và trưởng thành đặc biệt từ năm 1986 khi cả nước chuyển
+                            mình trong thời kỳ đổi mới,
+                            Công ty đã không ngừng lớn mạnh, tốc độ tăng trưởng của Công ty năm sau luôn cao hơn năm
+                            trước, hàng năm đều hoàn thành
+                            xuất sắc các chỉ tiêu Nhà nước giao. Tính đến nay, tổng công suất thiết kế các nguồn nước
+                            của Công ty đã đạt trên
+                            200.000 m³/ngày-đêm, tăng 12,5 lần so với ngày đầu thành lập. Công ty đã thực hiện duy trì
+                            05 phòng thí nghiệm để kiểm
+                            soát nghiêm ngặt. Sản lượng nước máy thương phẩm năm 2016 ước đạt 48,5 triệu m³, tổng doanh
+                            thu ước đạt 500 tỷ đồng, tỷ
+                            thất thoát giảm xuống dưới 18%. Đời sống của cán bộ công nhân viên được nâng cao, đảm bảo đủ
+                            việc làm thu nhập ổn định,
+                            bình quân năm 2016 ước đạt 7,5 triệu đồng/người/tháng.
+                        </p>
+                        <img src="/images/leramat.jpg" class="img-fluid d-block mx-auto my-4" style="max-width: 500px;">
+                        <p>
+                            Trong công tác điều hành SXKD, Công ty thực hiện đồng bộ các giải pháp quản lý như công tác
+                            phân giao nhiệm vụ, thực
+                            hiện chiến lược hướng tới khách hàng bằng các dịch vụ tốt nhất, loại bỏ hiện tượng cửa quyền
+                            trong công tác cấp nước,
+                            xác định mục tiêu trọng điểm từng năm để tập trung chỉ đạo thực hiện; triển khai thực hiện
+                            có hiệu quả công tác chống
+                            thất thoát, kết hợp chặt chẽ giữa chống thất thoát bằng biện pháp quản lý và biện pháp kỹ
+                            thuật, thực hiện chống thất
+                            thoát theo tuyến, vùng; Đầu tư các dự án trọng điểm như NMN Kim Tinh, Miếu Hương, Yên Lập,
+                            Hà Nam… nhằm đáp ứng nhu cầu
+                            sử dụng nước của các khu công nghiệp, đô thị, du lịch theo tiến trình phát triển của tỉnh.
+                        </p>
+                        <p>
+                            Ghi nhận những đóng góp của Công ty trong xây dựng, phát triển kinh tế xã hội của Tỉnh cũng
+                            như góp phần cũng cả nước,
+                            năm 2016, Công ty đã vinh dự được Nhà nước tặng thưởng Huân chương lao động hạng Nhất, phần
+                            thưởng cao quý sẽ là động
+                            lực to lớn cho cán bộ, công nhân viên lao động trong Công ty nỗ lực phấn đấu để hoàn thành
+                            tốt mọi nhiệm vụ được giao.
+                        </p>
+
+                    </div>
+                </section>
+                <!-- Tôn chỉ -->
+                <section class="bg-light py-4">
+                    <div class="container text-center">
+                        <h3 class="section-title">Tôn chỉ hoạt động của công ty</h3>
+
+                        <div class="highlight">
+                            <h4>MỘT GIÁ TRỊ - MỘT NIỀM TIN</h4>
+                            <p>CHĂM SÓC, PHỤC VỤ KHÁCH HÀNG TẬN TỤY, CHU ĐÁO.</p>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.row (main row) -->
+
+            </div><!-- /.container-fluid -->
+            <!-- /.content -->
+
+
+
+
+            <div id="loading-overlay" style="display: none;">
+                <div class="spinner-border text-primary" role="status"></div>
+                <span>Đang tải dữ liệu...</span>
+            </div>
+            <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="/plugins_2/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="/plugins_2/jquery-ui/jquery-ui.min.js"></script>
+    <!-- amchartjs -->
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="/plugins_2/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="/plugins_2/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="/plugins_2/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="/plugins_2/jqvmap/jquery.vmap.min.js"></script>
+    <script src="/plugins_2/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/plugins_2/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="/plugins_2/moment/moment.min.js"></script>
+    <script src="/plugins_2/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="/plugins_2/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="/plugins_2/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="/plugins_2/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/js/adminlte.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/dist/js/demo.js"></script>
+
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script> -->
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- <script src="/javascripts/leaflet.PopupMovable.js"></script> -->
+
+    <!-- Leaflet.markercluster -->
+    <!-- <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+
+    <script src="/javascripts/SmoothWheelZoom.js"></script>
+    <link rel="stylesheet" href="/stylesheets/Control.FullScreen.css" />
+    <script src="/javascripts/Control.FullScreen.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <script>
+
+
+        function showLoading() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+
+        function hideLoading() {
+            document.getElementById("loading-overlay").style.display = "none";
+        }
+        function show_notification(message, type) {
+            var notification = $("#notification");
+            notification.text(message).removeClass("error success").addClass(type);
+            notification.css("top", "20px").fadeIn();
+
+            // Ẩn sau 3 giây
+            setTimeout(function () {
+                notification.fadeOut(function () {
+                    notification.css("top", "-50px");
+                });
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>

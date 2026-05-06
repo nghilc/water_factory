@@ -122,3 +122,64 @@ tspan{
 .bootstrap-select {
   width: 273px !important;
 } */
+
+
+.blink-img {
+  animation: blinkImg 1s infinite;
+}
+
+@keyframes blinkImg {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+.blink-soft-yellow {
+  animation: blinkSoftYellow 1s infinite;
+  font-weight: bold;
+}
+
+@keyframes blinkSoftYellow {
+  0% {
+    color: #000000;
+  }
+
+  50% {
+    color: #ff9500;
+  }
+
+  100% {
+    color: #000000;
+  }
+}
+
+.blink-soft-red {
+  animation: blinkSoftRed 1.5s infinite;
+  font-weight: bold;
+}
+
+@keyframes blinkSoftRed {
+  0% {
+    color: #000000;
+  }
+
+  50% {
+    color: #960000;
+  }
+
+  100% {
+    color: #000000;
+  }
+}

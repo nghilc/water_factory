@@ -24,25 +24,5 @@
     cursor: pointer;
 }
 
-.tooltip-inner {
-  background-color: white !important;
-  color: black !important;
-  border: 1px solid #ccc;
-  padding: 8px 10px;
-  font-size: 14px;
-  text-align: left;
-}
 
-/* Mũi tên cũng đổi màu theo */
-.bs-tooltip-top .arrow::before {
-  border-top-color: white !important;
-}
-.bs-tooltip-bottom .arrow::before {
-  border-bottom-color: white !important;
-}
-.bs-tooltip-left .arrow::before {
-  border-left-color: white !important;
-}
-.bs-tooltip-right .arrow::before {
-  border-right-color: white !important;
-}
+

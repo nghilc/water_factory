@@ -11,6 +11,13 @@ function replace_obs(x){
     }
 }
 
+
+function show_if_null(x) {
+    if (x === "" || x === null)
+        return "-";
+    return x;
+}
+
 function shortToFullName(name){     // Trả về tên đầy đủ
         switch(name){
             case "ValOfNum":
@@ -106,7 +113,10 @@ const setting_controller = {
                 min_doman: null,
                 max_doman: null
             }
-            danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t5.meter_status AS status_meter FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ?;", [req.user.id]);
+            // danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t5.meter_status AS status_meter FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t4.device_type = t5.device_type;", [req.user.id]);
+            danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t5.meter_status AS status_meter FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id]);
+
+            may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_, t3.NodeCode AS NodeCode_,t5.lat, t5.lng, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id])
 
             danh_sach_xi_nghiep_nha_may = await access_db("SELECT t1.org_id, t2.org_name AS name, t1.parent_id AS parent_id, t3.org_name AS parent_name FROM org_mapping t1 LEFT JOIN organizations t2 ON t1.org_id = t2.id LEFT JOIN organizations t3 ON t1.parent_id = t3.id INNER JOIN user_org t4 ON t1.org_id = t4.org_id OR t1.parent_id = t4.org_id WHERE t4 .user_id = ? ORDER BY t1.order_by;", [req.user.id]);
 
@@ -118,7 +128,8 @@ const setting_controller = {
                 serial_sim: null,
                 address: null
             }
-     
+            danh_sach_thiet_bị.push(...may_phat_dien)
+
             let MeterCode = null;
             res.render('layouts/setting',{
                 danh_sach_thiet_bị, danh_sach_xi_nghiep_nha_may, meter_info, MeterCode, meter_type, meter_alert,
@@ -143,19 +154,45 @@ const setting_controller = {
                 let danh_sach_thiet_bị = [];
                 let type = req.query.type;
                 if (type == "all") {
-                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ?;", [req.user.id]);
+                    // danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t4.device_type = t5.device_type;", [req.user.id]);
+                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.*, t4.status AS status_meter, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id]);
+                    may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_, t3.NodeCode AS NodeCode_,t5.*, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id])
 
                 } else if (type == "xi_nghiep") {
-                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.parent_id = ?;", [req.user.id, org_id]);
+                    // danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.parent_id = ? AND t4.device_type = t5.device_type;", [req.user.id, org_id]);
+                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.*, t4.status AS status_meter, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.parent_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id, org_id]);
+
+                    may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_,t3.NodeCode AS NodeCode_,t5.*, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t7.parent_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id, org_id])
 
                 } else {
-                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.org_id = ?;", [req.user.id, org_id]);
+                    // danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t5.data_type FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.org_id = ? AND t4.device_type = t5.device_type;", [req.user.id, org_id]);
+                    danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.*, t4.status AS status_meter, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.org_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id, org_id]);
 
+                    may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_, t3.NodeCode AS NodeCode_ ,t5.*, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t7.org_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id, org_id])
                 }
+                danh_sach_thiet_bị.push(...may_phat_dien)
 
                 res.json({
                     success: true,
                     danh_sach_thiet_bị
+                })
+            }catch(error){
+                console.error('API setting error:', error);
+                res.status(500).json({ 
+                    success: false,
+                    message: 'Lỗi server' 
+                  });
+            }
+        },
+    get_log_user: async (req,res) => {
+            try{
+                let MeterCode = req.query.MeterCode;
+                let start_date = req.query.start_date;
+                let end_date = req.query.end_date;
+                let data = await access_db("SELECT * FROM log_user WHERE MeterCode = ? AND time >= ? AND time <= ?  ORDER BY time DESC;",[MeterCode, start_date, end_date]);
+                res.json({
+                    success: true,
+                    data
                 })
             }catch(error){
                 console.error('API setting error:', error);
@@ -176,20 +213,10 @@ const setting_controller = {
         //           });
         //     }
         // },
-        // get_general_status: (req,res) => {
-        //     try{
-
-        //     }catch(error){
-        //         console.error('API setting error:', error);
-        //         res.status(500).json({ 
-        //             success: false,
-        //             message: 'Lỗi server' 
-        //           });
-        //     }
-        // },
     get_meter_info: async (req,res) => {
         try{
             let MeterCode = req.query.MeterCode;
+            let device_type = req.query.device_type;
             let meter_type = null;
             let meter_info =  {
                 name: null,
@@ -216,7 +243,15 @@ const setting_controller = {
                 min_doman: null,
                 max_doman: null
             }
-            let get_meter_info = await access_db("SELECT * FROM meters t1 LEFT JOIN view_totaleq t2 ON t1.meter_serial = t2.MeterCode WHERE t1.meter_serial = ?;",[MeterCode]);
+            let get_meter_info = [];
+            if (device_type == "GENERATOR"){
+                get_meter_info = await access_db("SELECT t3.name, t4.lat, t4.lng, t3.device_type, t4.meter_type FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id LEFT JOIN view_totaleq t3 ON t1.point_code = t3.MeterCode LEFT JOIN meters t4 ON t4.meter_serial = t2.dcu_code WHERE t2.dcu_code = ?", [MeterCode]);
+
+            }else{
+                 get_meter_info = await access_db("SELECT * FROM meters t1 LEFT JOIN view_totaleq t2 ON t1.meter_serial = t2.MeterCode WHERE t1.meter_serial = ? AND t1.device_type = t2.device_type;", [MeterCode]);
+
+            }
+
             if (get_meter_info.length > 0){
                 meter_info.name = get_meter_info[0].name;
                 meter_info.lat = get_meter_info[0].lat;
@@ -297,10 +332,12 @@ const setting_controller = {
                     save_db = await access_db("UPDATE web_environment.totaleq SET name = ?, location_lat = ?, location_long = ? WHERE MeterCode = ?;", [meter_name, location.lat, location.lng, MeterCode]);
                     break;
                 case "GENERATOR":
-                    save_db = await access_db("UPDATE measurement_point SET point_name = ? WHERE point_code = ?;", [meter_name, MeterCode]);
+                    save_db = await access_db("UPDATE measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id SET t1.point_name = ? WHERE t2.dcu_code = ?;", [meter_name, MeterCode]);
                     break;
             }
             if (save_info.affectedRows > 0 && save_db.affectedRows > 0){
+                let log = `Mã trạm: ${MeterCode} || lat: ${show_if_null(location.lat)} || lng: ${show_if_null(location.lng)} || Tên trạm: ${meter_name}`;
+                await access_db("INSERT INTO log_user (time, action, value, created_by, MeterCode) VALUES (?,?,?,?, ?);",[new Date(), "Cài đặt thông tin điểm đo", log, req.user.user_name, MeterCode])
                 res.json({
                     success: true,
                     message: "Lưu thông tin thành công"
@@ -346,17 +383,23 @@ const setting_controller = {
             let max_doman = req.body.max_doman;
             let min_mucnuoc = req.body.min_mucnuoc;
             let max_mucnuoc = req.body.max_mucnuoc;
-
+            let log = "";
             let save_db;
             switch (meter_type) {
                 case "MUCNUOC":
                     save_db = await access_db("UPDATE meters SET min_mucnuoc =?, max_mucnuoc = ? WHERE meter_serial = ?;", [min_mucnuoc, max_mucnuoc, MeterCode]);
+                    log = `Mã trạm: ${MeterCode} || Mực nước Min: ${show_if_null(min_mucnuoc)} || Mực nước Max (tràn): ${show_if_null(max_mucnuoc)}`;
+
                     break;
                 case "CSMT":
                     save_db = await access_db("UPDATE meters SET min_doduc =?, max_doduc = ?, min_ph =?, max_ph = ?, min_nhietdo =?, max_nhietdo = ?, min_clodu =?, max_clodu = ?, min_EC =?, max_EC = ?, min_docung =?, max_docung = ?, min_doman =?, max_doman = ? WHERE meter_serial = ?;", [min_doduc, max_doduc, min_ph, max_ph, min_nhietdo, max_nhietdo, min_clodu, max_clodu, min_EC, max_EC, min_docung, max_docung, min_doman, max_doman, MeterCode]);
+                    log = `Mã trạm: ${MeterCode} || Ngưỡng dưới độ đục: ${show_if_null(min_doduc)} || Ngưỡng trên độ đục: ${show_if_null(max_doduc)} || Ngưỡng dưới PHc: ${show_if_null(min_ph)} || Ngưỡng trên PH: ${show_if_null(max_ph)} || Ngưỡng dưới nhiệt độ: ${show_if_null(min_nhietdo)} || Ngưỡng trên nhiệt độ: ${show_if_null(max_nhietdo)} || Ngưỡng dưới clo dư: ${show_if_null(min_clodu)} || Ngưỡng trên clo dư: ${show_if_null(max_clodu)} || Ngưỡng dưới EC: ${show_if_null(min_EC)} || Ngưỡng trên EC: ${show_if_null(max_EC)} || Ngưỡng dưới độ cứng: ${show_if_null(min_docung)} || Ngưỡng trên độ cứng: ${show_if_null(max_docung)} || Ngưỡng dưới độ mặn: ${show_if_null(min_doman)} || Ngưỡng trên độ mặn: ${show_if_null(max_doman)}`;
+
                     break;
             }
             if (save_db.affectedRows > 0) {
+
+                await access_db("INSERT INTO log_user (time, action, value, created_by, MeterCode) VALUES (?,?,?,?, ?);", [new Date(), "Cài đặt cảnh báo", log, req.user.user_name, MeterCode])
                 res.json({
                     success: true,
                     message: "Lưu thông tin thành công"
@@ -780,22 +823,22 @@ const setting_controller = {
         }
     },
 
-    get_log_user: async (req,res) => {
-        try{
-            let MeterCode = req.query.MeterCode;
-            let NodeCode = req.query.NodeCode;
-            let start_date = req.query.start_date;
-            let end_date = req.query.end_date;
-            let data = await access_db("SELECT * FROM log_user WHERE MeterCode = ? AND NodeCode = ? AND time <= ? AND time >= ? ORDER BY time DESC;",[MeterCode,NodeCode, end_date, start_date]);
-            res.json({data});
-        }catch(error){
-            console.error('API setting error:', error);
-            res.status(500).json({ 
-                success: false,
-                message: 'Lỗi server' 
-              });
-        }
-    },
+    // get_log_user: async (req,res) => {
+    //     try{
+    //         let MeterCode = req.query.MeterCode;
+    //         let NodeCode = req.query.NodeCode;
+    //         let start_date = req.query.start_date;
+    //         let end_date = req.query.end_date;
+    //         let data = await access_db("SELECT * FROM log_user WHERE MeterCode = ? AND NodeCode = ? AND time <= ? AND time >= ? ORDER BY time DESC;",[MeterCode,NodeCode, end_date, start_date]);
+    //         res.json({data});
+    //     }catch(error){
+    //         console.error('API setting error:', error);
+    //         res.status(500).json({ 
+    //             success: false,
+    //             message: 'Lỗi server' 
+    //           });
+    //     }
+    // },
     get_delete_meter_data: async (req,res) => {
         try{
             let secret_role = req.user.parent_role;

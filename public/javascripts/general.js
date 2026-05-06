@@ -615,134 +615,134 @@ function return_field_name(x){
 
 
 
-var socket;
-$(document).ready(function(){
-  if (typeof user_id === 'undefined' || !user_id) {
-    console.error("user_id chưa tồn tại");
-    return;
-  }
-  socket = io({
-    auth: {
-      user_id: user_id
-    }
-  });
+// var socket;
+// $(document).ready(function(){
+//   if (typeof user_id === 'undefined' || !user_id) {
+//     console.error("user_id chưa tồn tại");
+//     return;
+//   }
+//   socket = io({
+//     auth: {
+//       user_id: user_id
+//     }
+//   });
 
-  var alertContainer = $('#alert-container');
-  let alertQueue = []; // Hàng đợi cảnh báo
-  let alertDisplaying = false; // Cờ hiển thị cảnh báo
+//   var alertContainer = $('#alert-container');
+//   let alertQueue = []; // Hàng đợi cảnh báo
+//   let alertDisplaying = false; // Cờ hiển thị cảnh báo
 
-   // Hàm xử lý hàng đợi hiển thị popup
-   function processQueue() {
-    if (alertDisplaying || alertQueue.length === 0) return;
-
-    alertDisplaying = true;
-    var alertData = alertQueue.shift();
-
-    showAlert(alertData);
-
-    setTimeout(() => {
-      alertDisplaying = false;
-      processQueue();
-    }, 3300); // 3.3 giây
-  }
-
-    // Hàm thêm popup cảnh báo
-    function showAlert(message) {
-      console.log("chạy")
-      const alertId = `alert-${Date.now()}`;
-      const alertElement = $(`
-        <div id="${alertId}" class="alert alert-warning alert-popup" role="alert">
-          ${message}
-        </div>
-      `);
-  
-      alertContainer.append(alertElement);
-  
-      setTimeout(() => {
-        alertElement.addClass('show');
-      }, 100);
-  
-      setTimeout(() => {
-        alertElement.removeClass('show');
-        setTimeout(() => alertElement.remove(), 500);
-      }, 10000);
-    }
-
-socket.on("notification", (data) => {
-    // console.log("Nhận thông báo:", data);
-
-    // Format thông báo
-    data.forEach(e => {
-      if(e.type == 0){
-        var start = return_date_format_ddmmyyhhmmss(e.start_time);
-        var end = return_date_format_ddmmyyhhmmss(e.end_time);
-        var alert_mess = "";
-        alert_mess +=  "<strong> "+e.name+"</strong><br>"
-          +"Bắt đầu: <strong>"+ start+"</strong><br>"
-          if(end != "-"){
-            alert_mess += "Kết thúc: <strong> "+end+"</strong><br>"
-          }
-          alert_mess += "Nội dung cảnh báo: <strong> "+e.message+"</strong>"
-        
-        alertQueue.push(alert_mess);
-      }
-
-    });
-
-    processQueue();
-  });
-
-
-  // socket.on("notification", (data) => {
-  //   console.log("Nhận thông báo:", data);
-  //   let alert_mess = "<strong>"+ data.MeterCode + "</strong><br><strong>" + return_date_format_ddmmyyhhmmss(data.start_time) +"-"+return_date_format_ddmmyyhhmmss(data.end_time)+ "</strong><br><strong>" + data.message + "</strong>";
-  //   alertQueue.push(alert_mess);
-  //   processQueue();
-  // });
-
-//   // Hàm thêm popup cảnh báo
-//   function showAlert(message) {
-//     const alertId = `alert-${Date.now()}`; // Tạo ID duy nhất cho mỗi alert
-
-//     // Tạo element alert
-//     const alertElement = $(`
-//         <div id="${alertId}" class="alert alert-warning alert-popup" role="alert">
-//             ${message}
-//         </div>
-//     `);
-
-// //     // Thêm vào container
-//     alertContainer.append(alertElement);
-
-//     // Hiển thị alert với hiệu ứng
-//     setTimeout(() => {
-//         alertElement.addClass('show');
-//     }, 100); // Delay nhỏ để kích hoạt CSS transition
-
-//     // Ẩn alert sau 3 giây
-//     setTimeout(() => {
-//         alertElement.removeClass('show');
-//         setTimeout(() => alertElement.remove(), 500); // Xóa khỏi DOM sau khi hiệu ứng kết thúc
-//     }, 10000);
-// }
-
-  // Hàm xử lý hàng đợi hiển thị popup
-//   function processQueue() {
+//    // Hàm xử lý hàng đợi hiển thị popup
+//    function processQueue() {
 //     if (alertDisplaying || alertQueue.length === 0) return;
 
-//     alertDisplaying = true; // Đánh dấu đang hiển thị
-//     const alertData = alertQueue.shift(); // Lấy phần tử đầu tiên trong hàng đợi
+//     alertDisplaying = true;
+//     var alertData = alertQueue.shift();
 
 //     showAlert(alertData);
 
 //     setTimeout(() => {
-//         alertDisplaying = false; // Cho phép hiển thị cảnh báo tiếp theo
-//         processQueue(); // Xử lý tiếp
-//     }, 3.3*1000); // Đợi 3.3 giây trước khi hiển thị tiếp
-// }
+//       alertDisplaying = false;
+//       processQueue();
+//     }, 3300); // 3.3 giây
+//   }
+
+//     // Hàm thêm popup cảnh báo
+//     function showAlert(message) {
+//       console.log("chạy")
+//       const alertId = `alert-${Date.now()}`;
+//       const alertElement = $(`
+//         <div id="${alertId}" class="alert alert-warning alert-popup" role="alert">
+//           ${message}
+//         </div>
+//       `);
+  
+//       alertContainer.append(alertElement);
+  
+//       setTimeout(() => {
+//         alertElement.addClass('show');
+//       }, 100);
+  
+//       setTimeout(() => {
+//         alertElement.removeClass('show');
+//         setTimeout(() => alertElement.remove(), 500);
+//       }, 10000);
+//     }
+
+// socket.on("notification", (data) => {
+//     // console.log("Nhận thông báo:", data);
+
+//     // Format thông báo
+//     data.forEach(e => {
+//       if(e.type == 0){
+//         var start = return_date_format_ddmmyyhhmmss(e.start_time);
+//         var end = return_date_format_ddmmyyhhmmss(e.end_time);
+//         var alert_mess = "";
+//         alert_mess +=  "<strong> "+e.name+"</strong><br>"
+//           +"Bắt đầu: <strong>"+ start+"</strong><br>"
+//           if(end != "-"){
+//             alert_mess += "Kết thúc: <strong> "+end+"</strong><br>"
+//           }
+//           alert_mess += "Nội dung cảnh báo: <strong> "+e.message+"</strong>"
+        
+//         alertQueue.push(alert_mess);
+//       }
+
+//     });
+
+//     processQueue();
+//   });
 
 
-})
+//   // socket.on("notification", (data) => {
+//   //   console.log("Nhận thông báo:", data);
+//   //   let alert_mess = "<strong>"+ data.MeterCode + "</strong><br><strong>" + return_date_format_ddmmyyhhmmss(data.start_time) +"-"+return_date_format_ddmmyyhhmmss(data.end_time)+ "</strong><br><strong>" + data.message + "</strong>";
+//   //   alertQueue.push(alert_mess);
+//   //   processQueue();
+//   // });
+
+// //   // Hàm thêm popup cảnh báo
+// //   function showAlert(message) {
+// //     const alertId = `alert-${Date.now()}`; // Tạo ID duy nhất cho mỗi alert
+
+// //     // Tạo element alert
+// //     const alertElement = $(`
+// //         <div id="${alertId}" class="alert alert-warning alert-popup" role="alert">
+// //             ${message}
+// //         </div>
+// //     `);
+
+// // //     // Thêm vào container
+// //     alertContainer.append(alertElement);
+
+// //     // Hiển thị alert với hiệu ứng
+// //     setTimeout(() => {
+// //         alertElement.addClass('show');
+// //     }, 100); // Delay nhỏ để kích hoạt CSS transition
+
+// //     // Ẩn alert sau 3 giây
+// //     setTimeout(() => {
+// //         alertElement.removeClass('show');
+// //         setTimeout(() => alertElement.remove(), 500); // Xóa khỏi DOM sau khi hiệu ứng kết thúc
+// //     }, 10000);
+// // }
+
+//   // Hàm xử lý hàng đợi hiển thị popup
+// //   function processQueue() {
+// //     if (alertDisplaying || alertQueue.length === 0) return;
+
+// //     alertDisplaying = true; // Đánh dấu đang hiển thị
+// //     const alertData = alertQueue.shift(); // Lấy phần tử đầu tiên trong hàng đợi
+
+// //     showAlert(alertData);
+
+// //     setTimeout(() => {
+// //         alertDisplaying = false; // Cho phép hiển thị cảnh báo tiếp theo
+// //         processQueue(); // Xử lý tiếp
+// //     }, 3.3*1000); // Đợi 3.3 giây trước khi hiển thị tiếp
+// // }
+
+
+// })
 
 
 function return_tooltip(note){

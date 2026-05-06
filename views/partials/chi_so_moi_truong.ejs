@@ -5,17 +5,18 @@
             <h4>📈 CHỈ SỐ MÔI TRƯỜNG CHẤT LƯỢNG NƯỚC</h4>
             <div class="devices-count"><span id="he_thong_giam_sat"></span> hệ thống giám sát</div>
         </div>
+        <!-- <h6 class="row float-left" id="thoi_gian"></h6> -->
     </div>
 
     <!-- Thống kê tổng quan -->
-    <div class="stats-grid">
+    <!-- <div class="stats-grid">
         <div class="stat-card-large">
             <div class="d-flex align-items-center">
                 <div class="stat-icon-large">🌊</div>
                 <div class="stat-label-large">CHẤT LƯỢNG NƯỚC THÔ</div>
             </div>
             <div class="stat-value-large font-weight-bold text-success" id="chat_luong_nuoc_tho">...</div>
-            <!-- <div class="stat-subvalue"><span id="chi_so_on_dinh">...</span> chỉ số ổn định</div> -->
+            <div class="stat-subvalue"><span id="chi_so_on_dinh">...</span> chỉ số ổn định</div>
         </div>
         <div class="stat-card-large">
             <div class="d-flex align-items-center">
@@ -23,7 +24,7 @@
                 <div class="stat-label-large">CHẤT LƯỢNG NƯỚC SẠCH</div>
             </div>
             <div class="stat-value-large text-success font-weight-bold" id="chat_luong_nuoc_sach">TUYỆT VỜI</div>
-            <!-- <div class="stat-subvalue"><span id="chi_so_dat_chuan">...</span> chỉ số đạt chuẩn</div> -->
+            <div class="stat-subvalue"><span id="chi_so_dat_chuan">...</span> chỉ số đạt chuẩn</div>
         </div>
         <div class="stat-card-large">
             <div class="d-flex align-items-center">
@@ -31,7 +32,7 @@
                 <div class="stat-label-large">CẬP NHẬT</div>
             </div>
             <div class="stat-value-large" style="font-size: 18px;" id="thoi_gian">...</div>
-            <!-- <div class="stat-subvalue">Dữ liệu thời gian thực</div> -->
+            <div class="stat-subvalue">Dữ liệu thời gian thực</div>
         </div>
         <div class="stat-card-large">
             <div class="d-flex align-items-center">
@@ -39,9 +40,9 @@
                 <div class="stat-label-large">TRẠNG THÁI</div>
             </div>
             <div class="stat-value-large" style="color: #4CAF50;" id="trang_thai">...</div>
-            <!-- <div class="stat-subvalue">Không có cảnh báo</div> -->
+            <div class="stat-subvalue">Không có cảnh báo</div>
         </div>
-    </div>
+    </div> -->
     <!-- Chất lượng nước -->
     <div class="row g-4 mt-4">
         <div class="col-12 col-md-6">
@@ -188,7 +189,13 @@
                     <!-- TAB LỊCH SỬ -->
                     <!-- TAB BIỂU ĐỒ -->
                     <div class="tab-pane fade show active" id="chart" role="tabpanel">
-
+                        <div class="row d-flex justify-content-end">
+                            <i class="fas fa-info info-circle m-1 cursor-pointer mr-4 mb-2" data-html="true" data-toggle="tooltip"  data-placement="bottom"
+                            data-original-title="Hướng dẫn:<br>
+                            - Nhấn vào tên thông số bên dưới để bật/tắt từng đường biểu đồ tương ứng.<br>
+                            - Di chuột vào biểu đồ để xem thời gian và giá trị tại từng điểm.<br>
+                            - Kéo chuột trái từ điểm bắt đầu đến điểm kết thúc để xem biểu đồ trong khoảng đã chọn." ></i>  
+                            </div>
                         <div id="history_chart_div" style="width: 100%; height: 500px;"></div>
 
                     </div>
@@ -776,5 +783,9 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 </style>
-
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 <script src="/javascripts/chi_so_moi_truong.js"></script>

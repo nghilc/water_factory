@@ -11,15 +11,18 @@ const dashboard_controller = {
 
             let danh_sach_thiet_bị = [];
             let danh_sach_xi_nghiep_nha_may = [];
-            danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t5.meter_status AS status_meter FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ?;",[req.user.id]);
+            danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t5.meter_status AS status_meter FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';",[req.user.id]);
+
+            may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_, t3.NodeCode AS NodeCode_,t5.lat, t5.lng, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id])
+
 
             danh_sach_xi_nghiep_nha_may = await access_db("SELECT t1.org_id, t2.org_name AS name, t1.parent_id AS parent_id, t3.org_name AS parent_name FROM org_mapping t1 LEFT JOIN organizations t2 ON t1.org_id = t2.id LEFT JOIN organizations t3 ON t1.parent_id = t3.id INNER JOIN user_org t4 ON t1.org_id = t4.org_id OR t1.parent_id = t4.org_id WHERE t4 .user_id = ? ORDER BY t1.order_by;",[req.user.id]);
 
-
+            danh_sach_thiet_bị.push(...may_phat_dien)
 
             // await access_db("UPDATE users SET last_menu_link = ? WHERE id = ?;", [1, req.user.id]);
             res.render('layouts/dashboard', {
-                danh_sach_thiet_bị, danh_sach_xi_nghiep_nha_may,
+                danh_sach_thiet_bị, danh_sach_xi_nghiep_nha_may, may_phat_dien,
                 user_id: JSON.stringify(req.user.id),
                 role: req.user.role,
                 full_name: req.user.name,
@@ -38,22 +41,31 @@ const dashboard_controller = {
         try{
             let org_id = req.query.org_id;
             let danh_sach_thiet_bị = [];
+            let may_phat_dien = [];
             let type= req.query.type;
             if(type == "all"){
-                danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ?;", [req.user.id]);
+                danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.*, t4.status AS status_meter, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id]);
+                may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_, t3.NodeCode AS NodeCode_,t5.*, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id])
+
 
             }else if(type == "xi_nghiep"){
-                danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.parent_id = ?;", [req.user.id, org_id]);
+                danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.*, t4.status AS status_meter, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.parent_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id, org_id]);
+
+                may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_,t3.NodeCode AS NodeCode_,t5.*, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t7.parent_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id, org_id])
+
 
             }else{
-                danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.lat, t5.lng, t4.status AS status_meter, t5.meter_type, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.org_id = ?;", [req.user.id, org_id]);
+                danh_sach_thiet_bị = await access_db("SELECT DISTINCT t1.MeterCode AS MeterCode_, t1.NodeCode AS NodeCode_, t1.MeterCode, t1.NodeCode, t4.name AS meter_name, t5.*, t4.status AS status_meter, t4.* FROM org_managers t1 INNER JOIN org_mapping t2 ON t1.org_id = t2.org_id INNER JOIN user_org t3 ON t2.parent_id = t3.org_id LEFT JOIN view_totaleq t4 ON t1.MeterCode = t4.MeterCode LEFT JOIN meters t5 ON t1.MeterCode = t5.meter_serial WHERE t3.user_id = ? AND t2.org_id = ? AND t4.device_type = t5.device_type AND t4.device_type <> 'GENERATOR';", [req.user.id, org_id]);
+
+                may_phat_dien = await access_db("SELECT t3.MeterCode AS MeterCode_, t3.NodeCode AS NodeCode_ ,t5.*, t6.*, t4.name AS meter_name, CASE WHEN timestampdiff(SECOND, t6.dcu_time, NOW()) < 1620 THEN 1 ELSE 0 END status_meter FROM measurement_point t1 INNER JOIN dcu t2 ON t1.dcu_id = t2.dcu_id INNER JOIN org_managers t3 ON t2.dcu_code = t3.MeterCode LEFT JOIN view_totaleq t4  ON t1.point_code = t4.MeterCode LEFT JOIN meters t5 ON t5.meter_serial = t3.MeterCode LEFT JOIN instant t6 ON t1.point_id = t6.point_id INNER JOIN org_mapping t7 ON t3.org_id = t7.org_id INNER JOIN user_org t8 ON t7.parent_id = t8.org_id WHERE t8.user_id = ? AND t7.org_id = ? AND t5.meter_type = 'GENERATOR' AND t5.device_type = t4.device_type;", [req.user.id, org_id])
 
             }
 
+            danh_sach_thiet_bị.push(...may_phat_dien)
 
             res.json({
                 success: true,
-                danh_sach_thiet_bị,
+                danh_sach_thiet_bị, may_phat_dien,
                 map_type: req.user.map_type
 
             })

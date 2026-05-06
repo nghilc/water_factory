@@ -20,7 +20,7 @@ var i18n = require("i18n");
 const { Server } = require('socket.io');
 const WebSocket = require('ws');
 var wsManager = require('./ws-manager');
-let wss = new WebSocket.Server({ port: 5015 });
+// let wss = new WebSocket.Server({ port: 5015 });
 
 // var initializePassport = require('./config/passport-config')
 // initializePassport(passport);
@@ -220,102 +220,102 @@ console.log('User registered:', user_id);
 // app.set('sendToMeterSubscribers', wsManager.sendToMeterSubscribers);
 
 const meterSubscriptions = new Map();
-wss.on('connection', (ws) => {
-  // (tuỳ chọn) parse token từ URL/header nếu cần ACL
-  // const url = new URL(req.url, 'http://localhost');
-  // const token = url.searchParams.get('token');
-app.set('ws', ws);
-  // heartbeat
-  ws.isAlive = true;
-  ws.on('pong', () => { ws.isAlive = true; });
+// wss.on('connection', (ws) => {
+//   // (tuỳ chọn) parse token từ URL/header nếu cần ACL
+//   // const url = new URL(req.url, 'http://localhost');
+//   // const token = url.searchParams.get('token');
+// app.set('ws', ws);
+//   // heartbeat
+//   ws.isAlive = true;
+//   ws.on('pong', () => { ws.isAlive = true; });
 
-  ws.on('message', (raw) => {
-    // console.log(raw)
-    let msg;
-    let messageStr;
-      if (Buffer.isBuffer(raw)) {
-      messageStr = raw.toString('utf8');
-    }
+//   ws.on('message', (raw) => {
+//     // console.log(raw)
+//     let msg;
+//     let messageStr;
+//       if (Buffer.isBuffer(raw)) {
+//       messageStr = raw.toString('utf8');
+//     }
 
-    try { msg = JSON.parse(messageStr); } catch { return; }
+//     try { msg = JSON.parse(messageStr); } catch { return; }
     
-    const { type, data } = msg || {};
-        try {
-              // console.log(msg);
-          if (msg.type === 'subscribe') {
-            const meters = msg.meters;
-              ws.meterCodes = meters;
-              wsManager.registerMeters(ws, meters);      
-          } else if (msg.type === 'notify') {
-            const meterCode = msg.meterCode;
-            wsManager.sendToMeterSubscribers(meterCode, msg.data);
-          } else if (msg.type === 'send_message'){
-            wsManager.sendMessage(msg);
-            }
-            else {
-            if (msg.length > 0){
-              msg.forEach(record => {
-                    const MeterCode = record.meterCode; 
-                    io.to(`device:${MeterCode}`).emit("meter_instant", record);
-                    wsManager.sendToMeterSubscribers(MeterCode, record);
-                  });
-                }
-            }
-          } catch (err) {
-            console.error('Lỗi parse JSON:', err);
-            console.log('Raw message:', messageStr);
-          }
-    switch (type) {
-      case 'register':
-        // Option: lưu user/token từ client nếu cần
-        // ws.user = { id: data?.user, token: data?.token };
-        ws.send(JSON.stringify({ type: 'ack', data: { registered: true } }));
-        break;
+//     const { type, data } = msg || {};
+//         try {
+//               // console.log(msg);
+//           if (msg.type === 'subscribe') {
+//             const meters = msg.meters;
+//               ws.meterCodes = meters;
+//               wsManager.registerMeters(ws, meters);      
+//           } else if (msg.type === 'notify') {
+//             const meterCode = msg.meterCode;
+//             wsManager.sendToMeterSubscribers(meterCode, msg.data);
+//           } else if (msg.type === 'send_message'){
+//             wsManager.sendMessage(msg);
+//             }
+//             else {
+//             if (msg.length > 0){
+//               msg.forEach(record => {
+//                     const MeterCode = record.meterCode; 
+//                     io.to(`device:${MeterCode}`).emit("meter_instant", record);
+//                     wsManager.sendToMeterSubscribers(MeterCode, record);
+//                   });
+//                 }
+//             }
+//           } catch (err) {
+//             console.error('Lỗi parse JSON:', err);
+//             console.log('Raw message:', messageStr);
+//           }
+//     switch (type) {
+//       case 'register':
+//         // Option: lưu user/token từ client nếu cần
+//         // ws.user = { id: data?.user, token: data?.token };
+//         ws.send(JSON.stringify({ type: 'ack', data: { registered: true } }));
+//         break;
 
-      case 'subscribe': {
-        const meterCodes = data.meterCodes;
-        wsManager.subscribe(ws, meterCodes);
-        ws.send(JSON.stringify({ type: 'subscribed', data: { count: meterCodes.length || 0 } }));
-        break;
-      }
+//       case 'subscribe': {
+//         const meterCodes = data.meterCodes;
+//         wsManager.subscribe(ws, meterCodes);
+//         ws.send(JSON.stringify({ type: 'subscribed', data: { count: meterCodes.length || 0 } }));
+//         break;
+//       }
 
-      case 'unsubscribe': {
-        const meterCodes = data.meterCodes;
-        wsManager.unsubscribe(ws, meterCodes);
-        ws.send(JSON.stringify({ type: 'unsubscribed', data: { count: meterCodes.length || 0 } }));
-        break;
-      }
+//       case 'unsubscribe': {
+//         const meterCodes = data.meterCodes;
+//         wsManager.unsubscribe(ws, meterCodes);
+//         ws.send(JSON.stringify({ type: 'unsubscribed', data: { count: meterCodes.length || 0 } }));
+//         break;
+//       }
 
-      case 'ping':
-        ws.send(JSON.stringify({ type: 'pong', t: Date.now() }));
-        break;
+//       case 'ping':
+//         ws.send(JSON.stringify({ type: 'pong', t: Date.now() }));
+//         break;
 
-      default:
-      wsManager.sendBulk(msg);
-        // console.log("here");
-        //     msg.forEach(record => {
-        //       const MeterCode = record.meterCode; 
-        //       console.log(MeterCode);
+//       default:
+//       wsManager.sendBulk(msg);
+//         // console.log("here");
+//         //     msg.forEach(record => {
+//         //       const MeterCode = record.meterCode; 
+//         //       console.log(MeterCode);
               
-        //       wsManager.sendToMeterSubscribers(MeterCode, record);
-        //     });
-        break;
-    }
-  });
+//         //       wsManager.sendToMeterSubscribers(MeterCode, record);
+//         //     });
+//         break;
+//     }
+//   });
 
-  ws.on('close', () => wsManager.unsubscribeAll(ws));
-  ws.on('error', () => wsManager.unsubscribeAll(ws));
-});
+//   ws.on('close', () => wsManager.unsubscribeAll(ws));
+//   ws.on('error', () => wsManager.unsubscribeAll(ws));
+// });
 
-const interval = setInterval(() => {
-  wss.clients.forEach((ws) => {
-    if (ws.isAlive === false) return ws.terminate();
-    ws.isAlive = false;
-    ws.ping(() => {});
-  });
-}, 30000);
+// const interval = setInterval(() => {
+//   wss.clients.forEach((ws) => {
+//     if (ws.isAlive === false) return ws.terminate();
+//     ws.isAlive = false;
+//     ws.ping(() => {});
+//   });
+// }, 30000);
 
-wss.on('close', () => clearInterval(interval));
+// wss.on('close', () => clearInterval(interval));
 // wss.on('connection', (ws) => {
 //   console.log('Client connected');
 //   app.set('ws', ws);

@@ -162,6 +162,7 @@ function get_data() {
         },
         success: function (res) {
             let data = res.data;
+            console.log(data)
             switch (TYPE) {
                 case "dien_ap_luoi_btn":
                     $("#may_phat_dien_thead").empty();
@@ -175,31 +176,36 @@ function get_data() {
                 
                         `);
                     $("#may_phat_dien_tbody").empty();
-                    for (let i = 0; i < data.length; i++) {
+                    // if (data.length == 0){
+                    //     $("#may_phat_dien_tbody").append("123")
+                    // }else{
+                        for (let i = 0; i < data.length; i++) {
 
-                        $("#may_phat_dien_tbody").append(`
-                            <tr>
-                            <td rowspan="3">HT: ${new Date(data[i].server_time).toLocaleString('en-GB')} <br> CT: ${new Date(data[i].meter_time).toLocaleString('en-GB')}</td>
-                            <td>Pha A</td>
-                            <td>${show_if_null_number(data[i].V_A2_v) + return_unit_html(data[i].V_A2_u)}</td>
-                            <td rowspan="3">${show_if_null_number(data[i].Freq2_v) + return_unit_html(data[i].Freq2_u)}</td>
-                            <td>AB</td>
-                            <td>${show_if_null_number(data[i].V_AB2_v) + return_unit_html(data[i].V_AB2_u)}</td>
-                            </tr>
-                            <tr>
-                            <td>Pha B</td>
-                            <td>${show_if_null_number(data[i].V_B2_v) + return_unit_html(data[i].V_B2_u)}</td>
-                            <td>BC</td>
-                            <td>${show_if_null_number(data[i].V_BC2_v) + return_unit_html(data[i].V_BC2_u)}</td>
-                            </tr>
-                            <tr>
-                            <td>Pha C</td>
-                            <td>${show_if_null_number(data[i].V_C2_v) + return_unit_html(data[i].V_C2_u)}</td>
-                            <td>BC</td>
-                            <td>${show_if_null_number(data[i].V_CA2_v) + return_unit_html(data[i].V_CA2_u)}</td>
-                            </tr>
-                        `)
-                    }
+                            $("#may_phat_dien_tbody").append(`
+                                <tr>
+                                <td rowspan="3">HT: ${new Date(data[i].server_time).toLocaleString('en-GB')} <br> CT: ${new Date(data[i].meter_time).toLocaleString('en-GB')}</td>
+                                <td>Pha A</td>
+                                <td>${show_if_null_number(data[i].V_A2_v) + return_unit_html(data[i].V_A2_u)}</td>
+                                <td rowspan="3">${show_if_null_number(data[i].Freq2_v) + return_unit_html(data[i].Freq2_u)}</td>
+                                <td>AB</td>
+                                <td>${show_if_null_number(data[i].V_AB2_v) + return_unit_html(data[i].V_AB2_u)}</td>
+                                </tr>
+                                <tr>
+                                <td>Pha B</td>
+                                <td>${show_if_null_number(data[i].V_B2_v) + return_unit_html(data[i].V_B2_u)}</td>
+                                <td>BC</td>
+                                <td>${show_if_null_number(data[i].V_BC2_v) + return_unit_html(data[i].V_BC2_u)}</td>
+                                </tr>
+                                <tr>
+                                <td>Pha C</td>
+                                <td>${show_if_null_number(data[i].V_C2_v) + return_unit_html(data[i].V_C2_u)}</td>
+                                <td>CA</td>
+                                <td>${show_if_null_number(data[i].V_CA2_v) + return_unit_html(data[i].V_CA2_u)}</td>
+                                </tr>
+                            `)
+                        }
+                    // }
+
                     break;
                 case "dien_ap_ra_pha_btn":
                     $("#may_phat_dien_thead").empty();
@@ -215,6 +221,14 @@ function get_data() {
                             <th>Tần số dây</th>
                             `);
                     $("#may_phat_dien_tbody").empty();
+                    if (data.length == 0) {
+                        $("#may_phat_dien_tbody").append(`
+                            <tr>
+                            <td class="text-center-data-table align-middle" colspan="9">Không có dữ liệu</td>
+                        </tr>
+                        `)
+                        break;
+                    }
                     for (let i = 0; i < data.length; i++) {
 
                         $("#may_phat_dien_tbody").append(`
@@ -267,6 +281,13 @@ function get_data() {
                         <th>Điện áp</th>
                         `);
                     $("#may_phat_dien_tbody").empty();
+                    if (data.length == 0) {
+                        $("#may_phat_dien_tbody").empty();
+                        $("#may_phat_dien_tbody").append(`
+                            <tr>
+                            <td class="text-center-data-table align-middle" colspan="3">Không có dữ liệu</td>
+                        </tr>`)
+                    }
                     for (let i = 0; i < data.length; i++) {
 
                         $("#may_phat_dien_tbody").append(`

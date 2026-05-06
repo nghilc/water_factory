@@ -60,9 +60,9 @@ function render_table_meter_list(data) {
             + '<td class="text-center value-normal">'
             + data[i].last_measure_sensor + " " + data[i].last_unit
             + '</td>'
-            + '<td class="text-center value-normal">'
-            + data[i].last_measure_dynamic + " " + data[i].last_unit
-            + '</td>'
+            // + '<td class="text-center value-normal">'
+            // + data[i].last_measure_dynamic + " " + data[i].last_unit
+            // + '</td>'
 
     }
     $("#water-level-table-body").append(str);
@@ -139,7 +139,7 @@ function render_chart(raw_data, unit) {
         let x = {
             time: new Date(raw_data[i].time),
             measure_sensor: show_number_if_null(raw_data[i].measure_sensor),
-            measure_dynamic: show_number_if_null(raw_data[i].measure_dynamic)
+            // measure_dynamic: show_number_if_null(raw_data[i].measure_dynamic)
         }
         data.push(x);
     }
@@ -192,7 +192,7 @@ function render_chart(raw_data, unit) {
     // wt.renderer.line.stroke = am4core.color("#ffffffff");
     wt.renderer.line.strokeOpacity = 0.5;
     wt.renderer.line.strokeWidth = 1;
-    wt.title.text = UNIT;
+    wt.title.text = "Mực nước hiện tại (m)";
     wt.renderer.opposite = false;
     wt.extraMin = 0.1;
     wt.extraMax = 0.1;
@@ -211,29 +211,29 @@ function render_chart(raw_data, unit) {
     series.showOnInit = true;
     // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
     series.tooltipText = "Mực nước hiện tại" + ": {valueY} " + "(m)";
-    series.name = "Mực nước hiện tại"
+    series.name = "Mực nước hiện tại (m)"
     series.tooltip.pointerOrientation = "horizontal";
     series.fill = am4core.color("#1584b0");
     series.stroke = am4core.color("#1584b0");
     series.fillOpacity = 0;
 
-    var series_2;
-    series_2 = CHART.series.push(new am4charts.LineSeries());
-    series_2.yAxis = wt;
+    // var series_2;
+    // series_2 = CHART.series.push(new am4charts.LineSeries());
+    // series_2.yAxis = wt;
 
-    series_2.dataFields.valueY = "measure_dynamic";
-    series_2.dataFields.dateX = "time";
-    series_2.title = "Mực nước động";
-    series_2.strokeWidth = 3;
-    series_2.tensionX = 1;
-    series_2.showOnInit = true;
-    // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
-    series_2.tooltipText = "Mực nước động" + ": {valueY} " + "(m)";
-    series_2.name = "Mực nước động"
-    series_2.tooltip.pointerOrientation = "horizontal";
-    series_2.fill = am4core.color("#15b046ff");
-    series_2.stroke = am4core.color("#15b046ff");
-    series_2.fillOpacity = 0;
+    // series_2.dataFields.valueY = "measure_dynamic";
+    // series_2.dataFields.dateX = "time";
+    // series_2.title = "Mực nước động";
+    // series_2.strokeWidth = 3;
+    // series_2.tensionX = 1;
+    // series_2.showOnInit = true;
+    // // series.legendSettings.labelText = translate_text("Sản lượng") + " (m3)";
+    // series_2.tooltipText = "Mực nước động" + ": {valueY} " + "(m)";
+    // series_2.name = "Mực nước động"
+    // series_2.tooltip.pointerOrientation = "horizontal";
+    // series_2.fill = am4core.color("#15b046ff");
+    // series_2.stroke = am4core.color("#15b046ff");
+    // series_2.fillOpacity = 0;
 }
 
 
@@ -272,7 +272,7 @@ function render_table(raw_data) {
                 <tr>
               <th>Thời gian</th>
               <th>Mực nước hiện tại</th>
-              <th>Mực nước động</th>
+  
               </tr>
             `
           );
@@ -297,8 +297,8 @@ function render_table(raw_data) {
                 searching: false,
                 columns: [
                     { data: "time", className: "text-center-data-table align-middle" },
-                    { data: "measure_sensor", className: "text-right-data-table align-middle" },
-                    { data: "measure_dynamic", className: "text-right-data-table align-middle" },
+                    { data: "measure_sensor", className: "text-center-data-table align-middle" },
+                    // { data: "measure_dynamic", className: "text-right-data-table align-middle" },
                 ],
                 data: modifi_data(raw_data),
             });
@@ -314,7 +314,7 @@ function modifi_data(data) {
         let y = {
             time: new Date(data[i].time).toLocaleString('en-GB'),
             measure_sensor: show_dash_if_null(data[i].measure_sensor),
-            measure_dynamic: show_dash_if_null(data[i].measure_dynamic),
+            // measure_dynamic: show_dash_if_null(data[i].measure_dynamic),
         }
 
 
@@ -467,11 +467,14 @@ function render_water_level_realtime_chart(originalData) {
     // sM_static.columns.template.tooltipText =
     //     "{categoryX}\n{valueM} m (hiện tại)";
 
-    var sM_dynamic = chart.series.push(new am4charts.ColumnSeries());
-    sM_dynamic.name = "Mực nước động";
-    sM_dynamic.dataFields.valueY = "valueDynamicM";
-    sM_dynamic.yAxis = axisM;
-    baseColumnStyle(sM_dynamic);
+    // var sM_dynamic = chart.series.push(new am4charts.ColumnSeries());
+    // sM_dynamic.name = "Mực nước động";
+    // sM_dynamic.dataFields.valueY = "valueDynamicM";
+    // sM_dynamic.yAxis = axisM;
+    // baseColumnStyle(sM_dynamic);
+
+
+
     // sM_dynamic.columns.template.fill = am4core.color("#b4eaffff");   // trắng
     // sM_dynamic.columns.template.stroke = am4core.color("#b4eaffff");   // viền nhẹ
     // sM_dynamic.columns.template.tooltipText =
@@ -497,29 +500,29 @@ function render_water_level_realtime_chart(originalData) {
     // sCM_static.columns.template.tooltipText =
     //     "{categoryX}\n{valueCM} cm (hiện tại)";
 
-    var sCM_dynamic = chart.series.push(new am4charts.ColumnSeries());
-    sCM_dynamic.name = "Mực nước động";
-    sCM_dynamic.dataFields.valueY = "valueDynamicCM";
-    sCM_dynamic.yAxis = axisCM;
-    baseColumnStyle(sCM_dynamic);
-    sCM_dynamic.hiddenInLegend = true;
-    sCM_dynamic.columns.template.fill = am4core.color("#000000ff");
-    sCM_dynamic.columns.template.stroke = am4core.color("#000000ff");
+    // var sCM_dynamic = chart.series.push(new am4charts.ColumnSeries());
+    // sCM_dynamic.name = "Mực nước động";
+    // sCM_dynamic.dataFields.valueY = "valueDynamicCM";
+    // sCM_dynamic.yAxis = axisCM;
+    // baseColumnStyle(sCM_dynamic);
+    // sCM_dynamic.hiddenInLegend = true;
+    // sCM_dynamic.columns.template.fill = am4core.color("#000000ff");
+    // sCM_dynamic.columns.template.stroke = am4core.color("#000000ff");
     //sCM_dynamic.columns.template.tooltipText =
     //     "{categoryX}\n{valueDynamicCM} cm (động)\nTổng: {valueYTotal} cm";
 
     // Nhãn tổng trên đỉnh cột (đơn vị đúng theo trạm)
-    var label = sM_dynamic.bullets.push(new am4charts.LabelBullet());
-    label.label.fontSize = 11;
-    label.label.dy = -10;
-    label.label.text = "{valueY} (m)";
-    label.label.fill = am4core.color("#000000ff");
+    // var label = sM_dynamic.bullets.push(new am4charts.LabelBullet());
+    // label.label.fontSize = 11;
+    // label.label.dy = -10;
+    // label.label.text = "{valueY} (m)";
+    // label.label.fill = am4core.color("#000000ff");
 
-    var label2 = sCM_dynamic.bullets.push(new am4charts.LabelBullet());
-    label2.label.fontSize = 11;
-    label2.label.dy = -10;
-    label2.label.text = "{valueY} (cm)";
-    label2.label.fill = am4core.color("#000000ff");
+    // var label2 = sCM_dynamic.bullets.push(new am4charts.LabelBullet());
+    // label2.label.fontSize = 11;
+    // label2.label.dy = -10;
+    // label2.label.text = "{valueY} (cm)";
+    // label2.label.fill = am4core.color("#000000ff");
 
     chart.maskBullets = false;
 
@@ -708,11 +711,11 @@ function append_threshold_setting(data) {
             + '</div>'
             + '<div class="threshold-inputs">'
             + '<div class="threshold-input">'
-            + '<label>Ngưỡng dưới</label>'
+            + '<label>Mực nước Min</label>'
             + '<input type="number" class="lower_threshold" metercode="' + data[i].MeterCode_ + '" value="' + (data[i].lower_threshold == null ? '' : data[i].lower_threshold) + '" step="0.1">'
             + '</div>'
             + '<div class="threshold-input">'
-            + '<label>Ngưỡng trên</label>'
+            + '<label>Mực nước Max (tràn)</label>'
             + '<input type="number" class="upper_threshold" metercode="' + data[i].MeterCode_ + '" value="' + (data[i].upper_threshold == null ? '' : data[i].upper_threshold) + '" step="0.1">'
             + ' </div>'
             + '</div>'

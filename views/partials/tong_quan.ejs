@@ -39,7 +39,7 @@
                 <div class="stat-value pumps-active">0/0</div>
             </div>
         </div>
-        <div class="stat-item">
+        <!-- <div class="stat-item">
             <div class="d-flex align-items-center">
                 <div class="stat-icon">📈</div>
                 <div class="stat-label">CHẤT LƯỢNG NƯỚC</div>
@@ -62,7 +62,7 @@
                 <div class="stat-subvalue">Thời điểm đo:&nbsp;&nbsp;</div>
                 <div class="stat-value wmco_time">2025-10-17 13:00:00</div>
             </div>
-        </div>
+        </div> -->
         <div class="stat-item">
             <div class="d-flex align-items-center">
                 <div class="stat-icon">🔥</div>
@@ -101,18 +101,18 @@
                     <div class="legend-color" style="background-color: #3498db; border-color: #2980b9;"></div>
                     <div class="legend-text">Mực nước hiện tại</div>
                 </div>
-                <div class="legend-item">
+                <!-- <div class="legend-item">
                     <div class="legend-color" style="background-color: #ecf0f1; border-color: #bdc3c7;"></div>
                     <div class="legend-text">Mực nước động</div>
-                </div>
-                <div class="legend-item">
+                </div> -->
+                <!-- <div class="legend-item">
                     <div class="legend-color" style=" border-bottom: 3px dotted #e74c3c;"></div>
                     <div class="legend-text">Ngưỡng cao nhất</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="border-bottom: 3px dotted #f39c12;"></div>
                     <div class="legend-text">Ngưỡng thấp nhất</div>
-                </div>
+                </div> -->
             </div>
             <div class="chart-container" style="height: 300px;">
                 <div id="water-level-realtime-chart" style="width: 100%; height: 100%;"></div>
@@ -336,7 +336,7 @@
     </div>
 
     <!-- Máy phát điện và cảnh báo -->
-    <div class="generator-alerts-section">
+    <div class="generator-alerts-section" id="may_phat_dien_container">
         <!-- Máy phát điện -->
         <div class="generator-panel">
             <div class="generator-header">
@@ -446,7 +446,7 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Áp suất dầu</span>
-                            <span class="info-value oil-pressure" id="P_Oil_v">- bar</span>
+                            <span class="info-value oil-pressure" id="P_Oil_v">- psi</span>
                         </div>
                     </div>
                 </div>
@@ -466,8 +466,8 @@
 
         <!-- Cảnh báo -->
         <div class="alerts-panel">
-            <h5 class="generator-header">⚠️ CẢNH BÁO HIỆN TẠI (MÔ PHỎNG)</h5>
-            <div class="alert-item alert-medium">
+            <h5 class="generator-header">⚠️ CẢNH BÁO HIỆN TẠI</h5>
+            <!-- <div class="alert-item alert-medium">
                 <div class="alert-icon">🟡</div>
                 <div class="alert-content">
                     <div class="alert-title">Nhiệt độ Bơm PS-002 cao</div>
@@ -482,7 +482,7 @@
                     <div class="alert-desc">Còn 252 giờ đến lần bảo trì</div>
                     <div class="alert-time">13:45</div>
                 </div>
-            </div>
+            </div> -->
             <div class="alert-item alert-low">
                 <div class="alert-icon">🟢</div>
                 <div class="alert-content">
@@ -491,14 +491,14 @@
                     <div class="alert-time">12:00</div>
                 </div>
             </div>
-            <div class="alert-item alert-medium">
+            <!-- <div class="alert-item alert-medium">
                 <div class="alert-icon">🟡</div>
                 <div class="alert-content">
                     <div class="alert-title">Mực nước Sông 1 thấp</div>
                     <div class="alert-desc">2.8m - Gần ngưỡng cảnh báo</div>
                     <div class="alert-time">11:20</div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -511,7 +511,7 @@
 
     .production-stats {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 15px;
         margin-bottom: 25px;
         padding: 20px;
@@ -666,7 +666,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         padding-bottom: 15px;
         border-bottom: 1px solid rgba(73, 73, 73, 0.584);
     }
@@ -842,6 +842,20 @@
         height: 12px;
         border-radius: 2px;
         display: inline-block;
+    }
+
+    .status-running {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+        border-radius: 20px;
+        padding: 2px 4px;
+    }
+
+    .status-stopped {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+        border-radius: 20px;
+        padding: 2px 4px;
     }
 
     @media (max-width: 1200px) {
